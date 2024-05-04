@@ -1,0 +1,642 @@
+#置中{
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+/*
+align="center" 水平置中
+valign="center" 垂直置中
+*/
+
+
+
+
+
+
+
+/* 上方工作列 */
+body {
+    display: inline-block;
+    overflow-x: hidden;
+    flex-direction: column;
+
+    background-color: #e2f7ea;
+    color: #2c3630;
+}
+header{
+    z-index: 1;
+    height: 100px;
+    background-color: #93CDA9;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    border-bottom: #e2f7ea solid 2px;
+}
+.body1{
+    background-color: #e2f7ea;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    font-family: 微軟正黑體;
+}
+a{
+    text-decoration: none;
+}
+ul{
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    position: relative;
+    left: 330px;
+    top: 25px;
+}
+.menu{
+    font-family: 微軟正黑體;
+    font-size: 17px;
+    font-weight: 600;
+}
+.menu > li{              /* 子選擇器 只有第一層 */ 
+    float: left;
+}
+.menu li{
+    position: relative;
+    padding: 0px;
+    /*border: rgb(232, 220, 224) 1px dashed;*/
+    min-width: 120px;
+    /* background-color: #b4e7c7; */
+}
+.menu ul{
+    position: absolute;
+    z-index: 10;
+    top: 98%;
+    left: 10%;
+    display: none;
+    width: 100px;
+    height: 50px;
+    background-color: #b4e7c7;
+}
+.menu ul li > ul{     /* 定義上一層ul li 和下一層ul的距離，第三層以後 */
+    z-index: 20;
+    top: 20%;
+    left: 100%;
+}
+.menu a{
+    display: block;
+    padding: 5px 20px;
+    text-decoration: none;
+    /*background-color: #fffdfa;*/
+    background-size: cover;
+    color: #2c3630;
+}
+.menu a:hover{
+    /*background-color: rgb(198, 181, 170);*/
+    background-size: cover;
+    color: #3b7752;
+    text-decoration: underline 2px;
+}
+.menu li:hover > ul{
+    display: block;
+}
+.li1{
+    /* background-color: #93CDA9; */
+    height: 42px;
+}
+.logo{
+    height: 90px;
+    position: relative;
+    right: 200%;
+    top: 1px;
+}
+.back-to-top {
+    display: none; /* 默認是隱藏的，這樣在第一屏才不顯示 */
+    position: fixed; /* 位置是固定的 */
+    bottom: 20px; /* 顯示在頁面底部 */
+    right: 30px; /* 顯示在頁面的右邊 */
+    z-index: 99; /* 確保不被其他功能覆蓋 */
+    border: 1px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #e2f7ea; /* 設置背景背景顏色 */
+    color: #93CDA9; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding: 10px 15px 15px 15px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+}
+.back-to-top:hover {
+    background-color: #93CDA9; /* 滑鼠移上去時，反轉顏色 */
+    color: #e2f7ea;
+}
+
+
+
+
+
+
+
+
+/* 回報問題視窗 */
+.contact-form {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #afe1c2;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    color: #2c3630;
+    border-radius: 10px;
+    width: 300px;
+}
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 20px;
+    color: #2c3630;
+}
+label {
+    display: block;
+    margin-top: 10px;
+}
+input, textarea {
+    width: 80%;
+    padding: 8px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 2px solid #81b595; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 5px; /* 设置按钮圆角，可以根据需要调整 */
+}
+input[type="submit"][data-style="submit1"] {
+    width: 200px;
+    display: inline-block; /* 让按钮以块级元素显示 */
+    padding: 10px 20px; /* 设置按钮的内边距 */
+    font-size: 16px; /* 设置按钮文本的字体大小 */
+    text-align: center; /* 文本居中 */
+    text-decoration: none; /* 去除文本装饰，如果有的话 */
+    border: 2px solid #81b595; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 5px; /* 设置按钮圆角，可以根据需要调整 */
+    background-color: #93CDA9; /* 设置按钮背景颜色，可以根据需要调整 */
+    color: #ffffff; /* 设置按钮文本颜色，可以根据需要调整 */
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+}
+input[type="submit"][data-style="submit1"]:hover {
+    background-color: #e2f7ea; /* 悬停时改变背景颜色 */
+    color: #2c3630; /* 悬停时改变文本颜色 */
+}
+
+
+
+
+
+
+
+
+
+/* 員工首頁 */ 
+.information{
+    position: relative;
+    top: 100px;
+
+    width: 80%;
+
+   /* background-color: #2c3630;*/
+}
+h1{
+    font-size: 40px;
+}
+.p_information{
+    position: relative;
+    right: 300px;
+}
+.commute{
+    position: relative;
+    left: 300px;
+    margin-left: 10px;
+
+    background-color: #e2f7ea;
+    border: 3px solid #93CDA9;
+    border-radius: 5px;
+
+    width: 200px;
+    height: 50px;
+    font-size: 20px;
+}
+.commute:hover{
+    background-color: #93CDA9; /* 滑鼠移上去時，反轉顏色 */
+    color: #e2f7ea;
+}
+
+
+
+
+
+
+
+
+
+/* 員工新增地址 */ 
+.address{
+    text-align: center;
+
+    position: relative;
+    top: 130px;
+
+    background-color: #81b595;
+    width: 800px;
+    border-radius: 10px; /* 增加圓角 */
+}
+input[type="submit"][data-style="address_submit"]{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #e2f7ea; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding: 10px 15px 15px 15px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+
+    font-size: 20px;
+    font-weight: bold; 
+    width: 40%;
+    height: 50px;
+}
+input[type="submit"][data-style="address_submit"]:hover {
+    background-color: #3b7752; /* 滑鼠移上去時，反轉顏色 */
+    color: #e2f7ea;
+}
+.address_div{
+    text-align: left;
+    position: relative;
+    left: 23%;
+    font-size: large;
+    width: 60%;
+}
+.address_city{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #e2f7ea; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding-left: 10px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+
+    font-size: 15px;
+    width: 30%;
+    height: 40px;
+}
+.水平靠左{
+    display: flex;
+    justify-content: flex-start;
+}
+.goback_img{
+    width: 30px;
+}
+.goback_add{
+    position: relative;
+    right: 45%;
+    top: 15px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 員工我的地址 */ 
+.address_table{
+    text-align: center;
+
+    position: relative;
+    top: 100px;
+    margin-top: 50px;
+
+    background-color: #81b595;
+    width: 800px;
+    height: 100px;
+    border-radius: 10px; /* 增加圓角 */
+
+    font-size: 20px;
+    color: #2c3630;
+}
+.ea_name{
+    font-weight: bold; 
+    font-size: 25px;
+    color: #2c3630;
+}
+.goback_myaddress{
+    position: relative;
+    right: 26%;
+}
+.edit_address{
+    text-align: right;
+    font-size: 15px;
+
+    position: relative;
+    right: 3%;
+    top: 4px;
+}
+.edit_button{
+    background-color: #afe1c2;
+
+    border-radius: 3px; /* 增加圓角 */
+    border: 2px solid #3b7752;
+}
+.edit_button:hover{
+    background-color: #3b7752;
+
+    border-radius: 3px; /* 增加圓角 */
+    border: 2px solid #afe1c2;
+    
+    color: #afe1c2;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 員工新增上下班資訊 */
+.gowork{
+    text-align: center;
+
+    position: relative;
+    top: 100px;
+
+    background-color: #81b595;
+    width: 1000px;
+    border-radius: 10px; /* 增加圓角 */
+}
+.gowork_div{
+    text-align: left;
+    position: relative;
+    
+    left: 23%;
+    font-size: large;
+    width: 60%;
+}
+#水平均分{
+    display: flex;
+    justify-content: space-around;
+}
+#水平靠左{
+    display: flex;
+    justify-content: flex-start;
+}
+.gowork_table{
+    width: 500px;
+}
+.gowork_address{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #e2f7ea; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding-left: 10px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+
+    font-size: 15px;
+    width: 70%;
+    height: 40px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 註冊 */ 
+.signup_body{
+    display: flex;
+    justify-content: center;    /* 水平置中 */
+    align-content: center;    /* 垂直置中 */
+    flex-wrap: wrap;
+
+    position: relative;
+    top: 10px;
+}
+.signup{
+    text-align: center;
+    padding: 20px;
+    background-color: #81b595;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #2c3630;
+    border-radius: 50px;
+    width: 40%;
+}
+.signup_form{
+    text-align: left;
+    position: relative;
+    left: 23%;
+    font-size: large;
+    width: 60%;
+}
+.radio{
+    width: 50px;
+    height: 20px;
+    border: 2px solid #81b595; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 5px; /* 设置按钮圆角，可以根据需要调整 */
+}
+.back{
+    color: #2c3630;
+    position: relative;
+}
+.back::after{
+    content: " ";
+    position: absolute;
+    right: 50%;
+    left: 50%;
+    bottom: -5px;
+    border-bottom: 3px solid #2c3630;
+    transition: .3s;
+}
+.back:hover::after{
+    right: 0%;
+    left: 0%;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 登入 */ 
+.login_body{
+    display: flex;
+    justify-content: center;    /* 水平置中 */
+    align-content: center;    /* 垂直置中 */
+    flex-wrap: wrap;
+
+    position: relative;
+    top: 100px;
+}
+.login{
+    text-align: center;
+    padding: 20px;
+    background-color: #81b595;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: #2c3630;
+    border-radius: 50px;
+    width: 40%;
+}
+.login_form{
+    text-align: left;
+    position: relative;
+    left: 23%;
+    font-size: large;
+    width: 60%;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 登出 */
+input[type="submit"][data-style="logout_submit"] {
+    width: 100px;
+    display: inline-block; /* 让按钮以块级元素显示 */
+    padding: 10px 20px; /* 设置按钮的内边距 */
+    font-size: 16px; /* 设置按钮文本的字体大小 */
+    text-align: center; /* 文本居中 */
+    text-decoration: none; /* 去除文本装饰，如果有的话 */
+    border: 2px solid #81b595; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 5px; /* 设置按钮圆角，可以根据需要调整 */
+    background-color: #93CDA9; /* 设置按钮背景颜色，可以根据需要调整 */
+    color: #ffffff; /* 设置按钮文本颜色，可以根据需要调整 */
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+}
+input[type="submit"][data-style="logout_submit"]:hover {
+    background-color: #e2f7ea; /* 悬停时改变背景颜色 */
+    color: #2c3630; /* 悬停时改变文本颜色 */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 選擇身分 */
+.identity_body{
+    display: flex;
+    justify-content: center;    /* 水平置中 */
+    align-content: center;    /* 垂直置中 */
+    flex-wrap: wrap;
+
+    position: relative;
+    top: 100px;
+}
+.identity{
+    text-align: center;
+    background-color: #93CDA9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    color: #2c3630;
+    border-radius: 10px;
+
+    width: 60%;
+    height: 400px;
+
+    position: relative;
+    top: 30px;
+}
+.choose_identity_1{
+    border: 1px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #e2f7ea; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding: 10px 15px 15px 15px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+
+    font-size: 30px;
+    width: 30%;
+    height: 100px;
+
+    position: relative;
+    right: 5%;
+}
+.choose_identity_1:hover {
+    background-color: #3b7752; /* 滑鼠移上去時，反轉顏色 */
+    color: #e2f7ea;
+}
+.choose_identity_2{
+    border: 1px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #e2f7ea; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding: 10px 15px 15px 15px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+
+    font-size: 30px;
+    width: 30%;
+    height: 100px;
+
+    position: relative;
+    left: 5%;
+}
+.choose_identity_2:hover {
+    background-color: #3b7752; /* 滑鼠移上去時，反轉顏色 */
+    color: #e2f7ea;
+}
