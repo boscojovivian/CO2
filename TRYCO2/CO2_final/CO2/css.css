@@ -1,0 +1,136 @@
+body {
+    overflow-x: hidden; /* 避免水平滾動條 */
+}
+
+.ms-6 {  /* 左邊距 */
+    margin-left: 6rem;
+}
+.me-6 {  /* 右邊距 */
+    margin-right: 6rem;
+}
+.mt-6 {  /* 上邊距 */
+    margin-top: 6rem;
+}
+.mb-6 {  /* 下邊距 */
+    margin-bottom: 6rem;
+}
+.ms-10 {  /* 左邊距 */
+    margin-left: 10rem;
+}
+.me-10 {  /* 右邊距 */
+    margin-right: 10rem;
+}
+.mt-10 {  /* 上邊距 */
+    margin-top: 10rem;
+}
+.mb-10 {  /* 下邊距 */
+    margin-bottom: 10rem;
+}
+
+.green-font{
+    color: #6b8f78;
+}
+
+
+
+/* 網頁上方背景 */
+.top-background{
+    background-color: rgb(255, 255, 255, 0.5) !important; /* 白色，80% 不透明度 */
+    backdrop-filter: blur(10px); /* 可選：添加背景模糊效果 */
+}
+
+/* 車子背景 */
+.custom-bg {
+    background-image: url('api/img/background_car.png'); /* 設置背景圖片 */
+    background-size: cover; /* 使圖片覆蓋整個區塊 */
+    background-position: center; /* 使圖片居中顯示 */
+    background-repeat: no-repeat; /* 避免背景重複 */
+    height: 800px; /* 設置區塊高度為 100% 視窗高度 */
+    display: flex;
+    align-items: center; /* 垂直置中內容 */
+    justify-content: center; /* 水平置中內容 */
+}
+
+/* 環保小知識 */
+.knowledge-box {
+    flex: 1; /* 使元素可彈性伸縮，佔滿剩餘空間 */
+    background-color: #bddbbd; /* 設定背景顏色為淡綠色 */
+    padding: 10px; /* 設定內邊距為 10 像素 */
+    border-radius: 10px; /* 設定圓角為 10 像素 */
+}
+
+.knowledge-box h3 {
+    font-size: 20px; /* 設定標題文字的大小為 20 像素 */
+    margin-bottom: 10px; /* 設定底部邊距為 10 像素 */
+}
+
+.knowledge-box p {
+    font-size: 16px; /* 設定段落文字的大小為 16 像素 */
+}
+
+.custom-width {
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* 灰色背景 */
+.gray-bg{
+    background-color: rgba(201, 201, 201, 0.5);
+    z-index: -1;
+
+    position: relative;
+    top: -200px;
+}
+.gray-bg-word{
+    margin-top: 300px;
+}
+
+.gowork-table{
+    border-collapse: separate; /* 使邊框不重疊，讓圓角生效 */
+    border-spacing: 0; /* 取消單元格之間的間距 */
+    border-radius: 10px; /* 設置圓角大小 */
+    overflow: hidden; /* 確保圓角效果 */
+}
+
+
+/* 格子背景 */
+.plaid-bg {
+    position: relative;
+    z-index: 1; /* 確保內容在前景 */
+
+    position: relative;
+    top: -200px;
+}
+
+.plaid-bg::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 140%;
+    background-image: url('api/img/background_plaid.jpg');
+    /*background-size: cover;  確保背景圖完整覆蓋 */
+    opacity: 0.1; /* 設置背景透明度 */
+    z-index: -1; /* 確保背景圖片在內容後面 */
+}
+
+.pink-bg{
+    background-color: #f2d3bf;
+    border-radius: 10px; /* 設置圓角大小 */
+}
+
+
+
+
+
+
+
+
+
+
+
+/* 新增或修改地址 */
+.container{
+    position: relative;
+}

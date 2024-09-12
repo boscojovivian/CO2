@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>路線追蹤器</title>
+    <style>
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+        #info {
+            margin-top: 10px;
+        }
+        button {
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>路線追蹤器</h1>
+    <div id="dateTime">現在時間：--:--:--</div>
+    <div id="map"></div>
+    <div id="info">
+        <!-- 更新時間顯示格式為小時和分鐘，距離顯示為公里，速度顯示為公里/小時 -->
+        <p>距離：<span id="distance">0</span> </p>
+        <p>時間：<span id="time">0</span> </p>
+        <p>速度：<span id="speed">0</span> </p>
+    </div>
+    <div>
+        <button id="startBtn">開始</button>
+        <button id="stopBtn">結束</button>
+        <button id="exportBtn">匯出</button>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBE5jpz-2b9N-tE1DIKCtneSgZ9nXn3jxM&callback=initMap" async defer></script>
+    <script src="tracker copy.js"></script>
+</body>
+</html>
