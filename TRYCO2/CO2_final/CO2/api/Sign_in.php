@@ -6,7 +6,7 @@
         <link rel="stylesheet" href="css.css" type="text/css">
         <link rel="shortcut icon" href="img\logo.png" >
         <script src="js.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
         <script>
             const showAlert_logo = (title) => {
@@ -39,30 +39,20 @@
 
     <body class="login_body">
         <div class="login">
-        <div class="container-fluid p-0">
-        <div class="row g-0">
-            
-        <div class="col-lg-7 d-flex align-items-center justify-content-center">
-                <div class="login-container w-75">
-                    <div class="text-center w-100">
-                    <img src="img\logo.png" alt="logo" class="logo" >
+            <h1>登入</h1>
             <form id="loginForm" method="post">
 
-                            <div class="input-group mb-3">
-                                 <span class="input-group-text" id="basic-addon1">gmail圖</span>
-                                 <input type="text" id="email_in"  class="form-control" name="email_in" placeholder="請輸入電子郵件" required>    
-                                
-                            </div>  
+                <div class="login_form">
+                    <label for="email">電子信箱：</label>
+                    <input type="email" id="email_in" name="email_in" required>
 
-                             <div class="input-group mb-3">
-                                 <span class="input-group-text" id="basic-addon2">***</span>
-                                 <input type="password" id="password_in" class="form-control"name="password_in" placeholder="請輸入密碼" required>
-                                
-                            </div>
+                    <label for="password">密碼：</label>
+                    <input type="password" id="password_in" name="password_in" required>
+                </div>
+
                 <br><br>
 
-                <input type="submit" class="btn btn-primary w-100" name="login" data-style='submit1'  value="登入">
-               
+                <input type="submit" name="login" data-style='submit1' value="登入">
                 
                 <!-- <br>
                 <a href="Sign_up.php" class="back">未註冊，前往註冊頁面</a> -->
@@ -76,6 +66,5 @@
                 ?>
             </form>
         </div>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>    
