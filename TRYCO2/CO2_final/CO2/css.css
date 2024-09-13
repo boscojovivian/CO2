@@ -32,7 +32,6 @@ body {
 }
 
 
-
 /* 網頁上方背景 */
 .top-background{
     background-color: rgb(255, 255, 255, 0.5) !important; /* 白色，80% 不透明度 */
@@ -49,6 +48,18 @@ body {
     display: flex;
     align-items: center; /* 垂直置中內容 */
     justify-content: center; /* 水平置中內容 */
+}
+.custom-bg-position{
+    position: relative;
+    top: 100px;
+}
+
+
+/* 碳探你的路 */
+.title{
+    font-size: 65px;
+    position: relative;
+    top: -20px;
 }
 
 /* 環保小知識 */
@@ -79,7 +90,7 @@ body {
     z-index: -1;
 
     position: relative;
-    top: -200px;
+    top: -150px;
 }
 .gray-bg-word{
     margin-top: 300px;
@@ -91,7 +102,6 @@ body {
     border-radius: 10px; /* 設置圓角大小 */
     overflow: hidden; /* 確保圓角效果 */
 }
-
 
 /* 格子背景 */
 .plaid-bg {
@@ -129,8 +139,8 @@ body {
 
 
 
-
 /* 新增或修改地址 */
 .container{
     position: relative;
 }
+

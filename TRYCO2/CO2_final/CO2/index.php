@@ -9,7 +9,7 @@
 </head>
 <body>
     <!-- 導航欄 -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top top-background" style="background-color: rgb(255, 255, 255, 0.5)">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" style="background-color: rgb(255, 255, 255, 0.5)">
         <div class="container-fluid">
             <!-- logo -->
             <nav class="navbar navbar-brand bg-body-tertiary ms-6">
@@ -55,15 +55,18 @@
         </div>
     </nav>
 
-    <div class="custom-bg">
+    <div class="custom-bg-position">
+        <div class="custom-bg">
         <div class="text-white text-center p-5 row justify-content-md-center">
-            <h1 class="fw-bold">碳探你的路</h1>
+            <h1 class="fw-bold title">碳探你的路</h1>
             <div class="knowledge-box mt-5 custom-width col col-lg-12">
                 <h3 class="mt-2">環保小知識</h3>
                 <p>你知道嗎？..................................<a href="#">閱讀更多</a></p>
             </div>
         </div>
     </div>
+    </div>
+    
 
     <div class="gray-bg text-center row justify-content-md-center">
         <div class="col-md-6">
@@ -188,3 +191,5 @@
     </script>
 </body>
 </html>
+
+
