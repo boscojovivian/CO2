@@ -154,7 +154,7 @@
 
     <div class="plaid-bg d-flex justify-content-center align-items-center">
         <div class="col-lg-8 col-md-8"> <!-- 設置寬度比例 -->
-            <h2 class="text-center mt-6">個人碳排記錄：</h2>
+            <h2 class="text-center mt-6">個人碳排記錄</h2>
             <div class="p-5">
                 <canvas class="p-4 pink-bg mt-4" id="carbonChart"></canvas> <!-- 碳排記錄的圖表區 -->
             </div>

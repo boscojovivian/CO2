@@ -109,7 +109,7 @@ body {
     z-index: 1; /* 確保內容在前景 */
 
     position: relative;
-    top: -200px;
+    top: -150px;
 }
 
 .plaid-bg::before {
