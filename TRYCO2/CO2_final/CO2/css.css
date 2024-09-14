@@ -14,6 +14,18 @@ body {
 .mb-6 {  /* 下邊距 */
     margin-bottom: 6rem;
 }
+.ms-8 {  /* 左邊距 */
+    margin-left: 8rem;
+}
+.me-8 {  /* 右邊距 */
+    margin-right: 8rem;
+}
+.mt-8 {  /* 上邊距 */
+    margin-top: 8rem;
+}
+.mb-8 {  /* 下邊距 */
+    margin-bottom: 8rem;
+}
 .ms-10 {  /* 左邊距 */
     margin-left: 10rem;
 }
@@ -30,6 +42,32 @@ body {
 .green-font{
     color: #6b8f78;
 }
+
+#置中{
+    display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+/*
+align="center" 水平置中
+valign="center" 垂直置中
+*/
+#文字置中{ 
+    text-align: center;
+}
+#文字靠左{ 
+    text-align: left;
+}
+#水平均分{
+    display: flex;
+    justify-content: space-around;
+}
+#水平靠左{
+    display: flex;
+    justify-content: flex-start;
+}
+
+
 
 
 /* 網頁上方背景 */
@@ -144,8 +182,272 @@ body {
 
 
 
+
+
+
+
+.back-to-top {
+    display: none; /* 默認是隱藏的，這樣在第一屏才不顯示 */
+    position: fixed; /* 位置是固定的 */
+    bottom: 20px; /* 顯示在頁面底部 */
+    right: 30px; /* 顯示在頁面的右邊 */
+    z-index: 99; /* 確保不被其他功能覆蓋 */
+    border: 1px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #e2f7ea; /* 設置背景背景顏色 */
+    color: #93CDA9; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding: 10px 15px 15px 15px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+}
+.back-to-top:hover {
+    background-color: #93CDA9; /* 滑鼠移上去時，反轉顏色 */
+    color: #e2f7ea;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* 新增或修改地址 */
 .container{
     position: relative;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* 新增交通車出勤紀錄 */
+.choose_div{
+    width: 35%;
+}
+.choose_dat_time_div{
+    width: 65%;
+}
+.choose_car{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #ffffff; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding-left: 10px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+    box-shadow: 2px 2px 5px grey;
+    
+
+    font-size: 15px;
+    width: 80%;
+    height: 40px;
+    margin-top: 20px;
+}
+.choose_date{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #ffffff; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding-left: 10px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+    box-shadow: 2px 2px 5px grey;
+
+    font-size: 15px;
+    width: 40%;
+    height: 25px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.work_city{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #e2f7ea; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding-left: 10px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+
+    font-size: 15px;
+    width: 35%;
+    height: 40px;
+}
+.work_address_detail{
+    font-size: 15px;
+    width: 75%;
+    height: 20px;
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    background-color: #e2f7ea;
+}
+.work_city_div{
+    margin-top: 20px;
+
+    background-color: #81b595;
+    padding: 15px 15px 15px 15px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+    box-shadow: 2px 2px 5px grey;
+}
+.work_word{
+    font-size: large;
+    font-weight: bold;
+}
+.work_address_delete{
+    position: relative;
+    left: 82%;
+    color: #bc3b3b;
+    font-weight: bold;
+
+    display: inline-block; /* 让按钮以块级元素显示 */
+    text-align: center; /* 文本居中 */
+    text-decoration: none; /* 去除文本装饰，如果有的话 */
+    border: 2px solid #3b7752; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 3px; /* 设置按钮圆角，可以根据需要调整 */
+    background-color: #e2f7ea; /* 设置按钮背景颜色，可以根据需要调整 */
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+}
+.work_address_delete:hover {
+    background-color: #bc3b3b; /* 悬停时改变背景颜色 */
+    color: #ffffff; /* 悬停时改变文本颜色 */
+}
+.add_work_addAddress{
+    width: 60px;
+    height: 60px;
+
+    font-size: 50px;
+    font-weight: bold;
+    color: #ffffff;
+
+    display: inline-block; /* 让按钮以块级元素显示 */
+    text-align: center; /* 文本居中 */
+    text-decoration: none; /* 去除文本装饰，如果有的话 */
+    border: 2px solid #81b595; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 50px; /* 设置按钮圆角，可以根据需要调整 */
+    background-color: #81b595; /* 设置按钮背景颜色，可以根据需要调整 */
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+    box-shadow: 2px 2px 5px grey;
+}
+.add_work_addAddress:hover {
+    background-color: #3b7752; /* 悬停时改变背景颜色 */
+    color: #ffffff; /* 悬停时改变文本颜色 */
+}
+.add_work_plan_submit{
+    width: 40%;
+    height: 50px;
+
+    margin-left: 10px;
+
+    font-size: large;
+    font-weight: bold;
+    color: #3b7752;
+
+    display: inline-block; /* 让按钮以块级元素显示 */
+    padding: 10px 20px; /* 设置按钮的内边距 */
+    text-align: center; /* 文本居中 */
+    text-decoration: none; /* 去除文本装饰，如果有的话 */
+    border: 2px solid #81b595; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 5px; /* 设置按钮圆角，可以根据需要调整 */
+    background-color: #ffffff; /* 设置按钮背景颜色，可以根据需要调整 */
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+    box-shadow: 2px 2px 5px grey;
+}
+.add_work_plan_submit:hover {
+    background-color: #81b595; /* 悬停时改变背景颜色 */
+    color: #ffffff; /* 悬停时改变文本颜色 */
+}
+.add_work_apply_submit{
+    width: 40%;
+    height: 50px;
+
+    margin-left: 10px;
+
+    font-size: large;
+    font-weight: bold;
+    color: #3b7752;
+
+    display: inline-block; /* 让按钮以块级元素显示 */
+    padding: 10px 20px; /* 设置按钮的内边距 */
+    text-align: center; /* 文本居中 */
+    text-decoration: none; /* 去除文本装饰，如果有的话 */
+    border: 2px solid #81b595; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 5px; /* 设置按钮圆角，可以根据需要调整 */
+    background-color: #ffffff; /* 设置按钮背景颜色，可以根据需要调整 */
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+    box-shadow: 2px 2px 5px grey;
+}
+.add_work_apply_submit:hover {
+    background-color: #81b595; /* 悬停时改变背景颜色 */
+    color: #ffffff; /* 悬停时改变文本颜色 */
+}
+/* 禁用按钮的样式 */
+.add_work_apply_submit:disabled {
+    background-color: #ccc;
+    color: #8b8b8b;
+    cursor: not-allowed;
+    border: 1px solid #8b8b8b;
+}
+.map{
+    /* position: relative; */
+    /* left: 200px; */
+    /* top: 10px; */
+    width: 400px;
+    height: 550px;
+
+    border: 5px solid #81b595;
+    padding: 5px 5px 5px 5px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+    background-color: #81b595;
+    box-shadow: 2px 2px 5px grey;
+}
+
+/* 修改選擇器的外觀 */
+.flatpickr-calendar {
+    background-color: #b4e7c7; /* 背景色 */
+    color: #2c3630; /* 文字顏色 */
+}
+.flatpickr-day {
+    background-color: #b4e7c7; /* 日曆日期的背景色 */
+}
+.flatpickr-monthDropdown-months,
+.flatpickr-yearDropdown-years {
+    background-color: #b4e7c7; /* 年份和月份下拉列表的背景色 */
+}
+.flatpickr-time {
+    background-color: #b4e7c7; /* 時間選擇框的背景色 */
+}
+.flatpickr-am-pm,
+.flatpickr-hour,
+.flatpickr-minute,
+.flatpickr-second {
+    color: #3b7752; /* 時間選擇框的文字顏色 */
+}
+.plan_km_time{
+    background-color: #93CDA9;
+    width: 40%;
+    height: 80px;
+}
