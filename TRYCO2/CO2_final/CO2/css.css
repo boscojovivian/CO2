@@ -44,7 +44,8 @@ body {
     background-size: cover; /* 使圖片覆蓋整個區塊 */
     background-position: center; /* 使圖片居中顯示 */
     background-repeat: no-repeat; /* 避免背景重複 */
-    height: 800px; /* 設置區塊高度為 100% 視窗高度 */
+    /*height: 100vh;  區塊高度設為 100% 視窗高度 */
+    height: 800px;  /*設置區塊高度為 100% 視窗高度 */
     display: flex;
     align-items: center; /* 垂直置中內容 */
     justify-content: center; /* 水平置中內容 */
@@ -52,6 +53,8 @@ body {
 .custom-bg-position{
     position: relative;
     top: 100px;
+
+    width: 100%;
 }
 
 
@@ -60,6 +63,8 @@ body {
     font-size: 65px;
     position: relative;
     top: -20px;
+
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* 2px 的水平和垂直陰影，5px 的模糊半徑 */
 }
 
 /* 環保小知識 */

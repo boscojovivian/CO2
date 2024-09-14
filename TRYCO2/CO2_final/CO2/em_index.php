@@ -58,14 +58,14 @@
 
     <div class="custom-bg-position">
         <div class="custom-bg">
-        <div class="text-white text-center p-5 row justify-content-md-center">
-            <h1 class="fw-bold title">碳探你的路</h1>
-            <div class="knowledge-box mt-5 custom-width col col-lg-12">
-                <h3 class="mt-2">環保小知識</h3>
-                <p>你知道嗎？..................................<a href="#">閱讀更多</a></p>
+            <div class="text-white text-center p-5 row justify-content-md-center">
+                <h1 class="fw-bold title">碳探你的路</h1>
+                <div class="knowledge-box mt-5 custom-width col col-lg-12 shadow">
+                    <h3 class="mt-2">環保小知識</h3>
+                    <p>你知道嗎？..................................<a href="#">閱讀更多</a></p>
+                </div>
             </div>
         </div>
-    </div>
     </div>
     
 
