@@ -3,7 +3,7 @@
     <head>
         <title>登入</title>
         <meta charset="utf-8"></meta>
-        <link rel="stylesheet" href="css.css" type="text/css">
+        <link rel="stylesheet" href="sign_in_css.css" type="text/css">
         <link rel="shortcut icon" href="img\logo.png" >
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="js.js"></script>
@@ -41,39 +41,42 @@
 
     <body class="bg-light">
         <div class="container vh-100">
-            <div class="row h-100 justify-content-center align-items-center">
-                <div class="col-md-6 col-lg-4">
+            <div class="row h-100 justify-content-center align-items-center p-5">
+                <div class="col-md-8 col-lg-6">
                     <div class="card shadow-sm">
                         <div class="card-body">
-                            <h1 class="text-center mb-4">登入</h1>
-                            <form id="loginForm" method="post">
+                            <div class="p-5">
+                                <h1 class="text-center mb-4 fw-bold">登入</h1>
+                                <form id="loginForm" method="post">
 
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">電子信箱：</label>
-                                    <input type="email" class="form-control" id="email_in" name="email_in" required>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">電子信箱：</label>
+                                        <input type="email" class="form-control" id="email_in" name="email_in" required>
+                                    </div>
 
-                                <div class="mb-3">
-                                    <label for="password" class="form-label">密碼：</label>
-                                    <input type="password" class="form-control" id="password_in" name="password_in" required>
-                                </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">密碼：</label>
+                                        <input type="password" class="form-control" id="password_in" name="password_in" required>
+                                    </div>
 
-                                <div class="d-grid gap-2">
-                                    <button type="submit" name="login" class="btn btn-primary">登入</button>
-                                </div>
+                                    <!-- 使按鈕水平置中 -->
+                                    <div class="d-flex justify-content-center mt-5">
+                                        <button type="submit" name="login" class="btn sign-in-btn text-white p-3 w-75 fs-5">登入</button>
+                                    </div>
 
-                                <!-- 取消註冊連結，若需要可解開此註解
-                                <div class="text-center mt-3">
-                                    <a href="Sign_up.php" class="text-secondary">未註冊？前往註冊頁面</a>
-                                </div>
-                                -->
+                                    <!-- 
+                                    <div class="text-center mt-3">
+                                        <a href="Sign_up.php" class="text-secondary">未註冊？前往註冊頁面</a>
+                                    </div>
+                                    -->
 
-                                <?php
-                                    if (isset($_POST["login"])) {
-                                        include_once('inc/Sign_in.inc');
-                                    }
-                                ?>
-                            </form>
+                                    <?php
+                                        if (isset($_POST["login"])) {
+                                            include_once('inc/Sign_in.inc');
+                                        }
+                                    ?>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
