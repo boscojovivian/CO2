@@ -281,7 +281,7 @@ valign="center" 垂直置中
 
     font-size: 15px;
     width: 40%;
-    height: 25px;
+    height: 40px;
     margin-top: 20px;
     margin-left: 10px;
 }
@@ -301,7 +301,7 @@ valign="center" 垂直置中
 .work_address_detail{
     font-size: 15px;
     width: 75%;
-    height: 20px;
+    height: 35px;
     border: 2px solid #93CDA9; /* 顯示邊框 */
     background-color: #e2f7ea;
 }
@@ -316,10 +316,14 @@ valign="center" 垂直置中
 .work_word{
     font-size: large;
     font-weight: bold;
+    color: #2c3630;
+
+    text-decoration: none;
 }
 .work_address_delete{
     position: relative;
-    left: 82%;
+    left: 80%;
+    /* right: -80%; */
     color: #bc3b3b;
     font-weight: bold;
 
@@ -339,8 +343,8 @@ valign="center" 垂直置中
     width: 60px;
     height: 60px;
 
-    font-size: 50px;
-    font-weight: bold;
+    /* font-size: 50px;
+    font-weight: bold; */
     color: #ffffff;
 
     display: inline-block; /* 让按钮以块级元素显示 */
@@ -445,9 +449,4 @@ valign="center" 垂直置中
 .flatpickr-minute,
 .flatpickr-second {
     color: #3b7752; /* 時間選擇框的文字顏色 */
-}
-.plan_km_time{
-    background-color: #93CDA9;
-    width: 40%;
-    height: 80px;
 }
