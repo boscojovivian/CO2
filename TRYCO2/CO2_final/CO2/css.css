@@ -415,18 +415,21 @@ valign="center" 垂直置中
     cursor: not-allowed;
     border: 1px solid #8b8b8b;
 }
-.map{
-    /* position: relative; */
-    /* left: 200px; */
-    /* top: 10px; */
-    width: 400px;
-    height: 550px;
-
+.map {
+    width: 100%;
+    height: 350px; /* 調整小螢幕下的地圖高度 */
     border: 5px solid #81b595;
-    padding: 5px 5px 5px 5px; /* 增加一些內邊距 */
-    border-radius: 10px; /* 增加圓角 */
+    padding: 5px;
+    border-radius: 10px;
     background-color: #81b595;
     box-shadow: 2px 2px 5px grey;
+}
+
+/* 在較大的螢幕上增加地圖高度 */
+@media (min-width: 768px) {
+    .map {
+        height: 550px;
+    }
 }
 
 /* 修改選擇器的外觀 */

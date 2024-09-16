@@ -128,208 +128,174 @@ $results = $db_handle->runQuery($query);
         
 
         <!-- 新增交通車出勤紀錄 -->
-        <div class="mt-8 text-center container">
-            <div class="row justify-content-md-center">
-                <div class="col-md-10">
-                    <div class="row">
-                        <div class="col-5">
-                            <div class="map position-fixed" id="map"></div>
-                        </div>
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <!-- 地圖區塊 -->
+                <div class="col-12 col-md-5 mb-4">
+                    <div class="map" id="map"></div>
+                </div>
 
-                        <div class="col-7">
-                            <h1 class="fw-bold m-3">新增交通車出勤紀錄</h1>
-                            <div class="mt-5">
-                                <form id="routingForm" method="post">
-                                    <div id="text-center">
-                                        <div id="文字靠左">
-                                            <!-- 選擇交通車、出勤日期時間 -->
-                                            <div id="水平靠左">
-                                                
-                                                <!-- 選擇交通車 -->
-                                                <?php
-                                                $link = mysqli_connect("localhost", "root", "A12345678") 
-                                                or die("無法開啟 MySQL 資料庫連結!<br>");
-                                                mysqli_select_db($link, "carbon_emissions");
-                                    
-                                                $em_id = $_SESSION['em_id'];
-                                    
-                                                $sql = "SELECT cc_name, cc_type FROM cm_car";
-                                                mysqli_query($link, "SET NAMES utf8");
-                                    
-                                                $result = mysqli_query($link, $sql);
-                                                $fields = mysqli_num_fields($result); //取得欄位數
-                                                $rows = mysqli_num_rows($result); //取得記錄數
-                                                ?>
+                <!-- 表單區塊 -->
+                <div class="col-12 col-md-7">
+                    <h1 class="fw-bold m-3 text-center text-md-start">新增交通車出勤紀錄</h1>
+                    <form id="routingForm" method="post">
+                        <div id="text-center">
+                            <div id="文字靠左">
+                                <!-- 選擇交通車、出勤日期時間 -->
+                                <div id="水平靠左">
 
-                                                <div class="choose_div">
-                                                    <label class="work_word" for="transportMode">出勤交通車：</label>
+                                    <!-- 選擇交通車 -->
+                                    <?php
+                                    $link = mysqli_connect("localhost", "root", "A12345678") 
+                                    or die("無法開啟 MySQL 資料庫連結!<br>");
+                                    mysqli_select_db($link, "carbon_emissions");
 
-                                                    &nbsp&nbsp&nbsp&nbsp
-                                                    <select class="choose_car" id="transportMode" name="transportMode" required>
-                                                        <option value="">選擇交通車</option>
-                                                        <?php
-                                                        while ($rows = mysqli_fetch_array($result)){
-                                                            echo "<option value='" . $rows[1] . "'>" . $rows[0] . "</option>";
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
+                                    $em_id = $_SESSION['em_id'];
 
-                                                <!-- 日期選擇器 -->
-                                                <div class="choose_dat_time_div" >
-                                                    <label class="work_word" for="choose_date">選擇出勤日期時間：</label>
-                                                    <div id="水平均分">
-                                                        &nbsp&nbsp
-                                                        <input class="choose_date" type="text" id="startDate" name="startDate" placeholder="選擇日期" required>
-                                                        <input class="choose_date" type="text" id="startTime" name="startTime" placeholder="選擇時間" required>
-                                                    </div>
-                        
-                                                    <script>
-                                                        // 初始化日期選擇器，添加跳到今天的快捷鍵
-                                                        flatpickr("#startDate", {
-                                                            dateFormat: "Y-m-d", // 指定日期格式
-                                                            "locale": "zh_tw", // 设置为中文本地化
-                                                        });
+                                    $sql = "SELECT cc_name, cc_type FROM cm_car";
+                                    mysqli_query($link, "SET NAMES utf8");
 
-                                                        // 初始化時間選擇器，預設為現在的時間
-                                                        flatpickr("#startTime", {
-                                                            enableTime: true,
-                                                            noCalendar: true, // 不顯示日曆，只顯示時間
-                                                            dateFormat: "H:i", // 指定時間格式
-                                                            time_24hr: true,
-                                                            // defaultDate: new Date(), // 預設為現在的時間
-                                                            "locale": "zh_tw", // 设置为中文本地化
-                                                        });
-                                                        // 检查日期和时间是否已选择
-                                                        function checkDateTimeSelected() {
-                                                            var startDate = document.getElementById('startDate').value;
-                                                            var startTime = document.getElementById('startTime').value;
-                                                            if (!startDate || !startTime) {
-                                                                showAlert_chack_km_time();
-                                                                return false;
-                                                            }
-                                                            return true;
-                                                        }
-                                                    </script>
-                                                </div>
-                                            </div>
+                                    $result = mysqli_query($link, $sql);
+                                    $fields = mysqli_num_fields($result); //取得欄位數
+                                    $rows = mysqli_num_rows($result); //取得記錄數
+                                    ?>
 
-                                            <!-- 設置起點 -->
-                                            <div class="work_city_div" style="background-color: #8cb4bf;">
-                                                <a class="work_word">起點：</a>
-                                                <br><br>
-                                                <div id="水平靠左">
-                                                    &nbsp&nbsp&nbsp&nbsp
-                                                    <label for='city_list_0'>城市：</label>
-                                                    <select class='work_city' style="background-color:#e2ebf7; color:#527c7c; border:2px solid #9bc9ca;" id="city_list_0" name="city[]" onChange='getStartArea(this.value);' required>
-                                                        <option value disabled>請選擇城市</option>
-                                                        <?php
-                                                        foreach($results as $city){
-                                                            $selected = $city["city_name"] == "台中市" ? "selected" : "";
-                                                        ?>
-                                                        <option value="<?php echo $city["city_id"]; ?>" <?php echo $selected; ?>><?php echo $city["city_name"]; ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  
-                                                    <label for='area_list_0'>鄉鎮區：</label>
-                                                    <select class='work_city' style="background-color:#e2ebf7; color:#527c7c; border:2px solid #9bc9ca;" id="area_list_0" name="area[]" required>
-                                                        <option value="">請選擇鄉鎮區</option>
-                                                        <!-- 這裡需要動態載入鄉鎮區，假設北區的id為 "100" -->
-                                                        <option value="100" selected>北區</option>
-                                                    </select>
-                                                </div>
-                                                <br>
-                                                <div id="水平靠左">
-                                                    &nbsp&nbsp&nbsp&nbsp
-                                                    <label for="address_detail_0">詳細地址：</label>
-                                                    &nbsp
-                                                    <input class='work_address_detail rounded-3' style="background-color:#e2ebf7; color:#527c7c; border:2px solid #9bc9ca;" type="text" id="address_detail_0" name="address_detail[]" value="三民路三段129號" required>
-                                                </div>
-                                            </div>
-
-                                            <br><br>
-
-                                            <!-- 設置中途點 -->
-                                            <a class="work_word">新增中途點：</a>
-                                            <div id="address_container">
-                                                <script>
-                                                    window.onload = function() {
-                                                        addAddress();
-                                                    };
-                                                </script>
-                                            </div>
-
-                                            <!-- 新增中途點按鈕 -->
-                                            <div id="文字置中">
-                                                <button class="add_work_addAddress m-4 fw-bolder fs-1" type="button" onclick="addAddress()">+</button>
-                                            </div>
-                                            
-                                            <!-- 設置終點 -->
-                                            <div class="work_city_div" style="background-color: #cbb48e;">
-                                                <a class="work_word">終點：</a>
-                                                <br><br>
-                                                <div id="水平靠左">
-                                                    &nbsp&nbsp&nbsp&nbsp
-                                                    <label for='city_list_1'>城市：</label>
-                                                    <select class='work_city' style="background-color:#f4eee5; color:#773f3b; border:2px solid #caa79b;" id="city_list_1" name="city[]" onChange='getEndArea(this.value);' required>
-                                                        <option value disabled>請選擇城市</option>
-                                                        <?php
-                                                        foreach($results as $city){
-                                                            $selected = $city["city_name"] == "台中市" ? "selected" : "";
-                                                        ?>
-                                                        <option value="<?php echo $city["city_id"]; ?>" <?php echo $selected; ?>><?php echo $city["city_name"]; ?></option>
-                                                        <?php
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                    &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  
-                                                    <label for='area_list_1'>鄉鎮區：</label>
-                                                    <select class='work_city' style="background-color:#f4eee5; color:#773f3b; border:2px solid #caa79b;" id="area_list_1" name="area[]" required>
-                                                        <option value="">請選擇鄉鎮區</option>
-                                                        <!-- 這裡需要動態載入鄉鎮區，假設北區的id為 "100" -->
-                                                        <option value="100" selected>北區</option>
-                                                    </select>
-                                                </div>
-                                                <br>
-                                                <div id="水平靠左">
-                                                    &nbsp&nbsp&nbsp&nbsp
-                                                    <label for="address_detail_1">詳細地址：</label>
-                                                    &nbsp
-                                                    <input class='work_address_detail' style="background-color:#f4eee5; color:#773f3b; border:2px solid #caa79b;" type="text" id="address_detail_1" name="address_detail[]" value="三民路三段129號" required>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <br>
-                                        <div id="水平均分">
-                                            <input class="add_work_plan_submit" type="submit" name="plan" value="規劃路線">
-                                            <input class="add_work_apply_submit" type="submit" name="apply" value="提交申請" disabled>
-                                        </div>
-                                        <br>
-
-                                        <input type="hidden" id="chinese_address" name="chinese_address" value="">
-                                        <input type="hidden" id="total_km" name="total_km" value="">
-                                        <input type="hidden" id="total_hr" name="total_hr" value="">
-                                        <input type="hidden" id="total_min" name="total_min" value="">
-                                        <input type="hidden" id="transportName" name="transportName" value="">
+                                    <div class="choose_div">
+                                        <label class="work_word" for="transportMode">出勤交通車：</label>
+                                        &nbsp&nbsp&nbsp&nbsp
+                                        <select class="choose_car" id="transportMode" name="transportMode" required>
+                                            <option value="">選擇交通車</option>
+                                            <?php
+                                            while ($rows = mysqli_fetch_array($result)){
+                                                echo "<option value='" . $rows[1] . "'>" . $rows[0] . "</option>";
+                                            }
+                                            ?>
+                                        </select>
                                     </div>
 
-                                    <?php
-                                        if (isset($_POST["apply"])) {
-                                            include_once('inc\add_work.inc');
-                                        }
-                                    ?>
-                                </form>
+                                    <!-- 日期選擇器 -->
+                                    <div class="choose_dat_time_div" >
+                                        <label class="work_word" for="choose_date">選擇出勤日期時間：</label>
+                                        <div id="水平均分">
+                                            &nbsp&nbsp
+                                            <input class="choose_date" type="text" id="startDate" name="startDate" placeholder="選擇日期" required>
+                                            <input class="choose_date" type="text" id="startTime" name="startTime" placeholder="選擇時間" required>
+                                        </div>
+
+                                        <script>
+                                            // 初始化日期選擇器
+                                            flatpickr("#startDate", {
+                                                dateFormat: "Y-m-d", // 日期格式
+                                                "locale": "zh_tw", // 本地化
+                                            });
+
+                                            // 初始化時間選擇器
+                                            flatpickr("#startTime", {
+                                                enableTime: true,
+                                                noCalendar: true, // 不顯示日曆
+                                                dateFormat: "H:i", // 時間格式
+                                                time_24hr: true,
+                                                "locale": "zh_tw", // 本地化
+                                            });
+                                        </script>
+                                    </div>
+                                </div>
+
+                                <!-- 設置起點 -->
+                                <div class="work_city_div" style="background-color: #8cb4bf;">
+                                    <a class="work_word">起點：</a>
+                                    <br><br>
+                                    <div id="水平靠左">
+                                        &nbsp&nbsp&nbsp&nbsp
+                                        <label for='city_list_0'>城市：</label>
+                                        <select class='work_city' style="background-color:#e2ebf7; color:#527c7c; border:2px solid #9bc9ca;" id="city_list_0" name="city[]" onChange='getStartArea(this.value);' required>
+                                            <option value disabled>請選擇城市</option>
+                                            <?php
+                                            foreach($results as $city){
+                                                $selected = $city["city_name"] == "台中市" ? "selected" : "";
+                                            ?>
+                                            <option value="<?php echo $city["city_id"]; ?>" <?php echo $selected; ?>><?php echo $city["city_name"]; ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  
+                                        <label for='area_list_0'>鄉鎮區：</label>
+                                        <select class='work_city' style="background-color:#e2ebf7; color:#527c7c; border:2px solid #9bc9ca;" id="area_list_0" name="area[]" required>
+                                            <option value="">請選擇鄉鎮區</option>
+                                            <option value="100" selected>北區</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <div id="水平靠左">
+                                        &nbsp&nbsp&nbsp&nbsp
+                                        <label for="address_detail_0">詳細地址：</label>
+                                        &nbsp
+                                        <input class='work_address_detail rounded-3' style="background-color:#e2ebf7; color:#527c7c; border:2px solid #9bc9ca;" type="text" id="address_detail_0" name="address_detail[]" value="三民路三段129號" required>
+                                    </div>
+                                </div>
+
+                                <br><br>
+
+                                <!-- 設置終點 -->
+                                <div class="work_city_div" style="background-color: #cbb48e;">
+                                    <a class="work_word">終點：</a>
+                                    <br><br>
+                                    <div id="水平靠左">
+                                        &nbsp&nbsp&nbsp&nbsp
+                                        <label for='city_list_1'>城市：</label>
+                                        <select class='work_city' style="background-color:#f4eee5; color:#773f3b; border:2px solid #caa79b;" id="city_list_1" name="city[]" onChange='getEndArea(this.value);' required>
+                                            <option value disabled>請選擇城市</option>
+                                            <?php
+                                            foreach($results as $city){
+                                                $selected = $city["city_name"] == "台中市" ? "selected" : "";
+                                            ?>
+                                            <option value="<?php echo $city["city_id"]; ?>" <?php echo $selected; ?>><?php echo $city["city_name"]; ?></option>
+                                            <?php
+                                            }
+                                            ?>
+                                        </select>
+                                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  
+                                        <label for='area_list_1'>鄉鎮區：</label>
+                                        <select class='work_city' style="background-color:#f4eee5; color:#773f3b; border:2px solid #caa79b;" id="area_list_1" name="area[]" required>
+                                            <option value="">請選擇鄉鎮區</option>
+                                            <option value="100" selected>北區</option>
+                                        </select>
+                                    </div>
+                                    <br>
+                                    <div id="水平靠左">
+                                        &nbsp&nbsp&nbsp&nbsp
+                                        <label for="address_detail_1">詳細地址：</label>
+                                        &nbsp
+                                        <input class='work_address_detail rounded-3' style="background-color:#f4eee5; color:#773f3b; border:2px solid #caa79b;" type="text" id="address_detail_1" name="address_detail[]" value="三民路三段129號" required>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            
-                            <br><br><br>
+
+                            <br>
+                            <div id="水平均分">
+                                <input class="add_work_plan_submit" type="submit" name="plan" value="規劃路線">
+                                <input class="add_work_apply_submit" type="submit" name="apply" value="提交申請" disabled>
+                            </div>
+                            <br>
+
+                            <input type="hidden" id="chinese_address" name="chinese_address" value="">
+                            <input type="hidden" id="total_km" name="total_km" value="">
+                            <input type="hidden" id="total_hr" name="total_hr" value="">
+                            <input type="hidden" id="total_min" name="total_min" value="">
+                            <input type="hidden" id="transportName" name="transportName" value="">
                         </div>
-                    </div>
-                    
+
+                        <?php
+                            if (isset($_POST["apply"])) {
+                                include_once('inc\add_work.inc');
+                            }
+                        ?>
+                    </form>
                 </div>
+            </div>    
+        </div>
+
                 
             
             
@@ -473,6 +439,7 @@ $results = $db_handle->runQuery($query);
 
                 const detailInput = document.createElement('input');
                 detailInput.classList.add('work_address_detail');
+                detailInput.classList.add('rounded-3');
                 detailInput.setAttribute('type', 'text');
                 detailInput.setAttribute('id', detailId);
                 detailInput.setAttribute('name', 'address_detail[]');
