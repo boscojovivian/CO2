@@ -128,15 +128,15 @@ $results = $db_handle->runQuery($query);
         
 
         <!-- 新增交通車出勤紀錄 -->
-        <div class="container mt-5">
+        <div class="container mt-8">
             <div class="row justify-content-center">
                 <!-- 地圖區塊 -->
-                <div class="col-12 col-md-5 mb-4">
+                <div class="col-12 col-md-4">
                     <div class="map" id="map"></div>
                 </div>
 
                 <!-- 表單區塊 -->
-                <div class="col-12 col-md-7">
+                <div class="col-12 col-md-6">
                     <h1 class="fw-bold m-3 text-center text-md-start">新增交通車出勤紀錄</h1>
                     <form id="routingForm" method="post">
                         <div id="text-center">
