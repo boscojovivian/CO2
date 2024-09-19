@@ -23,11 +23,6 @@
     margin-top: 0; /* Optional: 控制選單與按鈕的間距 */
 }
 
-.dropdown-menu-custom{
-    background-color: #98c39a !important;
-    border: none !important;
-}
-
 .logout_submit{
     background-color: none;
 }
@@ -40,7 +35,7 @@
 }
 
 .dropdown-item:hover{
-    background-color: #98c39a !important;
+    background-color: #fff !important;
     color: black !important;
 }
 
@@ -52,21 +47,21 @@ table{
 
 table thead tr.active{
     height: 60px;
-    font-size: 24px;
+    font-size: 26px;
     vertical-align: middle; /*表格內水平置中*/
     background-color: #98c39a !important;
 }
 
 table thead tr{
     height: 60px;
-    font-size: 24px;
+    font-size: 26px;
     vertical-align: middle; /*表格內水平置中*/
     background-color: #fff;
 }
 
 table tbody tr{
     height: 60px;
-    font-size: 20px;
+    font-size: 24px;
     vertical-align: middle; /*表格內水平置中*/
 }
 
