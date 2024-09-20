@@ -13,25 +13,25 @@ if (!isset($_SESSION['em_id'])) {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>管理者資料</title>
+        <title>員工資料</title>
         <link rel="stylesheet" href="./css/employee.css" type="text/css">
         <link rel="shortcut icon" href="img/logo.png" >
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
     </head>
     <body>
         <!-- 導入導覽列 -->
-        <?php include('nav/cm_nav.php') ?>
+        <?php include('nav/em_nav.php') ?>
 
         <div class="container">
             <!-- 表格 -->
             <table class="table table-hover caption-top">
-                <caption>管理者資料</caption>
+                <caption>員工資料</caption>
                 <thead class="table">
                     <tr class="active">
-                        <th>管理者編號</th>
+                        <th>員工編號</th>
                         <th>姓名</th>
                         <th>電子信箱</th>
-                        <th colspan="2">設定管理者狀態</th>
+                        <th colspan="3">編輯資料</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -47,8 +47,9 @@ if (!isset($_SESSION['em_id'])) {
                                 echo "<td>".$row["em_id"]."</td>";
                                 echo "<td>".$row["em_name"]."</td>";
                                 echo "<td>".$row["em_email"]."</td>";
-                                echo "<td><button type='button' class='add-button btn btn-success btn-lg'>設定</button></td>";
-                                echo "<td><button type='button' class='remove-button btn btn-danger btn-lg'>解除</button></td>";
+                                echo "<td><button type='button' class='add-button btn btn-success btn-lg'>新增</button></td>";
+                                echo "<td><button type='button' class='fix-button btn btn-warning btn-lg'>修改</button></td>";
+                                echo "<td><button type='button' class='remove-button btn btn-danger btn-lg'>刪除</button></td>";
                                 echo "</tr>";
                             }
                         } else {

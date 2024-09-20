@@ -4,6 +4,11 @@ table{
     text-align: center;
 }
 
+caption{
+    font-size: 50px;
+    font-weight: bold;
+}
+
 table thead tr.active{
     height: 60px;
     font-size: 26px;
@@ -32,9 +37,4 @@ table tbody tr:nth-of-type(even){
 /* 新增最底深色邊框 */
 table tbody tr:last-of-type{
     border-bottom: 2px solid #98c39a;
-}
-
-caption{
-    font-size: 50px;
-    font-weight: bold;
 }
