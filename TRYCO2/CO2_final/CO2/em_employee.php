@@ -27,7 +27,7 @@ if (!isset($_SESSION['em_id'])) {
             <table class="table table-hover caption-top">
                 <caption>員工資料</caption>
                 <thead class="table">
-                    <tr class="active">
+                    <tr>
                         <th>員工編號</th>
                         <th>姓名</th>
                         <th>電子信箱</th>

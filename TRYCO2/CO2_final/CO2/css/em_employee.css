@@ -7,20 +7,14 @@ table{
 caption{
     font-size: 50px;
     font-weight: bold;
-}
-
-table thead tr.active{
-    height: 60px;
-    font-size: 26px;
-    vertical-align: middle; /*表格內水平置中*/
-    background-color: #98c39a !important;
+    color: #516850 !important;
 }
 
 table thead tr{
     height: 60px;
     font-size: 26px;
     vertical-align: middle; /*表格內水平置中*/
-    background-color: #fff;
+    background-color: #98c39a;
 }
 
 table tbody tr{

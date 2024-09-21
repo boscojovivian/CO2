@@ -5,7 +5,7 @@
     }
 
     .navbar-custom{
-        font-size: 18px;
+        font-size: 22px;
         font-weight: bolder;
         background-color: #d2f1dc;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -30,7 +30,7 @@
 
     .dropdown-item{
         margin-bottom: 1%;
-        font-size: 18px !important;
+        font-size: 22px !important;
         font-weight: bold !important;
         color: rgba(0, 0, 0, 0.55) !important;
     }
