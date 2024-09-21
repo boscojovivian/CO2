@@ -1,0 +1,40 @@
+table{
+    font-family: sans-serif;
+    min-width: 400px;
+    text-align: center;
+}
+
+caption{
+    font-size: 50px;
+    font-weight: bold;
+}
+
+table thead tr.active{
+    height: 60px;
+    font-size: 26px;
+    vertical-align: middle; /*表格內水平置中*/
+    background-color: #9eacb4 !important;
+}
+
+table thead tr{
+    height: 60px;
+    font-size: 26px;
+    vertical-align: middle; /*表格內水平置中*/
+    background-color: #fff;
+}
+
+table tbody tr{
+    height: 60px;
+    font-size: 24px;
+    vertical-align: middle; /*表格內水平置中*/
+}
+
+/* 格行添加背景 */
+table tbody tr:nth-of-type(even){
+    background-color: #f3f3f3;
+}
+
+/* 新增最底深色邊框 */
+table tbody tr:last-of-type{
+    border-bottom: 2px solid #9eacb4;
+}

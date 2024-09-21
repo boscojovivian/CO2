@@ -58,9 +58,9 @@
                                 員工資料
                             </a>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a class="dropdown-item" href="#">管理者資料</a></li>
+                                <li><a class="dropdown-item" href="cm_employee.php">管理者資料</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">員工資料</a></li>
+                                <li><a class="dropdown-item" href="em_employee.php">員工資料</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
