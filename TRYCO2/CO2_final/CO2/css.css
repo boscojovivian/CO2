@@ -87,6 +87,8 @@ valign="center" 垂直置中
     display: flex;
     align-items: center; /* 垂直置中內容 */
     justify-content: center; /* 水平置中內容 */
+    position: relative;
+    z-index: 2;
 }
 .custom-bg-position{
     position: relative;
@@ -130,7 +132,6 @@ valign="center" 垂直置中
 /* 灰色背景 */
 .gray-bg{
     background-color: rgba(201, 201, 201, 0.5);
-    z-index: -1;
 
     position: relative;
     top: -150px;
