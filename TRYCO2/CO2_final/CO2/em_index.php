@@ -221,6 +221,19 @@ $db_handle = new DBController();
             </div>
         </div>
     </div>
+    
+    <!-- 抓個人碳排資料 -->
+    <?php
+        $link = mysqli_connect('localhost', 'root', '')
+        or die("無法開啟 MySQL 資料庫連結!<br>");
+        mysqli_select_db($link, "carbon_emissions");
+        $em_id = $_SESSION['em_id'];
+        $sql = "SELECT eCO2_date, eCO2_carbon 
+                FROM em_co2 
+                where em_id = 1 AND
+                eCO2_date BETWEEN '2023-01-01' AND '2024-12-31'
+                group by eCO2_date;"
+    ?>
 
     <!-- 引入 Bootstrap JS（包含 Popper.js） -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
