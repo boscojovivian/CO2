@@ -1,0 +1,208 @@
+
+
+/* 新增交通車出勤紀錄 */
+.choose_div{
+    width: 35%;
+}
+.choose_dat_time_div{
+    width: 65%;
+}
+.choose_car{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #ffffff; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding-left: 10px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+    box-shadow: 2px 2px 5px grey;
+    
+
+    font-size: 15px;
+    width: 80%;
+    height: 40px;
+    margin-top: 20px;
+}
+.choose_date{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #ffffff; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding-left: 10px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+    box-shadow: 2px 2px 5px grey;
+
+    font-size: 15px;
+    width: 40%;
+    height: 40px;
+    margin-top: 20px;
+    margin-left: 10px;
+}
+.work_city{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #e2f7ea; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding-left: 10px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+
+    font-size: 15px;
+    width: 35%;
+    height: 40px;
+}
+.work_address_detail{
+    font-size: 15px;
+    width: 75%;
+    height: 35px;
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    background-color: #e2f7ea;
+}
+.work_city_div{
+    margin-top: 20px;
+
+    background-color: #81b595;
+    padding: 15px 15px 15px 15px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+    box-shadow: 2px 2px 5px grey;
+}
+.work_word{
+    font-size: large;
+    font-weight: bold;
+    color: #2c3630;
+
+    text-decoration: none;
+}
+.work_address_delete{
+    position: relative;
+    left: 80%;
+    /* right: -80%; */
+    color: #bc3b3b;
+    font-weight: bold;
+
+    display: inline-block; /* 让按钮以块级元素显示 */
+    text-align: center; /* 文本居中 */
+    text-decoration: none; /* 去除文本装饰，如果有的话 */
+    border: 2px solid #3b7752; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 3px; /* 设置按钮圆角，可以根据需要调整 */
+    background-color: #e2f7ea; /* 设置按钮背景颜色，可以根据需要调整 */
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+}
+.work_address_delete:hover {
+    background-color: #bc3b3b; /* 悬停时改变背景颜色 */
+    color: #ffffff; /* 悬停时改变文本颜色 */
+}
+.add_work_addAddress{
+    width: 60px;
+    height: 60px;
+
+    /* font-size: 50px;
+    font-weight: bold; */
+    color: #ffffff;
+
+    display: inline-block; /* 让按钮以块级元素显示 */
+    text-align: center; /* 文本居中 */
+    text-decoration: none; /* 去除文本装饰，如果有的话 */
+    border: 2px solid #81b595; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 50px; /* 设置按钮圆角，可以根据需要调整 */
+    background-color: #81b595; /* 设置按钮背景颜色，可以根据需要调整 */
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+    box-shadow: 2px 2px 5px grey;
+}
+.add_work_addAddress:hover {
+    background-color: #3b7752; /* 悬停时改变背景颜色 */
+    color: #ffffff; /* 悬停时改变文本颜色 */
+}
+.add_work_plan_submit{
+    width: 40%;
+    height: 50px;
+
+    margin-left: 10px;
+
+    font-size: large;
+    font-weight: bold;
+    color: #3b7752;
+
+    display: inline-block; /* 让按钮以块级元素显示 */
+    padding: 10px 20px; /* 设置按钮的内边距 */
+    text-align: center; /* 文本居中 */
+    text-decoration: none; /* 去除文本装饰，如果有的话 */
+    border: 2px solid #81b595; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 5px; /* 设置按钮圆角，可以根据需要调整 */
+    background-color: #ffffff; /* 设置按钮背景颜色，可以根据需要调整 */
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+    box-shadow: 2px 2px 5px grey;
+}
+.add_work_plan_submit:hover {
+    background-color: #81b595; /* 悬停时改变背景颜色 */
+    color: #ffffff; /* 悬停时改变文本颜色 */
+}
+.add_work_apply_submit{
+    width: 40%;
+    height: 50px;
+
+    margin-left: 10px;
+
+    font-size: large;
+    font-weight: bold;
+    color: #3b7752;
+
+    display: inline-block; /* 让按钮以块级元素显示 */
+    padding: 10px 20px; /* 设置按钮的内边距 */
+    text-align: center; /* 文本居中 */
+    text-decoration: none; /* 去除文本装饰，如果有的话 */
+    border: 2px solid #81b595; /* 设置按钮边框，可以根据需要调整颜色和宽度 */
+    border-radius: 5px; /* 设置按钮圆角，可以根据需要调整 */
+    background-color: #ffffff; /* 设置按钮背景颜色，可以根据需要调整 */
+    cursor: pointer; /* 鼠标悬停时显示手型光标 */
+    box-shadow: 2px 2px 5px grey;
+}
+.add_work_apply_submit:hover {
+    background-color: #81b595; /* 悬停时改变背景颜色 */
+    color: #ffffff; /* 悬停时改变文本颜色 */
+}
+/* 禁用按钮的样式 */
+.add_work_apply_submit:disabled {
+    background-color: #ccc;
+    color: #8b8b8b;
+    cursor: not-allowed;
+    border: 1px solid #8b8b8b;
+}
+.map {
+    height: 350px; /* 調整小螢幕下的地圖高度 */
+    border: 5px solid #81b595;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #81b595;
+    box-shadow: 2px 2px 5px grey;
+}
+
+/* 在較大的螢幕上增加地圖高度 */
+@media (min-width: 768px) {
+    .map {
+        height: 550px;
+    }
+}
+
+/* 修改選擇器的外觀 */
+.flatpickr-calendar {
+    background-color: #b4e7c7; /* 背景色 */
+    color: #2c3630; /* 文字顏色 */
+}
+.flatpickr-day {
+    background-color: #b4e7c7; /* 日曆日期的背景色 */
+}
+.flatpickr-monthDropdown-months,
+.flatpickr-yearDropdown-years {
+    background-color: #b4e7c7; /* 年份和月份下拉列表的背景色 */
+}
+.flatpickr-time {
+    background-color: #b4e7c7; /* 時間選擇框的背景色 */
+}
+.flatpickr-am-pm,
+.flatpickr-hour,
+.flatpickr-minute,
+.flatpickr-second {
+    color: #3b7752; /* 時間選擇框的文字顏色 */
+}

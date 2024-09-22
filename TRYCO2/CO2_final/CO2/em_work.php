@@ -23,8 +23,9 @@ $results = $db_handle->runQuery($query);
     <head>
         <title>新增交通車出勤紀錄</title>
         <meta charset="utf-8"></meta>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 設置網頁的字符集與 viewport，方便手機瀏覽 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta> <!-- 設置網頁的字符集與 viewport，方便手機瀏覽 -->
         <link rel="stylesheet" href="css.css" type="text/css">
+        <link rel="stylesheet" href="em_work.css" type="text/css">
         <link rel="stylesheet" type="text/css" href="https://js.api.here.com/v3/3.1/mapsjs-ui.css" />
         <link rel="shortcut icon" href="img\logo.png" >
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- 引入 Bootstrap 框架的 CSS 文件 -->
@@ -140,9 +141,9 @@ $results = $db_handle->runQuery($query);
                     <h1 class="fw-bold m-3 text-center text-md-start">新增交通車出勤紀錄</h1>
                     <form id="routingForm" method="post">
                         <div id="text-center">
-                            <div id="文字靠左">
+                            <div class="text-left">
                                 <!-- 選擇交通車、出勤日期時間 -->
-                                <div id="水平靠左">
+                                <div class="justify-left">
 
                                     <!-- 選擇交通車 -->
                                     <?php
@@ -176,7 +177,7 @@ $results = $db_handle->runQuery($query);
                                     <!-- 日期選擇器 -->
                                     <div class="choose_dat_time_div" >
                                         <label class="work_word" for="choose_date">選擇出勤日期時間：</label>
-                                        <div id="水平均分">
+                                        <div class="justify-around">
                                             &nbsp&nbsp
                                             <input class="choose_date" type="text" id="startDate" name="startDate" placeholder="選擇日期" required>
                                             <input class="choose_date" type="text" id="startTime" name="startTime" placeholder="選擇時間" required>
@@ -205,7 +206,7 @@ $results = $db_handle->runQuery($query);
                                 <div class="work_city_div" style="background-color: #8cb4bf;">
                                     <a class="work_word">起點：</a>
                                     <br><br>
-                                    <div id="水平靠左">
+                                    <div class="justify-left">
                                         &nbsp&nbsp&nbsp&nbsp
                                         <label for='city_list_0'>城市：</label>
                                         <select class='work_city' style="background-color:#e2ebf7; color:#527c7c; border:2px solid #9bc9ca;" id="city_list_0" name="city[]" onChange='getStartArea(this.value);' required>
@@ -227,7 +228,7 @@ $results = $db_handle->runQuery($query);
                                         </select>
                                     </div>
                                     <br>
-                                    <div id="水平靠左">
+                                    <div class="justify-left">
                                         &nbsp&nbsp&nbsp&nbsp
                                         <label for="address_detail_0">詳細地址：</label>
                                         &nbsp
@@ -237,11 +238,28 @@ $results = $db_handle->runQuery($query);
 
                                 <br><br>
 
+                                <!-- 設置中途點 -->
+                                <a class="work_word">新增中途點：</a>
+                                <div id="address_container">
+                                    <script>
+                                        window.onload = function() {
+                                            addAddress();
+                                        };
+                                    </script>
+                                </div>
+
+                                <!-- 新增中途點按鈕 -->
+                                <div class="text-middle">
+                                    <br>
+                                    <button class="add_work_addAddress fs-2" type="button" onclick="addAddress()">+</button>
+                                    <br><br>
+                                </div>
+
                                 <!-- 設置終點 -->
                                 <div class="work_city_div" style="background-color: #cbb48e;">
                                     <a class="work_word">終點：</a>
                                     <br><br>
-                                    <div id="水平靠左">
+                                    <div class="justify-left">
                                         &nbsp&nbsp&nbsp&nbsp
                                         <label for='city_list_1'>城市：</label>
                                         <select class='work_city' style="background-color:#f4eee5; color:#773f3b; border:2px solid #caa79b;" id="city_list_1" name="city[]" onChange='getEndArea(this.value);' required>
@@ -263,7 +281,7 @@ $results = $db_handle->runQuery($query);
                                         </select>
                                     </div>
                                     <br>
-                                    <div id="水平靠左">
+                                    <div class="justify-left">
                                         &nbsp&nbsp&nbsp&nbsp
                                         <label for="address_detail_1">詳細地址：</label>
                                         &nbsp
@@ -273,7 +291,7 @@ $results = $db_handle->runQuery($query);
                             </div>
 
                             <br>
-                            <div id="水平均分">
+                            <div class="justify-around">
                                 <input class="add_work_plan_submit" type="submit" name="plan" value="規劃路線">
                                 <input class="add_work_apply_submit" type="submit" name="apply" value="提交申請" disabled>
                             </div>
@@ -380,7 +398,7 @@ $results = $db_handle->runQuery($query);
                 addressDiv.appendChild(document.createElement('br'));
 
                 const horizontalDiv1 = document.createElement('div');
-                horizontalDiv1.id = '水平靠左';
+                horizontalDiv1.class = 'justify-left';
 
                 horizontalDiv1.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0'));
 
@@ -425,7 +443,7 @@ $results = $db_handle->runQuery($query);
                 addressDiv.appendChild(document.createElement('br'));
 
                 const horizontalDiv2 = document.createElement('div');
-                horizontalDiv2.id = '水平靠左';
+                horizontalDiv2.class = 'justify-left';
 
                 horizontalDiv2.appendChild(document.createTextNode('\u00A0\u00A0\u00A0\u00A0'));
 
