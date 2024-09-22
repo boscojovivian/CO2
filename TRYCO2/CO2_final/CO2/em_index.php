@@ -1,14 +1,29 @@
+<?php
+session_start();
+// 檢查用戶是否已登入
+if (!isset($_SESSION['em_id'])) {
+    // 如果未登入，重定向到登入頁面
+    header("Location: Sign_in.php");
+    exit();
+}
+
+include('dbcontroller.php');
+$db_handle = new DBController();
+?>
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- 設置網頁的字符集與 viewport，方便手機瀏覽 -->
     <title>個人首頁</title>
-    <link rel="shortcut icon" href="img\logo.png" >
+    <link rel="shortcut icon" href="img\logo.png">
     <link href="css.css" rel="stylesheet"> <!-- 引入外部 CSS 文件 -->
     <link href="em_index.css" rel="stylesheet"> <!-- 引入外部 CSS 文件 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- 引入 Bootstrap 框架的 CSS 文件 -->
 </head>
+
 <body>
     <!-- 導航欄 -->
     <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" style="background-color: rgb(255, 255, 255, 0.5)">
@@ -17,7 +32,7 @@
             <nav class="navbar navbar-brand bg-body-tertiary ms-6">
                 <div class="container">
                     <a class="navbar-brand nav-link active" aria-current="page" href="#">
-                    <img src="api/img/logo.png" alt="Bootstrap" width="100px">
+                        <img src="api/img/logo.png" alt="Bootstrap" width="100px">
                     </a>
                 </div>
             </nav>
@@ -68,7 +83,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <div class="gray-bg text-center row justify-content-md-center">
         <div class="col-md-6">
@@ -79,35 +94,82 @@
                 </div>
                 <div class="col"> <!-- 設置輸入框占據較大部分空間 -->
                     <div class="input-group">
-                        <input type="text" class="form-control" id="address" value="台中市中區中華路一段" readonly> <!-- 地址輸入框 -->
-                        <button class="btn btn-outline-secondary" type="button">+</button> <!-- 新增按鈕 -->
+                        <?php
+                        $link = mysqli_connect('localhost', 'root', '')
+                            or die("無法開啟 MySQL 資料庫連結!<br>");
+                        mysqli_select_db($link, "carbon_emissions");
+                        $em_id = $_SESSION['em_id'];
+
+                        $sql = "SELECT area.area_name, city.city_name, em_address.ea_address_detial
+                                    FROM em_address
+                                    join area on em_address.ea_address_area = area.area_id
+                                    join city on em_address.ea_address_city = city.city_id
+                                    where em_address.em_id = $em_id
+                                    and ea_default = 1";
+
+                        mysqli_query($link, "SET NAMES utf8");
+                        $result = mysqli_query($link, $sql);
+                        $fields = mysqli_num_fields($result); //取得欄位數
+                        $rows = mysqli_num_rows($result); //取得記錄數
+                        ?>
+                        <?php
+                        $rows = mysqli_fetch_array($result);
+                        echo '<input type="text" class="form-control" id="address" value="' . $rows[1] . $rows[0] . $rows[2] . '" readonly>';
+                        ?>
+                        <!-- <input type="text" class="form-control" id="address" value="台中市中區中華路一段" readonly> 地址輸入框 -->
+                        <button class="btn btn-outline-secondary" type="button">+</button> <!--新增按鈕-->
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center"> <!-- 讓這一行的內容置中 -->
-            <div class="col-md-8"> <!-- 設置寬度占比，例如占據 8/12 的寬度 -->
-                <h3 class="mt-6 text-center">2024年6月出勤記錄</h3>
-                <div class="d-flex justify-content-center mb-3 mt-4">
-                    <button class="btn btn-custom">&lt;&lt;上週</button>
-                    <button class="btn btn-custom">下週&gt;&gt;</button>
-                    <button class="btn btn-custom">進階查詢</button>
-                    <button class="btn btn-new">新增</button>
-                </div>
-        
-                <table class="table records-table text-center gowork-table p-4 mb-5"> <!-- 出勤記錄表格 -->
-                    <thead>
-                        <tr>
-                            <th>日期</th>   
-                            <th>上下班</th>
-                            <th>地址</th>
-                            <th>交通工具</th>
-                            <th>碳排量</th>
-                            <th>編輯</th>
-                        </tr>
-                    </thead>
-                    <tbody> <!-- 表格內資料 -->
-                        <tr>
+        <div class="col-md-8"> <!-- 設置寬度占比，例如占據 8/12 的寬度 -->
+            <h3 class="mt-6 text-center">2024年6月出勤記錄</h3>
+            <div class="d-flex justify-content-center mb-3 mt-4">
+                <button class="btn btn-custom">&lt;&lt;上週</button>
+                <button class="btn btn-custom">下週&gt;&gt;</button>
+                <button class="btn btn-custom">進階查詢</button>
+                <button class="btn btn-new">新增</button>
+            </div>
+
+            <table class="table records-table text-center gowork-table p-4 mb-5"> <!-- 出勤記錄表格 -->
+                <thead>
+                    <tr>
+                        <th>日期</th>
+                        <th>上下班</th>
+                        <th>地址</th>
+                        <th>交通工具</th>
+                        <th>碳排量</th>
+                        <th>編輯</th>
+                    </tr>
+                </thead>
+                <tbody> <!-- 表格內資料 -->
+
+                    <?php
+                    $sql = "SELECT em_co2.*, em_address.ea_name
+                        from em_co2
+                        join em_address on em_co2.ea_id = em_address.ea_id
+                        where em_co2.em_id = $em_id
+                        order by eCO2_date desc
+                        limit 7";
+                    mysqli_query($link, "SET NAMES utf8");
+                    $result = mysqli_query($link, $sql);
+
+                    while ($rows = mysqli_fetch_array($result)) {
+                        echo "<tr>";
+                        echo "<td>$rows[1]</td>";
+                        echo '<td>' . ($rows[2] == "go" ? "上班" : "下班") . '</td>';
+                        echo "<td>$rows[8]</td>";
+                        echo '<td>' . ($rows[6] == "car" ? "汽車" : ($rows[6] == "bicycle" ? "機車" : "大眾運輸")) . '</td>';
+                        echo "<td>$rows[3]kg</td>";
+                        echo "<td>
+                                    <form action='em_edit_CO2.php' method='GET'>
+                                        <button style='z-index: index 1;' name='edit_CO2' class='btn btn-sm btn-outline-secondary' value='" . $rows[0] . "'>編輯</button>
+                                    </form>
+                                  </td>";
+                        echo "</tr>";
+                    }
+                    ?>
+                    <!-- <tr>
                             <td>2024-06-07</td>
                             <td>上班</td>
                             <td>家</td>
@@ -146,14 +208,13 @@
                             <td>汽車</td>
                             <td>0.24 kg</td>
                             <td><button class="btn btn-sm btn-outline-secondary">編輯</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                        </tr> -->
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div class="plaid-bg d-flex justify-content-center align-items-center">
+    <div class="plaid-bg d-flex justify-content-center align-items-center" style="z-index: 99">
         <div class="col-lg-8 col-md-8"> <!-- 設置寬度比例 -->
             <h2 class="text-center mt-6">個人碳排記錄</h2>
             <div class="p-5">
@@ -169,7 +230,8 @@
         const ctx = document.getElementById('carbonChart').getContext('2d');
         const carbonChart = new Chart(ctx, {
             type: 'bar',
-            data: { /* 畫出 2023 和 2024 年每月的碳排量對比柱狀圖 */
+            data: {
+                /* 畫出 2023 和 2024 年每月的碳排量對比柱狀圖 */
                 labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
                 datasets: [{
                     label: '2023年',
@@ -182,7 +244,8 @@
                 }]
             },
             options: {
-                responsive: true, /* 圖表會根據設備大小自動縮放 */
+                responsive: true,
+                /* 圖表會根據設備大小自動縮放 */
                 scales: {
                     y: {
                         beginAtZero: true /* Y 軸從 0 開始 */
@@ -192,6 +255,5 @@
         });
     </script>
 </body>
+
 </html>
-
-
