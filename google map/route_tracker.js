@@ -103,7 +103,7 @@ function startTracking() {
                 const currentTime = new Date().getTime();
                 const elapsedTime = (currentTime - startTime) / 1000; // 以秒為單位
 
-                const speed = (totalDistance / 1000) / (elapsedTime / 3600); // 速度以公里/小時為單位
+                // const speed = (totalDistance / 1000) / (elapsedTime / 3600); // 速度以公里/小時為單位
 
                 // 將距離轉換為公里
                 const distanceInKm = totalDistance / 1000;
@@ -114,7 +114,7 @@ function startTracking() {
 
                 document.getElementById('distance').innerText = distanceInKm.toFixed(2) + ' 公里';
                 document.getElementById('time').innerText = hours + ' 小時 ' + minutes + ' 分鐘';
-                document.getElementById('speed').innerText = speed.toFixed(2) + ' 公里/小時';
+                // document.getElementById('speed').innerText = speed.toFixed(2) + ' 公里/小時';
             }
 
             // 更新地圖中心位置和標記位置
