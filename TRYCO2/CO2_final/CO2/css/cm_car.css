@@ -27,15 +27,19 @@ form{
     margin-top: 20px !important;
 }
 
-label, input{
+label, input, .btn{
     font-size: 22px;
-    margin: 5% 0 !important;
+    margin: 2% 0 !important;
 }
 
 input, select{
     border: 3px solid #98c39a;
     border-radius: 10px;
     padding: 10px;
+}
+
+.date-range-picker{
+    width: 60%;
 }
 
 table{
@@ -66,4 +70,65 @@ table tbody tr:nth-of-type(even){
 /* 新增最底深色邊框 */
 table tbody tr:last-of-type{
     border-bottom: 2px solid #98c39a;
+}
+
+/* 日期區間選擇器按鈕 */
+.flatpickr_week_button{
+    cursor: pointer;
+    width: 50%;
+    height: 40px;
+    background-color: #98c39a;
+    border: 2px solid #fff; /* 顯示邊框 */
+}
+
+.flatpickr_week_button:hover{
+    background-color: #fff;
+    border: 2px solid #98c39a; /* 顯示邊框 */
+}
+
+.filteredBarChart{
+    border-radius: 15px; 
+    overflow: hidden; /* 確保內容顯示 */
+    width: 80%;
+}
+
+/* 分頁按鈕樣式 */
+.turn_pages_div{
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5% 0;
+}
+
+/* 換頁按鈕 */
+.turn_pages{
+    background-color: #98c39a;
+    color: #516850;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+.turn_pages:hover{
+    background-color: #516850;
+    color: #98c39a;
+}
+
+/* 當前頁面，不可按 */
+.Noturn_pages, .Noturn_pages:hover{
+    background-color: #516850;
+    color: #98c39a;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+/* 示意more，不可按 */
+.turn_pages_more, .turn_pages_more:hover{
+    color: #516850;
+    text-decoration: none;
+    padding: 5px 10px;
 }
