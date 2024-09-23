@@ -25,52 +25,8 @@ $db_handle = new DBController();
 </head>
 
 <body>
-    <!-- 導航欄 -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" style="background-color: rgb(255, 255, 255, 0.5)">
-        <div class="container-fluid">
-            <!-- logo -->
-            <nav class="navbar navbar-brand bg-body-tertiary ms-6">
-                <div class="container">
-                    <a class="navbar-brand nav-link active" aria-current="page" href="#">
-                        <img src="api/img/logo.png" alt="Bootstrap" width="100px">
-                    </a>
-                </div>
-            </nav>
-            <!-- logo -->
-
-            <!-- 漢堡包按鈕 -->
-            <button class="navbar-toggler me-6" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvasLg" aria-controls="navbarOffcanvasLg" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <!-- Offcanvas 視窗 -->
-            <div class="offcanvas offcanvas-end" tabindex="-1" id="navbarOffcanvasLg" aria-labelledby="navbarOffcanvasLgLabel">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title fw-bold me-6 mt-4" id="offcanvasNavbarLabel">個人首頁</h5>
-                    <button type="button" class="btn-close mt-4" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-                </div>
-                <div class="offcanvas-body me-6">
-                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                        <li class="nav-item me-2">
-                            <a class="nav-link" href="#">交通車出勤</a>
-                        </li>
-                        <li class="nav-item me-2">
-                            <a class="nav-link" href="#">最新消息</a>
-                        </li>
-                        <li class="nav-item me-2">
-                            <a class="nav-link" href="#">環保教室</a>
-                        </li>
-                        <li class="nav-item me-2">
-                            <a class="nav-link" href="#">回報問題</a>
-                        </li>
-                    </ul>
-                    <div class="mt-auto text-center">
-                        <a class="nav-link mb-2 fs-5 fw-bold" href="#">Jo</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <!-- 導入導覽列 -->
+    <?php include('nav/em_nav.php') ?>
 
     <div class="custom-bg-position">
         <div class="custom-bg">
