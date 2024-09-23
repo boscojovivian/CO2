@@ -1,8 +1,63 @@
 
-button {
-    margin: 5px;
+.title_text{
+    background-color: #ecebe8;
+    height: 50px;
+
+    /* 垂直置中 */
+    align-content: center;      
+    flex-wrap: wrap;
 }
 
 .map{
-    height: 400px;
+    height: 300px;
+    border: 10px solid #81b595;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #81b595;
+    box-shadow: 2px 2px 5px grey;
+}
+
+.label_box{
+    width: 30%;
+}
+.select_box{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    outline: none; /* 不顯示外框 */
+    background-color: #ffffff; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    padding-left: 10px; /* 增加一些內邊距 */
+    border-radius: 10px; /* 增加圓角 */
+    box-shadow: 2px 2px 5px grey;
+    
+
+    font-size: 15px;
+    width: 50%;
+    height: 40px;
+}
+.distance_and_time{
+   background-color: #ecebe8; 
+   height: 40px;
+
+   /* 垂直置中 */
+    align-content: center;      
+    flex-wrap: wrap;
+}
+.button_box{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    background-color: #ffffff; /* 設置背景背景顏色 */
+    color: #3b7752; /* 設置文本顏色 */
+    border-radius: 10px; /* 增加圓角 */
+    box-shadow: 2px 2px 5px grey;
+
+    font-size: 20px;
+    width: 25%;
+    height: 40px;
+
+    margin-left: 8px;
+}
+.button_box:hover{
+    border: 2px solid #ffffff; /* 顯示邊框 */
+    background-color: #93CDA9; /* 設置背景背景顏色 */
+    color: #ffffff; /* 設置文本顏色 */
 }
