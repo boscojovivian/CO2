@@ -141,49 +141,6 @@ $db_handle = new DBController();
     
     <!-- 抓個人碳排資料 -->
     <?php
-        $link = mysqli_connect('localhost', 'root', '')
-        or die("無法開啟 MySQL 資料庫連結!<br>");
-        mysqli_select_db($link, "carbon_emissions");
-        $em_id = $_SESSION['em_id'];
-        $sql = "SELECT eCO2_date, eCO2_carbon 
-                FROM em_co2 
-                where em_id = 1
-                group by eCO2_date";
-        mysqli_query($link, "SET NAMES utf8");
-        $result = mysqli_query($link, $sql);
-        $rows = mysqli_fetch_array($result);
-        $data2022 = [];
-        $data2023 = [];
-        $data2024 = [];
-        while($rows){
-            $currentDate = explode('-', $rows[0]);
-            $currentYear = $currentDate[0];
-            $currentMonth = $currentDate[1];
-            $currentDay = $currentDate[2];
-            $sum = 0;
-            if($currentYear == '2022'){
-                for($i = 1; $i <= 12; $i++){
-                    if($currentMonth == strval($i)){
-                        $sum += $rows[1];
-                    }
-                    $data2022[] = [
-                        'm' => $i,
-                        'co2' => $sum
-                    ];
-                    $sum = 0;
-                }
-                      
-            }else if($currentYear == '2023'){
-
-            }else{
-
-            }
-        }
-        echo implode(',', $data2022);
-        
-    ?>
-
-    <?php
         
         $sql = "SELECT YEAR(eCO2_date) AS year, MONTH(eCO2_date) AS month, SUM(eCO2_carbon) AS total_carbon
                 FROM em_co2
