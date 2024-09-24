@@ -125,46 +125,6 @@ $db_handle = new DBController();
                         echo "</tr>";
                     }
                     ?>
-                    <!-- <tr>
-                            <td>2024-06-07</td>
-                            <td>上班</td>
-                            <td>家</td>
-                            <td>機車</td>
-                            <td>0.13 kg</td>
-                            <td><button class="btn btn-sm btn-outline-secondary">編輯</button></td>
-                        </tr>
-                        <tr>
-                            <td>2024-06-07</td>
-                            <td>下班</td>
-                            <td>家</td>
-                            <td>機車</td>
-                            <td>0.13 kg</td>
-                            <td><button class="btn btn-sm btn-outline-secondary">編輯</button></td>
-                        </tr>
-                        <tr>
-                            <td>2024-06-06</td>
-                            <td>上班</td>
-                            <td>家</td>
-                            <td>機車</td>
-                            <td>0.13 kg</td>
-                            <td><button class="btn btn-sm btn-outline-secondary">編輯</button></td>
-                        </tr>
-                        <tr>
-                            <td>2024-06-06</td>
-                            <td>下班</td>
-                            <td>家</td>
-                            <td>機車</td>
-                            <td>0.13 kg</td>
-                            <td><button class="btn btn-sm btn-outline-secondary">編輯</button></td>
-                        </tr>
-                        <tr>
-                            <td>2024-06-05</td>
-                            <td>下班</td>
-                            <td>家</td>
-                            <td>汽車</td>
-                            <td>0.24 kg</td>
-                            <td><button class="btn btn-sm btn-outline-secondary">編輯</button></td>
-                        </tr> -->
                 </tbody>
             </table>
         </div>
@@ -179,32 +139,85 @@ $db_handle = new DBController();
         </div>
     </div>
 
+    <?php
+        
+        $sql = "SELECT YEAR(eCO2_date) AS year, MONTH(eCO2_date) AS month, SUM(eCO2_carbon) AS total_carbon
+                FROM em_co2
+                WHERE em_id = $em_id
+                GROUP BY 
+                    YEAR(eCO2_date), MONTH(eCO2_date)
+                ORDER BY 
+                    YEAR(eCO2_date), MONTH(eCO2_date)";
+        
+        mysqli_query($link, "SET NAMES utf8");
+        $result = mysqli_query($link, $sql);
+        
+        $carbonData = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $year = $row['year'];
+            $month = $row['month'];
+            $total_carbon = $row['total_carbon'];
+        
+            // 將資料整理到以年份和月份分組的陣列中
+            if (!isset($data[$year])) {
+                $data[$year] = [];
+            }
+            $data[$year][$month] = $total_carbon;
+        }
+        
+        $jsonData = json_encode($data);
+        // 回傳格式如下(參考)
+        // {
+        //     "2022": { "1": 120, "2": 130, "3": 140 },
+        //     "2023": { "1": 110, "2": 115, "3": 150 }
+        // }
+        
+        
+    ?>
     <!-- 引入 Bootstrap JS（包含 Popper.js） -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <!-- 引入 Chart.js 用於繪製圖表 -->
     <script>
+        const carbonJsonData = <?php echo $jsonData; ?>;
+        console.log(carbonJsonData)
+        const monthLabels = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
+
+        // 長條圖的顏色列表(顏色你們挑喜歡的，我是gpt用幫我生顏色)
+        const colorList = [
+            '#FF6633', '#FF33FF', '#00B3E6', '#E6B333', '#3366E6', '#B34D4D', 
+            '#6680B3', '#66991A', '#FF9933', '#FF1A66', '#33FFCC', '#FFB399',
+            '#B3B31A', '#80B300', '#809900', '#999966', '#66E64D', '#4D80CC'
+        ];
+
+        // 將資料按照格式放好
+        // 每年分配不同顏色
+        const datasets = Object.keys(carbonJsonData).map((year, index) => {
+            const yearData = [];
+            // 用for迴圈去跑那12個月的碳排資料
+            for (let i = 1; i <= 12; i++) {
+                yearData.push(carbonJsonData[year][i]);  // 沒有碳排的月份就填0
+            }
+            // Json格式的資料內有幾個year就是會有幾個set
+            return {
+                label: `${year}年`, // 資料內的key
+                data: yearData, // 該key後面帶的data
+                backgroundColor: colorList[index % colorList.length]  // 循環使用顏色
+            };
+        });
+
+        // 繪製圖表
         const ctx = document.getElementById('carbonChart').getContext('2d');
         const carbonChart = new Chart(ctx, {
             type: 'bar',
             data: {
-                /* 畫出 2023 和 2024 年每月的碳排量對比柱狀圖 */
-                labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'],
-                datasets: [{
-                    label: '2023年',
-                    data: [3, 4, 3, 5, 4, 6, 5, 7, 4, 6, 7, 8],
-                    backgroundColor: '#FF6633'
-                }, {
-                    label: '2024年',
-                    data: [5, 6, 4, 5, 6, 7, 8, 9, 6, 8, 9, 10],
-                    backgroundColor: '#3366FF'
-                }]
+                labels: monthLabels,
+                datasets: datasets
             },
             options: {
                 responsive: true,
-                /* 圖表會根據設備大小自動縮放 */
                 scales: {
                     y: {
-                        beginAtZero: true /* Y 軸從 0 開始 */
+                        beginAtZero: true
                     }
                 }
             }
