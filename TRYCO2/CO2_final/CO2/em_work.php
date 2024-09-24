@@ -9,7 +9,7 @@ if (!isset($_SESSION['em_id'])) {
 ?>
 
 <?php
-include("dbcontroller.php");
+include("dropdown_list/dbcontroller.php");
 
 $db_handle = new DBController();    //將DBController類別實體化為物件，透過new這個關鍵字來初始化
 
@@ -305,7 +305,7 @@ $results = $db_handle->runQuery($query);
             function getStartArea(val){
                 $.ajax({
                     type : "POST",   //請求資料的方式
-                    url : "getArea.php",    //要請求資料的網址
+                    url : "dropdown_list/getArea.php",    //要請求資料的網址
                     //當某個city被選擇時把國家的id POST到後端(getArea)
                     data : "city_id=" + val,    //使用SQL語法到一料庫抓states資料表的資料
 
@@ -317,7 +317,7 @@ $results = $db_handle->runQuery($query);
             function getEndArea(val){
                 $.ajax({
                     type : "POST",   //請求資料的方式
-                    url : "getArea.php",    //要請求資料的網址
+                    url : "dropdown_list/getArea.php",    //要請求資料的網址
                     //當某個city被選擇時把國家的id POST到後端(getArea)
                     data : "city_id=" + val,    //使用SQL語法到一料庫抓states資料表的資料
 
@@ -435,7 +435,7 @@ $results = $db_handle->runQuery($query);
 
                 $.ajax({
                     type: "POST",
-                    url: "getArea.php",
+                    url: "dropdown_list/getArea.php",
                     data: "city_id=" + cityId,
                     success: function(data) {
                         areaSelect.innerHTML = data;

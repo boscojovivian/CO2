@@ -81,6 +81,22 @@
                     </select>
                 </div>
             </div>
+            
+            <!-- 選擇交通車 -->
+            <div class="col-11 col-md-5">
+                <div class="m-2">
+                    <label class="label_box fs-5" for="transportMode">出勤交通車：</label>
+                    &nbsp
+                    <select class="select_box" id="transportMode" name="transportMode" required>
+                        <option value="">選擇交通車</option>
+                        <?php
+                        while ($rows_car = mysqli_fetch_array($result_car)){
+                            echo "<option value='" . $rows_car[1] . "'>" . $rows_car[0] . "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
         </div>
 
         <div class="row justify-content-md-center text-center fs-5 mt-3 distance_and_time">
