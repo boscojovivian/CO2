@@ -195,7 +195,7 @@ $db_handle = new DBController();
             const yearData = [];
             // 用for迴圈去跑那12個月的碳排資料
             for (let i = 1; i <= 12; i++) {
-                yearData.push(carbonJsonData[year][i]);  // 沒有碳排的月份就填0
+                yearData.push(carbonJsonData[year][i] || 0);  // 沒有碳排的月份就填0
             }
             // Json格式的資料內有幾個year就是會有幾個set
             return {
