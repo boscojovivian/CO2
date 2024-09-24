@@ -78,9 +78,9 @@
                                 碳排紀錄
                             </a>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a class="dropdown-item" href="#">交通車碳排紀錄</a></li>
+                                <li><a class="dropdown-item" href="cm_c_co2.php">交通車碳排紀錄</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">員工碳排紀錄</a></li>
+                                <li><a class="dropdown-item" href="cm_e_co2.php">員工碳排紀錄</a></li>
                             </ul>
                         </li>
                         <li class="nav-item">
