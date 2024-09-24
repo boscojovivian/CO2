@@ -145,29 +145,29 @@ $db_handle = new DBController();
                 <tbody> <!-- 表格內資料 -->
 
                     <?php
-                    $sql = "SELECT em_co2.*, em_address.ea_name
-                        from em_co2
-                        join em_address on em_co2.ea_id = em_address.ea_id
-                        where em_co2.em_id = $em_id
-                        order by eCO2_date desc
-                        limit 7";
-                    mysqli_query($link, "SET NAMES utf8");
-                    $result = mysqli_query($link, $sql);
+                        $sql = "SELECT em_co2.*, em_address.ea_name
+                            from em_co2
+                            join em_address on em_co2.ea_id = em_address.ea_id
+                            where em_co2.em_id = $em_id
+                            order by eCO2_date desc
+                            limit 7";
+                        mysqli_query($link, "SET NAMES utf8");
+                        $result = mysqli_query($link, $sql);
 
-                    while ($rows = mysqli_fetch_array($result)) {
-                        echo "<tr>";
-                        echo "<td>$rows[1]</td>";
-                        echo '<td>' . ($rows[2] == "go" ? "上班" : "下班") . '</td>';
-                        echo "<td>$rows[8]</td>";
-                        echo '<td>' . ($rows[6] == "car" ? "汽車" : ($rows[6] == "bicycle" ? "機車" : "大眾運輸")) . '</td>';
-                        echo "<td>$rows[3]kg</td>";
-                        echo "<td>
-                                    <form action='em_edit_CO2.php' method='GET'>
-                                        <button style='z-index: index 1;' name='edit_CO2' class='btn btn-sm btn-outline-secondary' value='" . $rows[0] . "'>編輯</button>
-                                    </form>
-                                  </td>";
-                        echo "</tr>";
-                    }
+                        while ($rows = mysqli_fetch_array($result)) {
+                            echo "<tr>";
+                            echo "<td>$rows[1]</td>";
+                            echo '<td>' . ($rows[2] == "go" ? "上班" : "下班") . '</td>';
+                            echo "<td>$rows[8]</td>";
+                            echo '<td>' . ($rows[6] == "car" ? "汽車" : ($rows[6] == "bicycle" ? "機車" : "大眾運輸")) . '</td>';
+                            echo "<td>$rows[3]kg</td>";
+                            echo "<td>
+                                        <form action='em_edit_CO2.php' method='GET'>
+                                            <button style='z-index: index 1;' name='edit_CO2' class='btn btn-sm btn-outline-secondary' value='" . $rows[0] . "'>編輯</button>
+                                        </form>
+                                    </td>";
+                            echo "</tr>";
+                        }
                     ?>
                     <!-- <tr>
                             <td>2024-06-07</td>
@@ -231,9 +231,40 @@ $db_handle = new DBController();
         $em_id = $_SESSION['em_id'];
         $sql = "SELECT eCO2_date, eCO2_carbon 
                 FROM em_co2 
-                where em_id = 1 AND
-                eCO2_date BETWEEN '2023-01-01' AND '2024-12-31'
-                group by eCO2_date;"
+                where em_id = 1
+                group by eCO2_date";
+        mysqli_query($link, "SET NAMES utf8");
+        $result = mysqli_query($link, $sql);
+        $rows = mysqli_fetch_array($result);
+        $data2022 = [];
+        $data2023 = [];
+        $data2024 = [];
+        while($rows){
+            $currentDate = explode('-', $rows[0]);
+            $currentYear = $currentDate[0];
+            $currentMonth = $currentDate[1];
+            $currentDay = $currentDate[2];
+            $sum = 0;
+            if($currentYear == '2022'){
+                for($i = 1; $i <= 12; $i++){
+                    if($currentMonth == strval($i)){
+                        $sum += $rows[1];
+                    }
+                    $data2022[] = [
+                        'm' => $i,
+                        'co2' => $sum
+                    ];
+                    $sum = 0;
+                }
+                      
+            }else if($currentYear == '2023'){
+
+            }else{
+
+            }
+        }
+        echo implode(',', $data2022);
+        
     ?>
 
     <!-- 引入 Bootstrap JS（包含 Popper.js） -->

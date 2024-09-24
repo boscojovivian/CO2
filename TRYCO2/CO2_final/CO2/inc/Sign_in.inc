@@ -6,7 +6,7 @@ session_start();
 
 //try {
     //建立MySQL資料庫連結
-    $link = mysqli_connect("localhost", "root", "A12345678")
+    $link = mysqli_connect("localhost", "root", "")
     or die("無法開啟MySQL資料庫連結!<br>");
     mysqli_select_db($link, "carbon_emissions"); //選擇myschool資料庫
 
