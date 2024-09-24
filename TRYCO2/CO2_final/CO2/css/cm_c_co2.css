@@ -24,12 +24,28 @@
     color: #98c39a;
 }
 
+/* 圖表 */
+.left{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 100vh;
+}
+
+.filteredBarChart{
+    border-radius: 15px;
+    overflow: hidden; 
+    width: 80%;
+}
+
+/* 篩選列、表格 */
 form{
     margin-top: 20px !important;
 }
 
 label, input, .btn{
-    font-size: 22px;
+    font-size: 20px;
     margin: 2% 0 !important;
 }
 
