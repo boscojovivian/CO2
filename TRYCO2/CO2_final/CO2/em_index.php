@@ -7,7 +7,7 @@ if (!isset($_SESSION['em_id'])) {
     exit();
 }
 
-include('dbcontroller.php');
+include 'dropdown_list/dbcontroller.php';
 $db_handle = new DBController();
 ?>
 
@@ -26,7 +26,7 @@ $db_handle = new DBController();
 
 <body>
     <!-- 導入導覽列 -->
-    <?php include('nav/em_nav.php') ?>
+    <?php include 'nav/em_nav.php'?>
 
     <div class="custom-bg-position">
         <div class="custom-bg">
@@ -51,26 +51,26 @@ $db_handle = new DBController();
                 <div class="col"> <!-- 設置輸入框占據較大部分空間 -->
                     <div class="input-group">
                         <?php
-                        $link = mysqli_connect('localhost', 'root', '')
+                            $link = mysqli_connect('localhost', 'root', '')
                             or die("無法開啟 MySQL 資料庫連結!<br>");
-                        mysqli_select_db($link, "carbon_emissions");
-                        $em_id = $_SESSION['em_id'];
+                            mysqli_select_db($link, "carbon_emissions");
+                            $em_id = $_SESSION['em_id'];
 
-                        $sql = "SELECT area.area_name, city.city_name, em_address.ea_address_detial
-                                    FROM em_address
-                                    join area on em_address.ea_address_area = area.area_id
-                                    join city on em_address.ea_address_city = city.city_id
-                                    where em_address.em_id = $em_id
-                                    and ea_default = 1";
+                            $sql = "SELECT area.area_name, city.city_name, em_address.ea_address_detial
+                                                                                            FROM em_address
+                                                                                            join area on em_address.ea_address_area = area.area_id
+                                                                                            join city on em_address.ea_address_city = city.city_id
+                                                                                            where em_address.em_id = $em_id
+                                                                                            and ea_default = 1";
 
-                        mysqli_query($link, "SET NAMES utf8");
-                        $result = mysqli_query($link, $sql);
-                        $fields = mysqli_num_fields($result); //取得欄位數
-                        $rows = mysqli_num_rows($result); //取得記錄數
-                        ?>
-                        <?php
-                        $rows = mysqli_fetch_array($result);
-                        echo '<input type="text" class="form-control" id="address" value="' . $rows[1] . $rows[0] . $rows[2] . '" readonly>';
+                            mysqli_query($link, "SET NAMES utf8");
+                            $result = mysqli_query($link, $sql);
+                            $fields = mysqli_num_fields($result); //取得欄位數
+                            $rows = mysqli_num_rows($result); //取得記錄數
+                            ?>
+                                                                                <?php
+                            $rows = mysqli_fetch_array($result);
+                            echo '<input type="text" class="form-control" id="address" value="' . $rows[1] . $rows[0] . $rows[2] . '" readonly>';
                         ?>
                         <!-- <input type="text" class="form-control" id="address" value="台中市中區中華路一段" readonly> 地址輸入框 -->
                         <button class="btn btn-outline-secondary" type="button">+</button> <!--新增按鈕-->
@@ -78,55 +78,58 @@ $db_handle = new DBController();
                 </div>
             </div>
         </div>
-        <div class="col-md-8"> <!-- 設置寬度占比，例如占據 8/12 的寬度 -->
-            <h3 class="mt-6 text-center">2024年6月出勤記錄</h3>
-            <div class="d-flex justify-content-center mb-3 mt-4">
-                <button class="btn btn-custom">&lt;&lt;上週</button>
-                <button class="btn btn-custom">下週&gt;&gt;</button>
-                <button class="btn btn-custom">進階查詢</button>
-                <button class="btn btn-new">新增</button>
-            </div>
 
-            <table class="table records-table text-center gowork-table p-4 mb-5"> <!-- 出勤記錄表格 -->
-                <thead>
-                    <tr>
-                        <th>日期</th>
-                        <th>上下班</th>
-                        <th>地址</th>
-                        <th>交通工具</th>
-                        <th>碳排量</th>
-                        <th>編輯</th>
-                    </tr>
-                </thead>
-                <tbody> <!-- 表格內資料 -->
 
-                    <?php
-                        $sql = "SELECT em_co2.*, em_address.ea_name
-                            from em_co2
-                            join em_address on em_co2.ea_id = em_address.ea_id
-                            where em_co2.em_id = $em_id
-                            order by eCO2_date desc
-                            limit 7";
-                        mysqli_query($link, "SET NAMES utf8");
-                        $result = mysqli_query($link, $sql);
-
-                        while ($rows = mysqli_fetch_array($result)) {
-                            echo "<tr>";
-                            echo "<td>$rows[1]</td>";
-                            echo '<td>' . ($rows[2] == "go" ? "上班" : "下班") . '</td>';
-                            echo "<td>$rows[8]</td>";
-                            echo '<td>' . ($rows[6] == "car" ? "汽車" : ($rows[6] == "bicycle" ? "機車" : "大眾運輸")) . '</td>';
-                            echo "<td>$rows[3]kg</td>";
-                            echo "<td>
-                                        <form action='em_edit_CO2.php' method='GET'>
-                                            <button style='z-index: index 1;' name='edit_CO2' class='btn btn-sm btn-outline-secondary' value='" . $rows[0] . "'>編輯</button>
-                                        </form>
-                                    </td>";
-                            echo "</tr>";
-                        }
-                    ?>
-                </tbody>
-            </table>
+        <div class="col-md-8">
+            <h3 id="attendance-title" class="mt-6 text-center">出勤記錄</h3>
+                <div class="d-flex justify-content-center mb-3 mt-4">
+                    <button id="prevWeekBtn" class="btn btn-custom" onclick="changeWeek(-1)">&lt;&lt;上週</button>
+                    <button id="nextWeekBtn" class="btn btn-custom" onclick="changeWeek(1)">下週&gt;&gt;</button>
+                    <button class="btn btn-custom" onclick="showAdvancedSearch()">進階查詢</button>
+                    <button class="btn btn-new">新增</button>
+                </div>
+                <!-- 進階查詢模態框 -->
+                <div id="advancedSearchModal" class="modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">進階查詢</h5>
+                                <button type="button" class="close" onclick="closeModal()" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="searchForm">
+                                    <div class="form-group">
+                                        <label for="start_date">開始日期</label>
+                                        <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="end_date">結束日期</label>
+                                        <input type="date" class="form-control" id="end_date" name="end_date" required>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="fetchAttendance()">查詢</button>
+                                    <button type="button" class="btn btn-primary" onclick="resetdate()">清除條件</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <table class="table records-table text-center gowork-table p-4 mb-5">
+                    <thead>
+                        <tr>
+                            <th>日期</th>
+                            <th>上下班</th>
+                            <th>地址</th>
+                            <th>交通工具</th>
+                            <th>碳排量</th>
+                            <th>編輯</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendance-table-body">
+                        <!-- 這裡的數據將由 JavaScript 填充 -->
+                    </tbody>
+                </table>
         </div>
     </div>
 
@@ -138,42 +141,40 @@ $db_handle = new DBController();
             </div>
         </div>
     </div>
-    
+
     <!-- 抓個人碳排資料 -->
     <?php
-        
         $sql = "SELECT YEAR(eCO2_date) AS year, MONTH(eCO2_date) AS month, SUM(eCO2_carbon) AS total_carbon
-                FROM em_co2
-                WHERE em_id = $em_id
-                GROUP BY 
-                    YEAR(eCO2_date), MONTH(eCO2_date)
-                ORDER BY 
-                    YEAR(eCO2_date), MONTH(eCO2_date)";
-        
+                        FROM em_co2
+                        WHERE em_id = $em_id
+                        GROUP BY
+                            YEAR(eCO2_date), MONTH(eCO2_date)
+                        ORDER BY
+                            YEAR(eCO2_date), MONTH(eCO2_date)";
+
         mysqli_query($link, "SET NAMES utf8");
         $result = mysqli_query($link, $sql);
-        
+
         $carbonData = [];
         while ($row = mysqli_fetch_assoc($result)) {
             $year = $row['year'];
             $month = $row['month'];
             $total_carbon = $row['total_carbon'];
-        
+
             // 將資料整理到以年份和月份分組的陣列中
             if (!isset($data[$year])) {
                 $data[$year] = [];
             }
             $data[$year][$month] = $total_carbon;
         }
-        
+
         $jsonData = json_encode($data);
         // 回傳格式如下(參考)
         // {
         //     "2022": { "1": 120, "2": 130, "3": 140 },
         //     "2023": { "1": 110, "2": 115, "3": 150 }
         // }
-        
-        
+
     ?>
     <!-- 引入 Bootstrap JS（包含 Popper.js） -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -185,7 +186,7 @@ $db_handle = new DBController();
 
         // 長條圖的顏色列表(顏色你們挑喜歡的，我是gpt用幫我生顏色)
         const colorList = [
-            '#FF6633', '#FF33FF', '#00B3E6', '#E6B333', '#3366E6', '#B34D4D', 
+            '#FF6633', '#FF33FF', '#00B3E6', '#E6B333', '#3366E6', '#B34D4D',
             '#6680B3', '#66991A', '#FF9933', '#FF1A66', '#33FFCC', '#FFB399',
             '#B3B31A', '#80B300', '#809900', '#999966', '#66E64D', '#4D80CC'
         ];
@@ -223,6 +224,165 @@ $db_handle = new DBController();
                 }
             }
         });
+
+
+
+        let currentStartDate, currentEndDate;
+        const prevWeekButton = document.querySelector(".btn-custom:nth-child(1)"); // 上週按鈕
+        const nextWeekButton = document.querySelector(".btn-custom:nth-child(2)"); // 下週按鈕
+        let isAdvancedSearch = false; // 標記是否進行進階查詢
+
+        // 獲取當前周的開始和結束日期
+        function getCurrentWeekDates() {
+            const today = new Date();
+            const monday = new Date(today.setDate(today.getDate() - today.getDay() + 1)); // 本週一
+            const sunday = new Date(today.setDate(today.getDate() - today.getDay() + 7)); // 本週日
+            return {
+                start: monday.toISOString().split('T')[0],
+                end: sunday.toISOString().split('T')[0]
+            };
+        }
+
+        // 加載出勤記錄
+        function loadAttendance() {
+            const dates = getCurrentWeekDates();
+            currentStartDate = dates.start;
+            currentEndDate = dates.end;
+            fetchAttendance();
+
+            // 顯示預設的日期範圍
+            document.getElementById("attendance-title").innerText = `${dates.start} 到 ${dates.end} 出勤紀錄`;
+            // 啟用按鈕
+            prevWeekButton.disabled = false;
+            nextWeekButton.disabled = false;
+        }
+
+        // 取得出勤記錄
+        function fetchAttendance() {
+            const form = document.getElementById("searchForm");
+            const startDate = form.start_date.value || currentStartDate;
+            const endDate = form.end_date.value || currentEndDate;
+
+            // 更新當前日期範圍
+            currentStartDate = startDate;
+            currentEndDate = endDate;
+
+            // 如果是進階查詢，禁用按鈕
+            if (isAdvancedSearch) {
+                prevWeekButton.disabled = true;
+                nextWeekButton.disabled = true;
+            } else {
+                // 確保按鈕在預設查詢後仍然可用
+                prevWeekButton.disabled = false;
+                nextWeekButton.disabled = false;
+            }
+
+            fetch(`fetch_attendance.php?start_date=${startDate}&end_date=${endDate}`)
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById("attendance-table-body");
+                    tableBody.innerHTML = ""; // 清空表格
+
+                    // 更新標題
+                    document.getElementById("attendance-title").innerText = `${currentStartDate} 到 ${currentEndDate} 出勤紀錄`;
+
+                    if (data.length === 0) {
+                        // 如果沒有資料，顯示「沒有資料」的提示
+                        const noDataRow = document.createElement("tr");
+                        noDataRow.innerHTML = `<td colspan="6">沒有資料</td>`;
+                        tableBody.appendChild(noDataRow);
+                    } else {
+                        data.forEach(row => {
+                            const tr = document.createElement("tr");
+                            tr.innerHTML = `
+                                <td>${row.eCO2_date}</td>
+                                <td>${row.eCO2_commute === "go" ? "上班" : "下班"}</td>
+                                <td>${row.ea_name}</td>
+                                <td>${row.eCO2_type === "car" ? "汽車" : (row.eCO2_type === "bicycle" ? "機車" : "大眾運輸")}</td>
+                                <td>${row.eCO2_carbon}kg</td>
+                                <td>
+                                    <form action='em_edit_CO2.php' method='GET'>
+                                        <button name='edit_CO2' class='btn btn-sm btn-outline-secondary' value='${row.eCO2_id}'>編輯</button>
+                                    </form>
+                                </td>
+                            `;
+                            tableBody.appendChild(tr);
+                        });
+                    }
+
+                    // 關閉進階查詢視窗
+                    closeModal();
+                })
+                .catch(error => console.error("Error fetching attendance data:", error));
+        }
+
+
+        // 重置日期
+        function resetdate() {
+            // 清空開始和結束日期輸入框
+            document.getElementById("start_date").value = "";
+            document.getElementById("end_date").value = "";
+            closeModal();
+            isAdvancedSearch = false; // 重置進階查詢標記
+            loadAttendance(); // 重新加載出勤記錄
+        }
+
+        // 獲取上週或下週的出勤記錄
+        function loadAttendance() {
+            const dates = getCurrentWeekDates();
+            currentStartDate = dates.start;
+            currentEndDate = dates.end;
+            fetchAttendance();
+
+            // 顯示預設的日期範圍
+            document.getElementById("attendance-title").innerText = `${dates.start} 到 ${dates.end} 出勤紀錄`;
+
+            // 顯示上週和下週按鈕
+            document.querySelector(".btn-custom").style.display = "inline-block"; // 上週按鈕
+            document.querySelectorAll(".btn-custom")[1].style.display = "inline-block"; // 下週按鈕
+        }
+
+
+        // 進階查詢觸發的函數
+        function performAdvancedSearch() {
+            isAdvancedSearch = true; // 標記為進階查詢
+            fetchAttendance();
+
+            // 隱藏上週和下週按鈕
+            document.querySelector(".btn-custom").style.display = "none"; // 上週按鈕
+            document.querySelectorAll(".btn-custom")[1].style.display = "none"; // 下週按鈕
+        }
+
+
+
+
+        // 顯示進階查詢模態框
+        function showAdvancedSearch() {
+            document.getElementById("advancedSearchModal").style.display = "block";
+        }
+
+        // 關閉模態框
+        function closeModal() {
+            document.getElementById("advancedSearchModal").style.display = "none";
+        }
+
+        // 切換週數
+        function changeWeek(offset) {
+            const currentDate = new Date(currentStartDate);
+            currentDate.setDate(currentDate.getDate() + (offset * 7)); // 根據偏移量調整日期
+            currentStartDate = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1)).toISOString().split('T')[0];
+            currentEndDate = new Date(currentDate.setDate(currentDate.getDate() + 6)).toISOString().split('T')[0];
+
+            // 根據新的日期範圍查詢出勤記錄
+            fetchAttendance();
+        }
+
+
+
+        // 初始化
+        loadAttendance();
+
+
     </script>
 </body>
 
