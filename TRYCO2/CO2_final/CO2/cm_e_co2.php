@@ -58,7 +58,7 @@ $offset = ($pages - 1) * $records_per_page;
                             <option value="">請選擇</option>
                             <?php
                             // 包含資料庫連線的程式碼
-                            include_once("dbcontroller.php");
+                            include_once("dropdown_list/dbcontroller.php");
                             $db_handle = new DBController();
 
                             // 從資料庫中獲取所有的 em_name 資料
@@ -97,7 +97,7 @@ $offset = ($pages - 1) * $records_per_page;
                             </thead>
                             <tbody>
                                 <?php
-                                include_once("dbcontroller.php");
+                                include_once("dropdown_list/dbcontroller.php");
                                 $db_handle = new DBController();
                                 
                                 if (isset($_POST['apply_filter'])) {
