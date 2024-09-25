@@ -57,11 +57,11 @@ $db_handle = new DBController();
                             $em_id = $_SESSION['em_id'];
 
                             $sql = "SELECT area.area_name, city.city_name, em_address.ea_address_detial
-                                                                                            FROM em_address
-                                                                                            join area on em_address.ea_address_area = area.area_id
-                                                                                            join city on em_address.ea_address_city = city.city_id
-                                                                                            where em_address.em_id = $em_id
-                                                                                            and ea_default = 1";
+                                    FROM em_address
+                                    join area on em_address.ea_address_area = area.area_id
+                                    join city on em_address.ea_address_city = city.city_id
+                                    where em_address.em_id = $em_id
+                                    and ea_default = 1";
 
                             mysqli_query($link, "SET NAMES utf8");
                             $result = mysqli_query($link, $sql);
@@ -145,12 +145,12 @@ $db_handle = new DBController();
     <!-- 抓個人碳排資料 -->
     <?php
         $sql = "SELECT YEAR(eCO2_date) AS year, MONTH(eCO2_date) AS month, SUM(eCO2_carbon) AS total_carbon
-                        FROM em_co2
-                        WHERE em_id = $em_id
-                        GROUP BY
-                            YEAR(eCO2_date), MONTH(eCO2_date)
-                        ORDER BY
-                            YEAR(eCO2_date), MONTH(eCO2_date)";
+                FROM em_co2
+                WHERE em_id = $em_id
+                GROUP BY
+                    YEAR(eCO2_date), MONTH(eCO2_date)
+                ORDER BY
+                    YEAR(eCO2_date), MONTH(eCO2_date)";
 
         mysqli_query($link, "SET NAMES utf8");
         $result = mysqli_query($link, $sql);
