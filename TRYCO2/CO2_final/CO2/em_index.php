@@ -88,7 +88,7 @@ $db_handle = new DBController();
                     <button class="btn btn-custom" onclick="showAdvancedSearch()">進階查詢</button>
                     <button class="btn btn-new">新增</button>
                 </div>
-                <!-- 進階查詢模態框 -->
+                <!-- 進階查詢彈窗 -->
                 <div id="advancedSearchModal" class="modal" tabindex="-1" role="dialog">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -227,34 +227,20 @@ $db_handle = new DBController();
 
 
 
-        let currentStartDate, currentEndDate;
+        let currentStartDate, currentEndDate; // 宣告當前開始日與結束日
         const prevWeekButton = document.querySelector(".btn-custom:nth-child(1)"); // 上週按鈕
         const nextWeekButton = document.querySelector(".btn-custom:nth-child(2)"); // 下週按鈕
         let isAdvancedSearch = false; // 標記是否進行進階查詢
 
         // 獲取當前周的開始和結束日期
         function getCurrentWeekDates() {
-            const today = new Date();
+            const today = new Date(); // 找到今天
             const monday = new Date(today.setDate(today.getDate() - today.getDay() + 1)); // 本週一
             const sunday = new Date(today.setDate(today.getDate() - today.getDay() + 7)); // 本週日
             return {
                 start: monday.toISOString().split('T')[0],
                 end: sunday.toISOString().split('T')[0]
             };
-        }
-
-        // 加載出勤記錄
-        function loadAttendance() {
-            const dates = getCurrentWeekDates();
-            currentStartDate = dates.start;
-            currentEndDate = dates.end;
-            fetchAttendance();
-
-            // 顯示預設的日期範圍
-            document.getElementById("attendance-title").innerText = `${dates.start} 到 ${dates.end} 出勤紀錄`;
-            // 啟用按鈕
-            prevWeekButton.disabled = false;
-            nextWeekButton.disabled = false;
         }
 
         // 取得出勤記錄
@@ -281,15 +267,18 @@ $db_handle = new DBController();
                 .then(response => response.json())
                 .then(data => {
                     const tableBody = document.getElementById("attendance-table-body");
+                    // 每次抓新的資料都要把舊的清空
                     tableBody.innerHTML = ""; // 清空表格
 
                     // 更新標題
                     document.getElementById("attendance-title").innerText = `${currentStartDate} 到 ${currentEndDate} 出勤紀錄`;
 
                     if (data.length === 0) {
-                        // 如果沒有資料，顯示「沒有資料」的提示
+                        // 如果沒有資料，顯示「沒有資料」的字樣
                         const noDataRow = document.createElement("tr");
+                        // 產生沒有資料的那一格，一欄跨六格
                         noDataRow.innerHTML = `<td colspan="6">沒有資料</td>`;
+                        // 利用子節點的方式插進表格內
                         tableBody.appendChild(noDataRow);
                     } else {
                         data.forEach(row => {
@@ -316,7 +305,6 @@ $db_handle = new DBController();
                 .catch(error => console.error("Error fetching attendance data:", error));
         }
 
-
         // 重置日期
         function resetdate() {
             // 清空開始和結束日期輸入框
@@ -342,7 +330,6 @@ $db_handle = new DBController();
             document.querySelectorAll(".btn-custom")[1].style.display = "inline-block"; // 下週按鈕
         }
 
-
         // 進階查詢觸發的函數
         function performAdvancedSearch() {
             isAdvancedSearch = true; // 標記為進階查詢
@@ -353,32 +340,32 @@ $db_handle = new DBController();
             document.querySelectorAll(".btn-custom")[1].style.display = "none"; // 下週按鈕
         }
 
-
-
-
-        // 顯示進階查詢模態框
+        // 顯示進階查詢彈窗
         function showAdvancedSearch() {
             document.getElementById("advancedSearchModal").style.display = "block";
         }
 
-        // 關閉模態框
+        // 關閉彈窗
         function closeModal() {
             document.getElementById("advancedSearchModal").style.display = "none";
         }
 
         // 切換週數
+        // 會傳入-1或是1，來決定是要下週還是上週
         function changeWeek(offset) {
             const currentDate = new Date(currentStartDate);
-            currentDate.setDate(currentDate.getDate() + (offset * 7)); // 根據偏移量調整日期
+            // currentDate.getDate()：取得 currentDate 物件的當前日期（日）。 設今天是9/25
+            //currentDate.getDay()：取得當前是星期幾，回傳值是 0（星期日）到 6（星期六）的數字。 設今天星期三，返回3
+            //currentDate.getDate() - currentDate.getDay()：用當前的日數減去當前星期幾的數字
+            currentDate.setDate(currentDate.getDate() + (offset * 7)); // 根據函數傳入值(1 or -1)調整日期。 以傳入值-1為例，這邊會把currentDate變成9/18
+            // 所以這邊就會變成9/18-3(因為是星期三)+1，就會得到上周的星期一是9/16號
             currentStartDate = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 1)).toISOString().split('T')[0];
+            // 反之則找出9/22為該週的結束日，即為星期天
             currentEndDate = new Date(currentDate.setDate(currentDate.getDate() + 6)).toISOString().split('T')[0];
 
             // 根據新的日期範圍查詢出勤記錄
             fetchAttendance();
         }
-
-
-
         // 初始化
         loadAttendance();
 
