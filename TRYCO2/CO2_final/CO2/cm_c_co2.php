@@ -68,7 +68,7 @@ $offset = ($pages - 1) * $records_per_page;
                             <select id="filter_car" name="filter_car">
                                 <option value="">請選擇</option>
                                 <?php
-                                include_once("dbcontroller.php");
+                                include_once("dropdown_list/dbcontroller.php");
                                 $db_handle = new DBController();
 
                                 $sql = "SELECT cc_id, cc_name FROM cm_car";
@@ -125,7 +125,7 @@ $offset = ($pages - 1) * $records_per_page;
                             </thead>
                             <tbody>
                                 <?php
-                                    include_once("dbcontroller.php");
+                                    include_once("dropdown_list/dbcontroller.php");
                                     $db_handle = new DBController();
 
                                     if (isset($_POST['apply_filter'])) {

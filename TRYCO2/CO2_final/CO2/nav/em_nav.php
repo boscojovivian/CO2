@@ -7,7 +7,7 @@
     .navbar-custom{
         font-size: 22px;
         font-weight: bolder;
-        background-color: #d2f1dc;
+        background-color: #c0d2cd;
         box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     }
 
