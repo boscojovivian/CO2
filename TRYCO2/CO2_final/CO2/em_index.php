@@ -108,7 +108,7 @@ $db_handle = new DBController();
                                         <label for="end_date">結束日期</label>
                                         <input type="date" class="form-control" id="end_date" name="end_date" required>
                                     </div>
-                                    <button type="button" class="btn btn-primary" onclick="fetchAttendance()">查詢</button>
+                                    <button type="button" class="btn btn-primary" onclick="performAdvancedSearch()">查詢</button>
                                     <button type="button" class="btn btn-primary" onclick="resetdate()">清除條件</button>
                                 </form>
                             </div>
