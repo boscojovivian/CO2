@@ -287,7 +287,7 @@ $db_handle = new DBController();
                                 <td>${row.eCO2_date}</td>
                                 <td>${row.eCO2_commute === "go" ? "上班" : "下班"}</td>
                                 <td>${row.ea_name}</td>
-                                <td>${row.eCO2_type === "car" ? "汽車" : (row.eCO2_type === "bicycle" ? "機車" : "大眾運輸")}</td>
+                                <td>${row.ec_type === "car" ? "汽車" : (row.ec_type === "bicycle" ? "機車" : "大眾運輸")}</td>
                                 <td>${row.eCO2_carbon}kg</td>
                                 <td>
                                     <form action='em_edit_CO2.php' method='GET'>
