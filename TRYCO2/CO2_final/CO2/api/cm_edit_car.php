@@ -5,6 +5,8 @@ if (!isset($_SESSION['em_id'])) {
     header("Location: Sign_in.php");
     exit();
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -14,8 +16,10 @@ if (!isset($_SESSION['em_id'])) {
     <meta charset="utf-8">
     <link rel="stylesheet" href="css1.css" type="text/css">
     <link rel="shortcut icon" href="img/logo.png">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
-    <script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+   <script>
         const showAlert_logo = (title) => {
             Swal.fire({
                 title: title,
@@ -41,24 +45,67 @@ if (!isset($_SESSION['em_id'])) {
                 icon: 'error'
             })
         }
-        const showAlert_delete_car = (title, cc_id) => {
-            var icon = 'img/logo.png';
+        
+        const showAlert = (title, icon = 'info', callback = null) => {
             Swal.fire({
                 title: title,
-                imageUrl: icon,
+                icon: icon
+            }).then(() => {
+                if (callback) callback();
+            });
+        }
+
+        const showAlertWithImage = (title, callback = null) => {
+            Swal.fire({
+                title: title,
+                imageUrl: 'img/logo.png',
                 imageWidth: 150,
                 imageHeight: 100,
                 imageAlt: 'Custom image',
                 showCancelButton: true,
-                confirmButtonText: '確定',
-                cancelButtonText: '取消'
             }).then((result) => {
-                if (result.isConfirmed) {
-                    deleteCar(cc_id);
-                }
+                if (result.isConfirmed && callback) callback();
             });
         };
+
+        const deleteRecord = (cc_id) => {
+            showAlertWithImage('確定要刪除這個紀錄嗎？', () => {
+                fetch('delete_car.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ cc_id: cc_id })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        showAlert('紀錄刪除成功!', 'success', () => {
+                            window.location.href = 'cm_manage_car.php';
+                        });
+                    } else {
+                        showAlert('刪除失敗: ' + data.message, 'error');
+                    }
+                })
+                .catch(error => {
+                    showAlert('刪除失敗: 請稍後再試', 'error');
+                });
+            });
+        }
     </script>
+
+<style>
+       
+        /* 修改表單中標籤和輸入框的字體 */
+        form label, form input, form select {
+            font-size: 30px; /* 調整字體大小 */
+        }
+
+        /* 修改按鈕字體 */
+        input[type="submit"], input[type="button"] {
+            font-size: 40px; /* 調整按鈕字體大小 */
+        }
+    </style>
 </head>
 <body class="body1">
 <!-- 上方工作列 -->
@@ -144,8 +191,8 @@ if (!isset($_SESSION['em_id'])) {
                 </form>
             </div>
         </header>
-<div class="car">
-    <?php
+<div class="car  container">
+<?php
     include_once("dbcontroller1.php");
     $dbController = new DBController();
     
@@ -181,51 +228,55 @@ if (!isset($_SESSION['em_id'])) {
         }
     }
     ?>
-    <a href="cm_manage_car.php" class="goback_add1"><img src="img\goback.png" class="goback_img"></a>
-    <h1>編輯交通車資料</h1>
-    <div class="car_div">
+      
+       <div class="car_item">
+       <a href="cm_manage_car.php" class="goback_add1"><img src="img/goback.png" class="goback_img"></a>
+        <h1>編輯交通車資料</h1>
+        <div class="car_div">
         <form method="post">
             <label for="cc_name">交通車名稱：</label>
             <input type="text" id="cc_name" name="cc_name" value="<?php echo htmlspecialchars($car['cc_name']); ?>" required>
             <br><br>
-            <div id="水平靠左">
-                <label for="cc_type">交通車類型：</label>
-                <select class="car_type" id="cc_type" name="cc_type" required>
-                    <option value="" disabled <?php echo empty($car['cc_type']) ? 'selected' : ''; ?>>選擇交通車類型</option>
-                    <option value="motorcycle" <?php echo $car['cc_type'] == 'motorcycle' ? 'selected' : ''; ?>>機車</option>
-                    <option value="car" <?php echo $car['cc_type'] == 'car' ? 'selected' : ''; ?>>汽車</option>
-                    <option value="truck" <?php echo $car['cc_type'] == 'truck' ? 'selected' : ''; ?>>卡車</option>
-                </select>
+            <div class="水平靠左">
+            <label for="cc_type">交通車類型：</label>
+            <select class="car_type" id="cc_type" name="cc_type" required>
+                <option value="" disabled <?php echo empty($car['cc_type']) ? 'selected' : ''; ?>>選擇交通車類型</option>
+                <option value="motorcycle" <?php echo $car['cc_type'] == 'motorcycle' ? 'selected' : ''; ?>>機車</option>
+                <option value="car" <?php echo $car['cc_type'] == 'car' ? 'selected' : ''; ?>>汽車</option>    
+                <option value="truck" <?php echo $car['cc_type'] == 'truck' ? 'selected' : ''; ?>>卡車</option>
+            </select>
             </div>
-    </div>        
-        <div id="文字置中">
             <br><br>
+            </div>
             <input type="submit" name="update" data-style='car_submit' value="更新交通車">
             <br>
-            <input type="button" onclick="showAlert_delete_car('確定要刪除這輛交通車嗎？', <?php echo $car['cc_id']; ?>)" data-style='car_delete' value="刪除">
+            <!-- <input type="button" onclick="deleteCar(<?php echo $car['cc_id']; ?>)" data-style='car_delete' value="刪除"> -->
+            <input type="button" onclick="deleteRecord('<?php echo $cc_id; ?>')" data-style='car_delete' value="刪除">
             <br><br>
-        </div>
-            
         </form>
-    
+        
+ 
 </div>
-
+ <!-- 引入 Bootstrap JS -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+</body>
 <script>
     function deleteCar(cc_id) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                var response = JSON.parse(this.responseText);
-                showAlert_success(response.message);
-                // if (response.status === 'success') {
-                //     window.location.href = 'cm_manage_car.php';
-                // }
-            }
-        };
-        xhttp.open("POST", "delete_car.php", true);
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send("cc_id=" + cc_id);
+        if (confirm('確定要刪除這輛交通車嗎？')) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var response = JSON.parse(this.responseText);
+                    alert(response.message);
+                    if (response.status === 'success') {
+                        window.location.href = 'cm_manage_car.php';
+                    }
+                }
+            };
+            xhttp.open("POST", "delete_car.php", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("cc_id=" + cc_id);
+        }
     }
 </script>
-</body>
 </html>

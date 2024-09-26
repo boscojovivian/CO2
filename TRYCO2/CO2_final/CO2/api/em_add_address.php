@@ -23,7 +23,8 @@ $results = $db_handle->runQuery($query);
     <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
-        <script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+      <script>
             const showAlert_success = (title) => {
                 // var icon = 'img/logo.png';
                 Swal.fire({
@@ -42,6 +43,19 @@ $results = $db_handle->runQuery($query);
             }
     </script>
 
+
+<style>
+       
+        /* 修改表單中標籤和輸入框的字體 */
+        form label, form input, form select {
+            font-size: 30px; /* 調整字體大小 */
+        }
+
+        /* 修改按鈕字體 */
+        input[type="submit"], input[type="button"] {
+            font-size: 40px; /* 調整按鈕字體大小 */
+        }
+    </style>
 </head>
 <body class="body1">
     <a href="#" class="back-to-top">︽</a>
@@ -126,7 +140,10 @@ $results = $db_handle->runQuery($query);
         </header>
     
     <!-- 新增地址 -->
-    <div class="address">
+    <div class="address container">
+    <div class="address_item">
+        
+            <!--加一個div row-->
         <a href="em_index.php" class="goback_add"><img src="img/goback.png" class="goback_img"></a>
         <h1 class="">新增地址</h1>
         <form id="addressForm" method="post" onsubmit="handleFormSubmission(event)">
@@ -263,5 +280,6 @@ $results = $db_handle->runQuery($query);
             });
         }
     </script>
+     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 </body>
 </html>

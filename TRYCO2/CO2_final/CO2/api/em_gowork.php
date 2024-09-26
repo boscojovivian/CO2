@@ -25,6 +25,7 @@ if (!isset($_SESSION['em_id'])) {
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
         <script>
             const showAlert_logo = (title) => {
                 Swal.fire({
@@ -54,6 +55,18 @@ if (!isset($_SESSION['em_id'])) {
         </script>
     </head>
 
+    
+    <style>
+       
+       .gowork_word {
+            font-size: 30px; /* 可以根據需要調整字體大小 */
+        }
+
+        .gowork_word_2 {
+            font-size: 25px;
+        }
+
+   </style>
     <body class="body1">
         <a href="#" class="back-to-top">︽</a>
 
@@ -138,7 +151,8 @@ if (!isset($_SESSION['em_id'])) {
         
 
         <!-- 新增通勤紀錄 -->
-        <div class="gowork">
+        <div class="gowork container ">
+        <div class="gowork_item">
             <a href="em_index.php" class="goback_gowork"><img src="img\goback.png" class="goback_img"></a>
             <h1>新增上下班資訊</h1>
             <form id="goworkForm" method="post">
@@ -146,7 +160,7 @@ if (!isset($_SESSION['em_id'])) {
             <div class="gowork_div">
                 <div id="水平靠左">
                     <div class="gowork_date_address" id="文字靠左">
-                        <label class="gowork_word" for="gowork_date">選擇日期：</label><br>
+                        <label class="gowork_word" for="gowork_date">選擇日期：</label> <br><br>
                         <input class="gowork_date" type="text" id="gowork_date" name="gowork_date" placeholder="選擇日期">
                         <input type="hidden" id="dateStr" name="dateStr" value="">
 
@@ -185,7 +199,7 @@ if (!isset($_SESSION['em_id'])) {
                     </div>
                 
                     <div class="gowork_date_address" id="文字靠左">
-                        <label class="gowork_word" for="gowork_address">通勤地址：</label><br>
+                        <label class="gowork_word" for="gowork_address">通勤地址：</label><br><br>
                         <?php
                         $link = mysqli_connect("localhost", "root", "A12345678") 
                         or die("無法開啟 MySQL 資料庫連結!<br>");
@@ -246,6 +260,7 @@ if (!isset($_SESSION['em_id'])) {
 
 
                 <div class="chosse_go_back">
+                    
                     <div id="水平靠左">
                         <label class="gowork_word" for="go_back">上班還是下班：</label>
                         <a class="gowork_word_2">(可複選)</a>
@@ -422,5 +437,7 @@ if (!isset($_SESSION['em_id'])) {
 
             }
         </script>
+        <!-- 引入 Bootstrap JS -->
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
     </body>
 </html>    

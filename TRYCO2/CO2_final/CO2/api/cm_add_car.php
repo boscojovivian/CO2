@@ -9,49 +9,124 @@ if (!isset($_SESSION['em_id'])) {
 ?>
 
 
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>新增交通車</title>
-    <meta charset="utf-8">
     <link rel="stylesheet" href="css1.css" type="text/css">
-    <link rel="shortcut icon" href="img\logo.png">
+    <link rel="shortcut icon" href="img/logo.png">
     <script src="js.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
-        <script>
-            const showAlert_logo = (title) => {
-                Swal.fire({
-                    title: title,
-                    imageUrl: 'img/logo.png',
-                    imageWidth: 150,
-                    imageHeight: 100,
-                    imageAlt: 'Custom image'
-                }).then(() => {
-                    window.location.href = 'cm_manage_car.php';
-                });
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+
+    <style>
+        /* 放大表單區域字體 */
+        .car_div input,
+        .car_div select {
+            font-size: 1.5em;
+            padding: 10px;
+            width: 100%; /* 保證下拉框寬度 100% */
+            box-sizing: border-box;
+            margin-bottom: 20px;
+        }
+
+        .car_type {
+        width: 100%; /* 保證下拉選單寬度填滿容器 */
+        padding: 10px; /* 增加內邊距確保顯示完整 */
+        font-size: 1.2em; /* 調整字體大小 */
+        box-sizing: border-box; /* 防止 padding 和邊框影響寬度 */
+        border-radius: 5px; /* 添加圓角邊框美化 */
+        border: 1px solid #ccc; /* 邊框顏色 */
+        height: 60px; /* 增加高度 */
+         }
+
+        /* 控制內部區塊內容平分 */
+        .car.container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 20px;
+        }
+
+        .car_item {
+            flex: 1 1 45%; /* 每個項目寬度占45%，自動調整 */
+            min-width: 250px; /* 確保在小螢幕下項目不會變得太小 */
+            margin-bottom: 20px;
+        }
+
+        .car_item label {
+            font-size: 1.2em;
+        }
+
+        /* 美化表單提交按鈕，並加上 RWD 支援 */
+        .car_div input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 12px 20px;
+            font-size: 1.2em;
+            width: 100%; /* 保證按鈕寬度適應外部容器 */
+            box-sizing: bo  rder-box; /* 確保 padding 不影響寬度 */
+        }
+
+        .car_div input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        /* 改善區塊內間距 */
+        /* 修改 car_div 區塊顏色 */
+        .car_div {
+            padding: 20px;
+            border-radius: 8px;
+            background-color:#81b595; /* 背景顏色，例如：淡灰色 */
+            color: #333; /* 字體顏色，例如：深灰色 */
+            
+            font-size: 1.2em;
+        }
+
+        /* RWD 支援 - 在小螢幕下調整顯示 */
+        @media (max-width: 768px) {
+            .car_item {
+                flex: 1 1 100%; /* 小螢幕下每個項目占滿一行 */
             }
-            const showAlert_success = (title) => {
-                Swal.fire({
-                    title: title,
-                    icon: 'success'
-                }).then(() => {
-                    window.location.href = 'cm_manage_car.php';
-                });
+
+            .car_div input[type="submit"] {
+                font-size: 1.1em;
+                padding: 10px;
             }
-            const showAlert_fail = (title) => {
-                Swal.fire({
-                    title: title,
-                    icon: 'error'
-                })
-            }
-        </script>
+        }
+        
+        .input[type="submit"][data-style="car_submit"]{
+            border: 2px solid #93CDA9; 
+            outline: none; 
+            background-color: #e2f7ea; 
+            color: #3b7752; 
+            cursor: pointer; 
+            padding: 10px 15px 15px 15px; 
+            border-radius: 10px; 
+
+            font-size: 20px;
+            font-weight: bold; 
+            width: 40%;
+            height: 50px;
+        }
+
+        .input[type="submit"][data-style="car_submit"]:hover {
+            background-color: #3b7752;
+            color: #e2f7ea;
+        }
+
+    </style>
 </head>
 
 <body class="body1">
-    <a href="#" class="back-to-top">︽</a>
+<a href="#" class="back-to-top">︽</a>
         <!-- 上方工作列 -->
         <header id="置中">
             <a href="cm_index.php"><img src="img\logo.png" class="logo"></a>
@@ -135,38 +210,31 @@ if (!isset($_SESSION['em_id'])) {
                 </form>
             </div>
         </header>
+    
+    <div class="car container">
+        <div class="car_item">
+            <a href="cm_manage_car.php" class="goback_add1"><img src="img/goback.png" class="goback_img"></a>
 
-    <div class="car">
-        <?php
-        include("dbcontroller.php");
+            <h1>新增交通車</h1>
 
-        $db_handle = new DBController();
-        ?>
-        <a href="cm_manage_car.php" class="goback_add1"><img src="img\goback.png" class="goback_img"></a>
-        
-        <h1 class="">新增交通車</h1>
+            <div class="car_div">
+                <form id="carForm" method="post">
+                    <label for="car_name">交通車名稱：</label>
+                    <input type="text" id="car_name" name="car_name" required>
 
-        <div class="car_div">
-            <form id="carForm" method="post">
-            <label for="car_name">交通車名稱：</label>
-            <input type="text" id="car_name" name="car_name" required>
-            <br><br>
-            <div class="水平靠左">
-                <label for="car_type">交通車類型：</label>
-                <select class="car_type" id="car_type" name="car_type" required>
-                    <option value="" disabled selected>選擇交通車類型</option>
-                    <option value="motorcycle">機車</option>
-                    <option value="car">汽車</option>    
-                    <option value="truck">卡車</option>
-                </select>
-            </div>
-            <br><br>
-        </div>
+                    <label for="car_type">交通車類型：</label>
+                    <select class="car_type" id="car_type" name="car_type" required>
+                        <option value="" disabled selected>選擇交通車類型</option>
+                        <option value="motorcycle">機車</option>
+                        <option value="car">汽車</option>
+                        <option value="truck">卡車</option>
+                    </select>
+                    <br><br>
+                    <input type="submit" name="car_submit" data-style='car_submit' value="新增交通車">
 
-            <input type="submit" name="car_submit" data-style='car_submit' value="新增交通車">
+               
 
-            <br><br><br>
-
+             
             <?php
             if (isset($_POST["car_submit"])) {
                 $car_name = $_POST['car_name'];
@@ -184,10 +252,14 @@ if (!isset($_SESSION['em_id'])) {
                     // echo '<script>alert("新增交通車失敗！");</script>';
                 }
             }
-            ?>
-        </form>
-        
+            ?> 
+            </form>
+            </div>
+        </div>
     </div>
 
+    <!-- 引入 Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
 </body>
+
 </html>
