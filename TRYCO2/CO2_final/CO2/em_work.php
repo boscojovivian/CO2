@@ -102,7 +102,7 @@ $results = $db_handle->runQuery($query);
 
                                     <!-- 選擇交通車 -->
                                     <?php
-                                    $link = mysqli_connect("localhost", "root", "A12345678") 
+                                    $link = mysqli_connect("localhost", "root", "") 
                                     or die("無法開啟 MySQL 資料庫連結!<br>");
                                     mysqli_select_db($link, "carbon_emissions");
 
