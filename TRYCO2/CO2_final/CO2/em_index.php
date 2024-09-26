@@ -246,22 +246,28 @@ $db_handle = new DBController();
         // 取得出勤記錄
         function fetchAttendance() {
             const form = document.getElementById("searchForm");
-            const startDate = form.start_date.value || currentStartDate;
-            const endDate = form.end_date.value || currentEndDate;
+            var startDate;
+            var endDate;
 
-            // 更新當前日期範圍
-            currentStartDate = startDate;
-            currentEndDate = endDate;
+            
 
             // 如果是進階查詢，禁用按鈕
             if (isAdvancedSearch) {
                 prevWeekButton.disabled = true;
                 nextWeekButton.disabled = true;
+                startDate = form.start_date.value;
+                endDate = form.end_date.value;
             } else {
                 // 確保按鈕在預設查詢後仍然可用
                 prevWeekButton.disabled = false;
                 nextWeekButton.disabled = false;
+                startDate = currentStartDate;
+                endDate = currentEndDate;
             }
+
+            // 更新當前日期範圍
+            currentStartDate = startDate;
+            currentEndDate = endDate;
 
             fetch(`fetch_attendance.php?start_date=${startDate}&end_date=${endDate}`)
                 .then(response => response.json())
@@ -332,20 +338,24 @@ $db_handle = new DBController();
 
         // 進階查詢觸發的函數
         function performAdvancedSearch() {
-            isAdvancedSearch = true; // 標記為進階查詢
             const form = document.getElementById("searchForm");
-            const startDate = form.start_date.value;
-            const endDate = form.end_date.value;
-            if(startDate == '' || endDate == ''){
+            var startDate = form.start_date.value;
+            var endDate = form.end_date.value;
+            
+            // 檢查開始日期與結束日期是否都有輸入
+            if (startDate === '' || endDate === '') {
+                isAdvancedSearch = false;
                 alert('請輸入條件範圍');
-            }else{
-                fetchAttendance();
-                // 隱藏上週和下週按鈕
-                document.querySelector(".btn-custom").style.display = "none"; // 上週按鈕
-                document.querySelectorAll(".btn-custom")[1].style.display = "none"; // 下週按鈕
+                return; // 如果他沒設範圍，不給他跑fetch
             }
-              
+            
+            isAdvancedSearch = true; // 標記為進階查詢
+            fetchAttendance(); // 繼續進行資料抓取
+            // 隱藏上週和下週按鈕
+            document.querySelector(".btn-custom").style.display = "none"; // 上週按鈕
+            document.querySelectorAll(".btn-custom")[1].style.display = "none"; // 下週按鈕 
         }
+
 
         // 顯示進階查詢彈窗
         function showAdvancedSearch() {
@@ -355,6 +365,7 @@ $db_handle = new DBController();
         // 關閉彈窗
         function closeModal() {
             document.getElementById("advancedSearchModal").style.display = "none";
+            isAdvancedSearch = false;
         }
 
         // 切換週數
