@@ -1,0 +1,19 @@
+.container{
+    font-size: 25px;
+    padding: 50px;
+    border: 3px solid #24613c;
+    border-radius: 10px;
+}
+
+.btn-secondary.dropdown-toggle {
+    background-color: #24613c;    
+}
+
+.dropdown-toggle:focus {
+    outline: none; /* 隱藏焦點邊框 */
+}
+
+
+.btn-primary {
+    background-color: #24613c; /* 修改按鈕背景色 */
+}

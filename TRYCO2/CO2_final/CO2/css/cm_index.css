@@ -1,0 +1,54 @@
+.row{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 30px !important;
+}
+.search-history-button1 {
+    font-size: 20px;
+    width: 200px; /* 設置按鈕寬度 */
+    color: #ffffff; /* 設置文字顏色 */
+    border: 2px solid #69919c;
+    border-radius: 5px; /* 設置按鈕圓角 */
+    cursor: pointer; /* 滑鼠懸停時顯示手型光標 */
+    padding: 20px;
+    white-space: nowrap;
+    background-color: #8cb4bf;
+}
+
+.search-history-button1:hover {
+    border: 2px solid #8cb4bf;
+    background-color: #69919c;
+    color: #ffffff;
+}
+
+.search-history-button2 {
+    font-size: 20px;
+    width: 200px; /* 設置按鈕寬度 */
+    color: #ffffff; /* 設置文字顏色 */
+    border: 2px solid  #a89068; /* 設置按鈕邊框 */
+    border-radius: 5px; /* 設置按鈕圓角 */
+    cursor: pointer; /* 滑鼠懸停時顯示手型光標 */
+    padding: 20px;
+    white-space: nowrap;
+    background-color:#cbb48e ;
+}
+
+.search-history-button2:hover {
+    background-color: #a89068; /* 滑鼠懸停時改變背景顏色 */
+    border: 2px solid  #cbb48e; /* 設置按鈕邊框 */
+    color: #ffffff;
+}
+
+.right{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    max-width: 1000px !important ;
+    min-height: 700px;
+    border: 2px solid #3f6d51;
+}
+
+.left{
+    margin: 20px !important;
+}
