@@ -333,11 +333,18 @@ $db_handle = new DBController();
         // 進階查詢觸發的函數
         function performAdvancedSearch() {
             isAdvancedSearch = true; // 標記為進階查詢
-            fetchAttendance();
-
-            // 隱藏上週和下週按鈕
-            document.querySelector(".btn-custom").style.display = "none"; // 上週按鈕
-            document.querySelectorAll(".btn-custom")[1].style.display = "none"; // 下週按鈕
+            const form = document.getElementById("searchForm");
+            const startDate = form.start_date.value;
+            const endDate = form.end_date.value;
+            if(startDate == '' || endDate == ''){
+                alert('請輸入條件範圍');
+            }else{
+                fetchAttendance();
+                // 隱藏上週和下週按鈕
+                document.querySelector(".btn-custom").style.display = "none"; // 上週按鈕
+                document.querySelectorAll(".btn-custom")[1].style.display = "none"; // 下週按鈕
+            }
+              
         }
 
         // 顯示進階查詢彈窗
