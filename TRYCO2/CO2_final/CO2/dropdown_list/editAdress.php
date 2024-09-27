@@ -2,7 +2,7 @@
 class editAdress{     //新增一個類別DBController
     private $host = "localhost";
     private $user = "root";
-    private $pass = "A12345678";
+    private $pass = "";
     private $dbname = "carbon_emissions";
 
     private $conn;

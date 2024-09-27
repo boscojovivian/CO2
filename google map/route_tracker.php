@@ -7,6 +7,8 @@
 
     <link href="route_tracker.css" rel="stylesheet"> <!-- 引入外部 CSS 文件 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- 引入 Bootstrap 框架的 CSS 文件 -->
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
     <div class="container text-center mt-4">
@@ -66,34 +68,26 @@
                 </div>
             </div>
 
-            <!-- 選擇交通車 -->
+            <!-- 是否開公司車 -->
             <div class="col-11 col-md-5">
                 <div class="m-2">
-                    <label class="label_box fs-5" for="transportMode">出勤交通車：</label>
+                    <label class="label_box fs-5" for="transportMode">是否開公司車：</label>
                     &nbsp
                     <select class="select_box" id="transportMode" name="transportMode" required>
-                        <option value="">選擇交通車</option>
-                        <?php
-                        while ($rows_car = mysqli_fetch_array($result_car)){
-                            echo "<option value='" . $rows_car[1] . "'>" . $rows_car[0] . "</option>";
-                        }
-                        ?>
+                        <option value="">請選擇</option>
+                        <option value="is_cm_car">是</option>
+                        <option value="not_cm_car">否</option>
                     </select>
                 </div>
             </div>
-            
-            <!-- 選擇交通車 -->
+
+            <!-- 選擇交通工具 -->
             <div class="col-11 col-md-5">
                 <div class="m-2">
-                    <label class="label_box fs-5" for="transportMode">出勤交通車：</label>
+                    <label class="label_box fs-5" for="vehicleType">車輛選擇：</label>
                     &nbsp
-                    <select class="select_box" id="transportMode" name="transportMode" required>
-                        <option value="">選擇交通車</option>
-                        <?php
-                        while ($rows_car = mysqli_fetch_array($result_car)){
-                            echo "<option value='" . $rows_car[1] . "'>" . $rows_car[0] . "</option>";
-                        }
-                        ?>
+                    <select class="select_box" id="vehicleType" name="vehicleType" required>
+                        <option value="">請先選擇是否開公司車</option>
                     </select>
                 </div>
             </div>
@@ -124,6 +118,8 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBE5jpz-2b9N-tE1DIKCtneSgZ9nXn3jxM&callback=initMap" async defer></script>
     <script src="route_tracker.js"></script>
+    <script src="choose_car.js"></script>
+
     <!-- 引入 Bootstrap JS（包含 Popper.js） -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
