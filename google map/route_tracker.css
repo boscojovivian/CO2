@@ -18,7 +18,7 @@
 }
 
 .label_box{
-    width: 30%;
+    width: 40%;
 }
 .select_box{
     border: 2px solid #93CDA9; /* 顯示邊框 */
@@ -34,6 +34,13 @@
     font-size: 15px;
     width: 50%;
     height: 40px;
+}
+/* 禁用按钮的样式 */
+.select_box:disabled {
+    background-color: #a7a7a6;
+    color: #ffffff;
+    cursor: not-allowed;
+    border: 2px solid #6c6e6d;
 }
 .distance_and_time{
    background-color: #ecebe8; 
@@ -60,4 +67,11 @@
     border: 2px solid #ffffff; /* 顯示邊框 */
     background-color: #93CDA9; /* 設置背景背景顏色 */
     color: #ffffff; /* 設置文本顏色 */
+}
+/* 禁用按钮的样式 */
+.button_box:disabled {
+    background-color: #ccc;
+    color: #8b8b8b;
+    cursor: not-allowed;
+    border: 2px solid #8b8b8b;
 }

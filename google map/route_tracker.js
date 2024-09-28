@@ -47,9 +47,18 @@ function initMap() {
     }
 
     // 綁定按鈕事件
-    document.getElementById('startBtn').addEventListener('click', startTracking);
-    document.getElementById('stopBtn').addEventListener('click', stopTracking);
-    document.getElementById('exportBtn').addEventListener('click', exportData);
+    document.getElementById('startBtn').addEventListener('click', function() {
+        console.log("開始追蹤");
+        startTracking();
+    });
+    document.getElementById('stopBtn').addEventListener('click', function() {
+        console.log("結束追蹤");
+        stopTracking();
+    });
+    document.getElementById('exportBtn').addEventListener('click', function() {
+        console.log("匯出資料");
+        exportData();
+    });
 
     // 設定日期時間的自動更新
     updateDateTime();
@@ -72,7 +81,11 @@ function updateDateTime() {
 }
 
 function startTracking() {
+    // 開啟 "結束" 按鈕
+    document.getElementById('stopBtn').disabled = false;
+
     if (navigator.geolocation) {
+
         startTime = new Date().getTime();
 
         // 使用 watchPosition 只在第一次要求權限，之後自動監測位置變化
@@ -138,6 +151,9 @@ function startTracking() {
 
 
 function stopTracking() {
+    // 禁用 "結束" 按鈕
+    document.getElementById('stopBtn').disabled = true;
+
     if (watchId) {
         navigator.geolocation.clearWatch(watchId);
         watchId = null;
