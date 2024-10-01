@@ -44,9 +44,9 @@
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    max-width: 1000px !important ;
-    min-height: 700px;
-    border: 2px solid #3f6d51;
+    max-width: 700px !important ;
+    min-height: 500px;
+    /* border: 2px solid #3f6d51; */
 }
 
 .left{

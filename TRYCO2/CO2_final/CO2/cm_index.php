@@ -25,7 +25,7 @@ if (!isset($_SESSION['em_id'])) {
                 <!-- 圓餅圖 -->
                 <div id="pieChart" ></div>
                 <?php
-                require_once("<dropdown_list/dbcontroller.php");
+                require_once("dropdown_list/dbcontroller.php");
                 $db_handle = new DBController();
 
                 // 查詢圓餅圖數據
