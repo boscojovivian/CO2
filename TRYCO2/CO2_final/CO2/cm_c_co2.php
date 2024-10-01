@@ -56,10 +56,12 @@ $offset = ($pages - 1) * $records_per_page;
                 <div class="row">
                     <!-- 篩選列 -->
                     <form action="" method="post" class="g-3 d-flex filter-form">
-                        <div class="row">
+                        <div class="row w-100">
                             <!-- 篩選日期 -->
-                            <div class="col-lg-2 d-flex justify-content-center align-items-center">
-                                <button class="btn btn-success btn-lg" onclick="showAdvancedSearch()">篩選日期</button>
+                            <div class="col-lg-12 d-flex justify-content-center align-items-center">
+                                <button class="btn btn-success btn-lg me-3" onclick="showAdvancedSearch()">篩選日期</button>
+                                <input type="text" id="start_date_display" name="start_date_display" class="date-range-picker me-2" placeholder="開始日期">
+                                <input type="text" id="end_date_display" name="end_date_display" class="date-range-picker" placeholder="結束日期">
                             </div>
                             <!-- 篩選日期彈窗 -->
                             <div id="advancedSearchModal" class="modal" tabindex="-1" role="dialog">
@@ -133,13 +135,11 @@ $offset = ($pages - 1) * $records_per_page;
                             </div>
 
                             <!-- 確認篩選按鈕 --> 
-                            <div class="col-lg-2 d-flex justify-content-center align-items-center">
+                            <div class="col-lg-4 d-flex justify-content-center align-items-center">
                                 <!-- type="submit"設定提交表單 -->
                                 <button type="submit" class="btn btn-success btn-lg" name="apply_filter" data-style="apply_filter">確認篩選</button>
                             </div>
-
                         </div>
-                        
                     </form>
 
                     <!-- 碳排表格 -->
@@ -841,6 +841,20 @@ $offset = ($pages - 1) * $records_per_page;
             function closeModal() {
                 document.getElementById("advancedSearchModal").style.display = "none";
                 isAdvancedSearch = false;
+            }
+
+            // 日期印到input
+            function performAdvancedSearch() {
+                // 獲取選擇的日期值
+                var startDate = document.getElementById("start_date").value;
+                var endDate = document.getElementById("end_date").value;
+
+                // 設置顯示的日期欄位值
+                document.getElementById("start_date_display").value = startDate;
+                document.getElementById("end_date_display").value = endDate;
+
+                // 關閉彈窗
+                closeModal();
             }
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
