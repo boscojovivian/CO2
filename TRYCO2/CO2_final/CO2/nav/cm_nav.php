@@ -51,7 +51,7 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="#">管理者首頁</a>
+                            <a class="nav-link" aria-current="page" href="cm_index.php">管理者首頁</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -70,7 +70,7 @@
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a class="dropdown-item" href="cm_car.php">交通車資料</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="#">管理交通車</a></li>
+                                <li><a class="dropdown-item" href="cm_manage_car.php">管理交通車</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -84,7 +84,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">回報問題</a>
+                            <a class="nav-link" href="cm_feeback.php">回報問題</a>
                         </li>
 
                         <?php
@@ -98,8 +98,6 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-custom">
                                 <li><a class="dropdown-item" href="em_index.php">員工首頁</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="cm_index.php">管理者首頁</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="post" class="dropdown-item"> <!-- 登出按鈕放在表單裡 -->
