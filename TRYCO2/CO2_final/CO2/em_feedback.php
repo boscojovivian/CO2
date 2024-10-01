@@ -1,11 +1,32 @@
 <?php
-session_start();
-// 檢查用戶是否已登入
-if (!isset($_SESSION['em_id'])) {
-    // 如果未登入，重定向到登入頁面
-    header("Location: Sign_in.php");
-    exit();
-}
+    session_start();
+    // 檢查用戶是否已登入
+    if (!isset($_SESSION['em_id'])) {
+        // 如果未登入，重定向到登入頁面
+        header("Location: Sign_in.php");
+        exit();
+    }
+
+    require_once '<dropdown_list/dbcontroller.php';
+
+    $db = new DBController();
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $type = $_POST['type'];
+        $message = $_POST['message'];
+
+        $data = [
+            'type' => $type,
+            'message' => $message
+        ];
+
+        if ($db->insert('feedback', $data)) {
+            echo '數據已成功插入。';
+        } else {
+            echo '插入失敗。';
+        }
+        exit;
+    }
 ?>
 <!DOCTYPE html>
 <html lang="zh-TW">
@@ -20,18 +41,18 @@ if (!isset($_SESSION['em_id'])) {
 <body>
     <?php include('nav/em_nav.php') ?>
     <div class="container mt-5">
-        <h1 class="text-center">問題回報</h1>
+        <h1 class="text-center">回報問題</h1>
         <div class="row justify-content-center mt-4">
             <div class="col-md-6">
                 <form id="reportForm">
-                    <div class="mb-3">
+                    <div class="mb-3 form">
                         <label for="recipient-name" class="col-form-label">問題類型:</label>
                         <div class="dropdown">
                             <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                 通勤相關 
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                <li><a class="dropdown-item active" href="#" data-value="通勤相關">通勤相關</a></li>
+                                <li><a class="dropdown-item" href="#" data-value="通勤相關">通勤相關</a></li>
                                 <li><a class="dropdown-item" href="#" data-value="交通車出勤相關">交通車出勤相關</a></li>
                                 <li><a class="dropdown-item" href="#" data-value="圖表相關">圖表相關</a></li>
                                 <li><a class="dropdown-item" href="#" data-value="其他">其他</a></li>
@@ -55,20 +76,21 @@ if (!isset($_SESSION['em_id'])) {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var dropdownItems = document.querySelectorAll('.dropdown-item');
-            var dropdownToggle = document.getElementById('dropdownMenuButton1'); // 修改為正確的 ID
-            var selectedValue = '通勤相關'; // 預設值
+            var dropdownToggle = document.getElementById('dropdownMenuButton1'); 
+            var selectedValue = '通勤相關'; 
 
             // 監聽下拉選單點擊事件
             dropdownItems.forEach(function (item) {
-                item.addEventListener('click', function (e) {
-                    e.preventDefault();
+                item.addEventListener('click', function () {
                     selectedValue = this.getAttribute('data-value');
                     dropdownToggle.textContent = selectedValue;
                 });
             });
 
             // 綁定 "發送" 按鈕事件
-            document.getElementById('submitButton').addEventListener('click', function () {
+            document.getElementById('submitButton').addEventListener('click', function (e) {
+
+
                 var messageText = document.getElementById('message-text').value;
 
                 // 檢查是否輸入了問題詳述
@@ -79,7 +101,7 @@ if (!isset($_SESSION['em_id'])) {
 
                 // 使用 AJAX 發送資料到後端
                 var xhr = new XMLHttpRequest();
-                xhr.open('POST', 'save_feedback.php', true); // 設置正確的路徑
+                xhr.open('POST', 'em_feedback.php', true); 
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === 4 && xhr.status === 200) {
@@ -94,8 +116,8 @@ if (!isset($_SESSION['em_id'])) {
                 // 發送表單數據
                 xhr.send('type=' + encodeURIComponent(selectedValue) + '&message=' + encodeURIComponent(messageText));
             });
-
         });
+
     </script>
 </body>
 </html>

@@ -39,6 +39,16 @@ class DBController{     //新增一個類別DBController
         $result = mysqli_query($this->conn, $query);
         return $result;
     }
+
+    function insert($table, $data) {
+        $columns = implode(", ", array_keys($data));
+        $values  = implode(", ", array_map(function($value) {
+            return "'" . mysqli_real_escape_string($this->conn, $value) . "'";
+        }, array_values($data)));
+
+        $query = "INSERT INTO $table ($columns) VALUES ($values)";
+        return $this->executeUpdate($query);
+    }
 }
 
 
