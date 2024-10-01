@@ -239,7 +239,7 @@
             stopTracking();
         });
         document.getElementById('exportBtn').addEventListener('click', function() {
-            console.log("匯出資料");
+            console.log("完成出勤");
             exportData();
         });
 
@@ -283,7 +283,7 @@
                 const pos = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
-                    timestamp: new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' })  // 記錄當前台灣時間
+                    timestamp: new Date().getTime() // 使用時間戳，後續導出資料時再轉換格式
                 };
 
                 positions.push(pos); // 存儲位置和時間戳
@@ -375,40 +375,78 @@
 
     function exportData() {
         let elapsedTime = 0;
+        let startTimeFormatted = new Date(startTime).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
+        let endTimeFormatted = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
 
-        if (watchId) {
-            elapsedTime = (new Date().getTime() - startTime) / 3600000; // 以小時為單位
-        } else if (positions.length > 0) {
-            const lastPositionTime = new Date(positions[positions.length - 1].timestamp).getTime();
-            if (!isNaN(lastPositionTime)) {
-                elapsedTime = (lastPositionTime - startTime) / 3600000;
+        // if (watchId) {
+        //     elapsedTime = (new Date().getTime() - startTime) / 3600000; // 以小時為單位
+        // } else if (positions.length > 0) {
+        //     const lastPositionTime = new Date(positions[positions.length - 1].timestamp).getTime();
+        //     if (!isNaN(lastPositionTime)) {
+        //         elapsedTime = (lastPositionTime - startTime) / 3600000;
+        //     } else {
+        //         console.error("Invalid timestamp in positions array.");
+        //         elapsedTime = 0;  // 或者处理方式根据业务需求调整
+        //     }
+        // } else {
+        //     console.warn("No positions recorded, cannot calculate elapsed time.");
+        // }
+
+        if (positions.length > 0) {
+            const lastPositionTime = positions[positions.length - 1].timestamp;
+            if (lastPositionTime) {
+                elapsedTime = (lastPositionTime - startTime) / 3600000; // 以小時為單位
             } else {
                 console.error("Invalid timestamp in positions array.");
-                elapsedTime = 0;  // 或者处理方式根据业务需求调整
+                elapsedTime = 0; // 或者處理方式根據業務需求調整
             }
         } else {
             console.warn("No positions recorded, cannot calculate elapsed time.");
         }
 
         if (!isNaN(elapsedTime)) {
+            const distanceInKm = (totalDistance / 1000).toFixed(2);  // 以公里為單位
+
             const data = {
-                distance: (totalDistance / 1000).toFixed(2) + ' 公里',  // 以公里為單位
-                time: elapsedTime.toFixed(2) + ' 小時',  // 以小時為單位
-                path: positions,  // 使用完整的路徑數據，包括時間戳
-                calculatedRoute: calculatedRoute || []  // 計算的路線，如果尚未計算則為空數組
+                start_date_time: startTimeFormatted,
+                end_date_time: endTimeFormatted,
+                total_time: elapsedTime.toFixed(2) + ' 小時',
+                distance: distanceInKm + ' 公里',
+                path: JSON.stringify(positions),  // 路徑數據作為 JSON 字符串
+                car: document.getElementById('transportMode').value,
+                vehicleType: document.getElementById('vehicleType').value,
+                employee_id: document.getElementById('employeeSelect').value
             };
 
-            const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'route-data.json';
-            a.click();
-            URL.revokeObjectURL(url);
+            // 發送 AJAX 請求
+            $.ajax({
+                url: 'save_route_data.php',  // 後端處理的 PHP 文件
+                type: 'POST',
+                data: data,
+                success: function(response) {
+                    // 成功訊息
+                    Swal.fire({
+                        title: '資料已成功儲存',
+                        text: '出勤已完成並記錄。',
+                        icon: 'success',
+                        confirmButtonText: '確定'
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        title: '錯誤',
+                        text: '儲存資料時發生錯誤，請稍後再試。',
+                        icon: 'error',
+                        confirmButtonText: '確定'
+                    });
+                }
+            });
         } else {
             console.error("Elapsed time is NaN, data export aborted.");
         }
+
+        // 重置地圖、表單和按鈕
+        resetAll();
     }
 
 
@@ -457,6 +495,40 @@
                 alert('發生未知錯誤。錯誤代碼：' + error.code);
                 break;
         }
+    }
+
+    function resetAll() {
+        // 清空位置數據
+        positions = [];
+        loca = [];
+        totalDistance = 0;
+
+        // 重置地圖上的路徑和標記
+        userPath.setPath([]);
+        if (marker) {
+            marker.setMap(null);
+        }
+        calculatedRoute = null;
+
+        // 重置表單
+        document.getElementById('employeeSelect').value = '';
+        document.getElementById('transportMode').value = '';
+        document.getElementById('vehicleType').value = '';
+        document.getElementById('employeeSelect').disabled = false;
+        document.getElementById('transportMode').disabled = false;
+        document.getElementById('vehicleType').disabled = false;
+
+        // 重置距離和時間顯示
+        document.getElementById('distance').innerText = '0';
+        document.getElementById('time').innerText = '0';
+
+        // 重置按鈕狀態
+        document.getElementById('startBtn').disabled = false;
+        document.getElementById('stopBtn').disabled = true;
+        document.getElementById('exportBtn').disabled = true;
+
+        // 顯示重置完成提示
+        message('出勤資料已匯出並重置!');
     }
 
 
