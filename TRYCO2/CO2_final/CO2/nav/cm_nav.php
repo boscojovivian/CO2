@@ -84,7 +84,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="cm_feeback.php">回報問題</a>
+                            <a class="nav-link" href="cm_feedback.php">回報問題</a>
                         </li>
 
                         <?php

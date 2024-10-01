@@ -60,7 +60,7 @@
                             <a class="nav-link" href="CO2_class.php">環保教室</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="em_feeback.php">回報問題</a>
+                            <a class="nav-link" href="em_feedback.php">回報問題</a>
                         </li>
 
                         <?php

@@ -55,61 +55,91 @@ $offset = ($pages - 1) * $records_per_page;
             <div class="col-6 right">
                 <div class="row">
                     <!-- 篩選列 -->
-                    <form action="" method="post" class="row g-3 d-flex align-items-center filter-form">
-                        <!-- 篩選日期 -->
-                        <div class="col-12 col-xl-4 d-flex justify-content-center align-items-center">
-                            <label for="date_range">日期：</label>
-                            <input type="text" id="date_range" name="date_range" class="date-range-picker" placeholder="選擇日期">
-                        </div>
+                    <form action="" method="post" class="g-3 d-flex filter-form">
+                        <div class="row">
+                            <!-- 篩選日期 -->
+                            <div class="col-lg-2 d-flex justify-content-center align-items-center">
+                                <button class="btn btn-success btn-lg" onclick="showAdvancedSearch()">篩選日期</button>
+                            </div>
+                            <!-- 篩選日期彈窗 -->
+                            <div id="advancedSearchModal" class="modal" tabindex="-1" role="dialog">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">篩選日期</h5>
+                                            <button type="button" class="close" onclick="closeModal()" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="searchForm">
+                                                <div class="form-group">
+                                                    <label for="start_date">開始日期</label>
+                                                    <input type="date" class="form-control" id="start_date" name="start_date" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="end_date">結束日期</label>
+                                                    <input type="date" class="form-control" id="end_date" name="end_date" required>
+                                                </div>
+                                                <button type="button" class="btn btn-success" onclick="performAdvancedSearch()">查詢</button>
+                                                <button type="button" class="btn btn-success" onclick="resetdate()">清除條件</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
-                        <!-- 篩選交通車 -->
-                        <div class="col-12 col-xl-3 d-flex justify-content-center align-items-center">
-                            <label for="filter_car">交通車：</label>
-                            <select id="filter_car" name="filter_car">
-                                <option value="">請選擇</option>
-                                <?php
-                                include_once("dropdown_list/dbcontroller.php");
-                                $db_handle = new DBController();
+                            <!-- 篩選交通車 -->
+                            <div class="col-lg-4 d-flex justify-content-center align-items-center">
+                                <label for="filter_car">交通車：</label>
+                                <select id="filter_car" name="filter_car">
+                                    <option value="">請選擇</option>
+                                    <?php
+                                    include_once("dropdown_list/dbcontroller.php");
+                                    $db_handle = new DBController();
 
-                                $sql = "SELECT cc_id, cc_name FROM cm_car";
-                                $result = $db_handle->runQuery($sql);
+                                    $sql = "SELECT cc_id, cc_name FROM cm_car";
+                                    $result = $db_handle->runQuery($sql);
 
-                                if (!empty($result)) {
-                                    foreach ($result as $row) {
-                                        echo "<option value='" . $row['cc_name'] . "'>" . $row['cc_name'] . "</option>";
+                                    if (!empty($result)) {
+                                        foreach ($result as $row) {
+                                            echo "<option value='" . $row['cc_name'] . "'>" . $row['cc_name'] . "</option>";
+                                        }
+                                    } else {
+                                        echo "<option value=''>沒有資料</option>";
                                     }
-                                } else {
-                                    echo "<option value=''>沒有資料</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
+                                    ?>
+                                </select>
+                            </div>
 
-                        <!-- 篩選員工 -->
-                        <div class="col-12 col-xl-3 d-flex justify-content-center align-items-center">
-                            <label for="filter_employee">員工：</label>
-                            <select id="filter_employee" name="filter_employee">
-                                <option value="">請選擇</option>
-                                <?php
-                                $sql = "SELECT em_id, em_name FROM employee";
-                                $result = $db_handle->runQuery($sql);
+                            <!-- 篩選員工 -->
+                            <div class="col-lg-4 d-flex justify-content-center align-items-center">
+                                <label for="filter_employee">員工：</label>
+                                <select id="filter_employee" name="filter_employee">
+                                    <option value="">請選擇</option>
+                                    <?php
+                                    $sql = "SELECT em_id, em_name FROM employee";
+                                    $result = $db_handle->runQuery($sql);
 
-                                if (!empty($result)) {
-                                    foreach ($result as $row) {
-                                        echo "<option value='" . $row['em_name'] . "'>" . $row['em_name'] . "</option>";
+                                    if (!empty($result)) {
+                                        foreach ($result as $row) {
+                                            echo "<option value='" . $row['em_name'] . "'>" . $row['em_name'] . "</option>";
+                                        }
+                                    } else {
+                                        echo "<option value=''>沒有資料</option>";
                                     }
-                                } else {
-                                    echo "<option value=''>沒有資料</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
+                                    ?>
+                                </select>
+                            </div>
 
-                        <!-- 確認篩選按鈕 --> 
-                        <div class="col-12 col-xl-2 d-flex justify-content-center align-items-end">
-                            <!-- type="submit"設定提交表單 -->
-                            <button type="submit" class="btn btn-success btn-lg" name="apply_filter" data-style="apply_filter">確認篩選</button>
+                            <!-- 確認篩選按鈕 --> 
+                            <div class="col-lg-2 d-flex justify-content-center align-items-center">
+                                <!-- type="submit"設定提交表單 -->
+                                <button type="submit" class="btn btn-success btn-lg" name="apply_filter" data-style="apply_filter">確認篩選</button>
+                            </div>
+
                         </div>
+                        
                     </form>
 
                     <!-- 碳排表格 -->
@@ -802,52 +832,15 @@ $offset = ($pages - 1) * $records_per_page;
                 document.documentElement.scrollTop = 0; // Chrome、Firefox、 IE、Opera
             }
 
-            // 日期選擇器(區間)
-            flatpickr("#date_range", {
-                mode: "range",
-                dateFormat: "Y-m-d",
-                "locale": "zh_tw", // 设置为中文本地化
-                onReady: function(selectedDates, dateStr, instance) {
-                    const container = instance.calendarContainer;
-                    const weekButton = document.createElement("button");
-                    weekButton.textContent = "本周";
-                    weekButton.type = "button";
-                    weekButton.classList.add("flatpickr_week_button");
-                    weekButton.addEventListener("click", function() {
-                        instance.setDate(getWeekRange());
-                    });
-
-                    const monthButton = document.createElement("button");
-                    monthButton.textContent = "本月";
-                    monthButton.type = "button";
-                    monthButton.classList.add("flatpickr_week_button");
-                    monthButton.addEventListener("click", function() {
-                        instance.setDate(getMonthRange());
-                    });
-
-                    container.appendChild(weekButton);
-                    container.appendChild(monthButton);
-                }
-            });
-
-            function getWeekRange() {
-                const now = new Date();
-                const dayOfWeek = now.getDay();
-                const start = new Date(now);
-                const end = new Date(now);
-
-                start.setDate(now.getDate() - dayOfWeek + 1); // 設定到本周的星期一
-                end.setDate(now.getDate() + (7 - dayOfWeek)); // 設定到本周的星期日
-
-                return [start, end];
+            // 顯示日期彈窗
+            function showAdvancedSearch() {
+                document.getElementById("advancedSearchModal").style.display = "block";
             }
 
-            function getMonthRange() {
-                const now = new Date();
-                const start = new Date(now.getFullYear(), now.getMonth(), 1); // 設定到本月的第一天
-                const end = new Date(now.getFullYear(), now.getMonth() + 1, 0); // 設定到本月的最後一天
-
-                return [start, end];
+            // 關閉彈窗
+            function closeModal() {
+                document.getElementById("advancedSearchModal").style.display = "none";
+                isAdvancedSearch = false;
             }
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
