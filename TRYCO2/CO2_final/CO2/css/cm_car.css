@@ -17,6 +17,11 @@
     border: 3px solid #98c39a;
     border-radius: 10px;
 }
+.title1{
+    font-size: 50px;
+    font-weight: bold;
+    color: #516850 !important;
+}
 
 .topBtn:hover{
     background: #fff;
