@@ -1,32 +1,37 @@
 <?php
-// 連接資料庫
-$link = mysqli_connect("localhost", "root", "", "carbon_emissions");
+// 建立 MySQL 資料庫連結
+$link = mysqli_connect("localhost", "root", "A12345678") 
+or die("無法開啟 MySQL 資料庫連結!<br>");
+mysqli_select_db($link, "carbon_emissions");
 
-if (!$link) {
-    die("無法連接到資料庫：" . mysqli_connect_error());
-}
+// 設定 MySQL 查詢字串
+$sql = "";
+
+// 送出 UTF8 編碼的 MySQL 指令
+mysqli_query($link, "SET NAMES utf8");
 
 // 取得 POST 的 JSON 資料
 $data = json_decode(file_get_contents('php://input'), true);
 
-// 接收 AJAX 發送的數據
-$start_date_time = $_POST['start_date_time'];
-$end_date_time = $_POST['end_date_time'];
-$total_time = $_POST['total_time'];
-$distance = $_POST['distance'];
-// $file = $_POST['path'];
-$car = $_POST['car'];
-$type = $_POST['vehicleType'];
-$employee_id = $_POST['employee_id'];
+// 接收 AJAX 發送的數據並進行轉義，防止 SQL 注入
+$start_date_time = mysqli_real_escape_string($link, $_POST['start_date_time']);
+$end_date_time = mysqli_real_escape_string($link, $_POST['end_date_time']);
+$total_time = mysqli_real_escape_string($link, $_POST['total_time']);
+$distance = mysqli_real_escape_string($link, $_POST['distance']);
+$car = mysqli_real_escape_string($link, $_POST['car']);
+$type = mysqli_real_escape_string($link, $_POST['vehicleType']);
+$employee_id = mysqli_real_escape_string($link, $_POST['employee_id']);
 
 // 路徑資料可存儲為 JSON 檔案並存入
 $path = json_encode($_POST['path']);
 $filename = 'path_data_' . time() . '.json';
 file_put_contents('path_files/' . $filename, $path);
 
-// 插入資料到 transportation 表
-$sql = "INSERT INTO transportation (start_date_time, end_date_time, total_time, distance, file, car, type, employee_id) 
-        VALUES ($start_date_time, $start_date_time, $total_time, $distance, $filename, $car, $type, $employee_id)";
+$ppp = "555";
+
+// 插入資料到 route_tracker 表
+$sql = "INSERT INTO route_tracker(start_date_time, end_date_time, total_time, distance, file, car, type, employee_id) 
+        VALUES ('$start_date_time', '$end_date_time', '$total_time', '$distance', '$ppp', '$car', '$type', '$employee_id')";
 
 // 預處理 SQL
 // $stmt = mysqli_prepare($link, $sql);
