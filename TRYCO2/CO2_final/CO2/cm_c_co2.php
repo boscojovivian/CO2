@@ -703,9 +703,12 @@ $offset = ($pages - 1) * $records_per_page;
                 var dates = <?php echo json_encode(array_column($result, 'cCO2_date')); ?>;
                 var carbons = <?php echo json_encode(array_column($result, 'cCO2_carbon')); ?>;
                 var cars = <?php echo json_encode(array_column($result, 'cc_name')); ?>;
-
+                var filter_start_date = <?php echo json_encode($filter_start_date); ?> || '';
+                var filter_end_date = <?php echo json_encode($filter_end_date); ?> || '';
+                console.log(filter_start_date);
+                console.log(filter_end_date);
                 // 调用渲染图表的函数
-                renderChart(dates, carbons, cars, "<?php echo $filter_start_date; ?>", "<?php echo $filter_end_date; ?>");
+                renderChart(dates, carbons, cars, filter_start_date, filter_end_date);
 
                 function renderChart(dates, carbons, cars, startDate, endDate) {
                     var data = [];
