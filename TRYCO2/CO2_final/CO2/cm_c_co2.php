@@ -458,7 +458,7 @@ $offset = ($pages - 1) * $records_per_page;
             $end_date = $end_date_display;
             $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
-                        WHERE cm_co2.cc_id = '$filter_car_id' AND cm_co2.cCO2_date BETWEEN '$start_date' AND '$end_date'
+                        WHERE cm_co2.cc_id = '$filter_car' AND cm_co2.cCO2_date BETWEEN '$start_date' AND '$end_date'
                         GROUP BY month";
             $chartResults = $db_handle->runQuery($chartQuery);
             $chartData = [
@@ -551,7 +551,7 @@ $offset = ($pages - 1) * $records_per_page;
                 }];
 
                 var layout = {
-                    title: '$date_range 員工 $filter_employee 的碳排量',
+                    title: '$start_date 至 $end_date 員工 $filter_employee 的碳排量',
                     xaxis: {
                         title: '交通車',
                         gridcolor: '#67776d'
@@ -659,14 +659,14 @@ $offset = ($pages - 1) * $records_per_page;
                     x: dates,
                     y: carbons,
                     type: 'bar',
-                    name: '" . $date_range . " " . $filter_car . " " . $filter_employee . " 的碳排量',
+                    name: '" . $start_date . " 至 " . $end_date . " " . $filter_car . " " . $filter_employee . " 的碳排量',
                     marker: {
                         color: '#FF6384'
                     }
                 }];
 
                 var layout = {
-                    title: '" . $date_range . " 交通車" . $filter_car . " 員工" . $filter_employee . " 的碳排量',
+                    title: '" . $start_date . " 至 " . $end_date . " 交通車" . $filter_car . " 員工" . $filter_employee . " 的碳排量',
                     xaxis: {
                         title: '日期',
                         gridcolor: '#67776d'
