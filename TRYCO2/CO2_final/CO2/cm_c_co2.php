@@ -607,7 +607,7 @@ $offset = ($pages - 1) * $records_per_page;
                 }];
 
                 var layout = {
-                    title: '交通車 $filter_car 員工 $filter_employee 的碳排量',
+                    title: '交通車 ".$filter_car." 員工 ".$filter_employee." 的碳排量',
                     xaxis: {
                         title: '月份',
                         gridcolor: '#67776d'
@@ -685,93 +685,6 @@ $offset = ($pages - 1) * $records_per_page;
             </script>";
         }
         ?>
-
-        <?php if (isset($_POST['apply_filter']) && !empty($result)){ ?>
-            <script>
-                // 获取 PHP 生成的日期、碳排量和车辆数据
-                var dates = <?php echo json_encode(array_column($result, 'cCO2_date')); ?>;
-                var carbons = <?php echo json_encode(array_column($result, 'cCO2_carbon')); ?>;
-                var cars = <?php echo json_encode(array_column($result, 'cc_name')); ?>;
-                var filter_start_date = <?php echo json_encode($start_date_display); ?> || '';
-                var filter_end_date = <?php echo json_encode($end_date_display); ?> || '';
-                console.log(filter_start_date);
-                console.log(filter_end_date);
-                // 调用渲染图表的函数
-                renderChart(dates, carbons, cars, filter_start_date, filter_end_date);
-
-                function renderChart(dates, carbons, cars, startDate, endDate) {
-                    var data = [];
-                    var groupedData = {};
-                    var colors = ['#ff8263', '#ffd063', '#f7ff63', '#63ff87', '#63ffea', '#639aff', '#c363ff']; // 你可以添加更多颜色
-                    var totalCarbons = {};
-
-                    for (var i = 0; i < dates.length; i++) {
-                        if (!groupedData[cars[i]]) {
-                            groupedData[cars[i]] = { x: [], y: [] };
-                        }
-                        groupedData[cars[i]].x.push(dates[i]);
-                        groupedData[cars[i]].y.push(carbons[i]);
-
-                        if (!totalCarbons[dates[i]]) {
-                            totalCarbons[dates[i]] = 0;
-                        }
-                        totalCarbons[dates[i]] += parseFloat(carbons[i]);
-                    }
-
-                    var colorIndex = 0;
-                    for (var car in groupedData) {
-                        data.push({
-                            x: groupedData[car].x,
-                            y: groupedData[car].y,
-                            type: 'bar',
-                            name: car,
-                            marker: {
-                                color: colors[colorIndex % colors.length]
-                            }
-                        });
-                        colorIndex++;
-                    }
-
-                    var totalDates = Object.keys(totalCarbons).sort();
-                    var totalCarbonsValues = totalDates.map(date => totalCarbons[date]);
-
-                    data.push({
-                        x: totalDates,
-                        y: totalCarbonsValues,
-                        type: 'scatter',
-                        mode: 'lines+markers',
-                        name: '碳排總和',
-                        line: {
-                            color: '#FF5733',
-                            width: 2
-                        },
-                        marker: {
-                            color: '#FF5733',
-                            size: 6
-                        }
-                    });
-
-                    var layout = {
-                        title: startDate + ' 至 ' + endDate + ' 交通車碳排量',
-                        xaxis: {
-                            title: '日期',
-                            gridcolor: '#67776d'
-                        },
-                        yaxis: {
-                            title: '碳排量 (kg)',
-                            gridcolor: '#67776d'
-                        },
-                        barmode: 'stack',
-                        // 设置绘图区域背景颜色
-                        plot_bgcolor: '#e2f7ea',
-                        // 设置整个图表背景颜色
-                        paper_bgcolor: '#e2f7ea',
-                    };
-
-                    Plotly.newPlot('filteredBarChart', data, layout);
-                }
-            </script>
-        <?php } ?>
 
         <script>
             // 回到最頂端
