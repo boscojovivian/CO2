@@ -121,10 +121,18 @@
                             <table class="table table-bordered table-hover">
                                 <thead class="table">
                                     <tr>
-                                        <th>交通車名稱</th>
-                                        <th>產生碳排日期</th>
-                                        <th>產生的碳排量</th>
-                                        <th>員工姓名</th>
+                                        <?php
+                                            if(isset($_POST['apply_filter'])){
+                                                echo "<th>交通車名稱</th>
+                                                    <th>產生碳排日期</th>
+                                                    <th>產生的碳排量</th>
+                                                    <th>員工姓名</th>";
+                                            }else{
+                                                echo "<th>交通車名稱</th>
+                                                    <th>產生的碳排量</th>";
+                                            }
+                                        ?>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -162,39 +170,64 @@
                                                     INNER JOIN employee ON cm_co2.em_id = employee.em_id
                                                     INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
                                                     ".$strSrh;
-                                            echo "</br>" . $query;
+                                            // echo "</br>" . $query;
+
+                                            // 獲取總記錄數
+                                            $total_records_query = "SELECT COUNT(*) as total FROM ($query) as temp_table";
+                                            $total_records_result = $db_handle->runQuery($total_records_query);
+                                            $total_records = $total_records_result[0]['total'];
+                                            $total_pages = ceil($total_records / $records_per_page);
+                                            // 添加LIMIT子句到查詢
+                                            $query .= " ORDER BY cm_co2.cCO2_date DESC LIMIT $offset, $records_per_page";
+                                            $result = $db_handle->runQuery($query);
+
+                                            if (!empty($result)) {
+                                                foreach ($result as $row) {
+                                                    $address = htmlspecialchars($row['cCO2_address'], ENT_QUOTES, 'UTF-8');
+                                                    $address = str_replace(',', "\n", $address);
+                                                    echo "<tr>";
+                                                    echo "<td>" . $row['cc_name'] . "</td>";
+                                                    echo "<td>" . $row['cCO2_date'] . "</td>";
+                                                    echo "<td>" . $row['cCO2_carbon'] . " 公斤</td>";
+                                                    echo "<td>" . $row['em_name'] . "</td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='4'>沒有資料</td></tr>";
+                                            }
                                             
                                         } else {
                                             // 預設查詢
-                                            $query = "SELECT cm_co2.cc_id, cm_car.cc_name, cm_co2.cCO2_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, cm_co2.cCO2_carbon, cm_car.cc_type, employee.em_id, employee.em_name, cm_co2.cCO2_address
+                                            $query = "SELECT cm_co2.cc_id, cm_car.cc_name, cm_co2.cCO2_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, SUM(cm_co2.cCO2_carbon) as cCO2_carbon, cm_car.cc_type, cm_co2.cCO2_address
                                                     FROM cm_co2
-                                                    INNER JOIN employee ON cm_co2.em_id = employee.em_id
-                                                    INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id";
-                                        }
+                                                    INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
+                                                    GROUP BY cm_car.cc_name";
 
-                                        // 獲取總記錄數
-                                        $total_records_query = "SELECT COUNT(*) as total FROM ($query) as temp_table";
-                                        $total_records_result = $db_handle->runQuery($total_records_query);
-                                        $total_records = $total_records_result[0]['total'];
-                                        $total_pages = ceil($total_records / $records_per_page);
-                                        // 添加LIMIT子句到查詢
-                                        $query .= " ORDER BY cm_co2.cCO2_date DESC LIMIT $offset, $records_per_page";
-                                        $result = $db_handle->runQuery($query);
 
-                                        if (!empty($result)) {
-                                            foreach ($result as $row) {
-                                                $address = htmlspecialchars($row['cCO2_address'], ENT_QUOTES, 'UTF-8');
-                                                $address = str_replace(',', "\n", $address);
-                                                echo "<tr>";
-                                                echo "<td>" . $row['cc_name'] . "</td>";
-                                                echo "<td>" . $row['cCO2_date'] . "</td>";
-                                                echo "<td>" . $row['cCO2_carbon'] . "公克</td>";
-                                                echo "<td>" . $row['em_name'] . "</td>";
-                                                echo "</tr>";
+                                            // 獲取總記錄數
+                                            $total_records_query = "SELECT COUNT(*) as total FROM ($query) as temp_table";
+                                            $total_records_result = $db_handle->runQuery($total_records_query);
+                                            $total_records = $total_records_result[0]['total'];
+                                            $total_pages = ceil($total_records / $records_per_page);
+                                            // 添加LIMIT子句到查詢
+                                            $query .= " ORDER BY cm_co2.cCO2_date DESC LIMIT $offset, $records_per_page";
+                                            $result = $db_handle->runQuery($query);
+
+                                            if (!empty($result)) {
+                                                foreach ($result as $row) {
+                                                    $address = htmlspecialchars($row['cCO2_address'], ENT_QUOTES, 'UTF-8');
+                                                    $address = str_replace(',', "\n", $address);
+                                                    echo "<tr>";
+                                                    echo "<td>" . $row['cc_name'] . "</td>";
+                                                    echo "<td>" . $row['cCO2_carbon'] . " 公斤</td>";
+                                                    echo "</tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='4'>沒有資料</td></tr>";
                                             }
-                                        } else {
-                                            echo "<tr><td colspan='4'>沒有資料</td></tr>";
                                         }
+
+                                        
                                     ?>
                                 </tbody>
                             </table>
@@ -766,6 +799,32 @@
                     document.body.scrollTop = 0; // Safari
                     document.documentElement.scrollTop = 0; // Chrome、Firefox、 IE、Opera
                 }
+
+
+                document.querySelector('.filter-form').addEventListener('submit', function(event) {
+                var startDate = document.getElementById('start_date_display').value;
+                var endDate = document.getElementById('end_date_display').value;
+                var car = document.getElementById('filter_car').value;
+                var employee = document.getElementById('filter_employee').value;
+                
+                var errorMessage = '';
+
+                // 檢查是否所有條件為空
+                if (!startDate && !endDate && !car && !employee) {
+                    errorMessage = '請至少選擇一個篩選條件。';
+                } 
+                // 檢查是否篩選日期不完整
+                else if ((startDate && !endDate) || (!startDate && endDate)) {
+                    errorMessage = '請填寫完整的日期範圍。';
+                }
+
+                // 如果有錯誤訊息，阻止提交並顯示訊息
+                if (errorMessage) {
+                    alert(errorMessage);  // 你可以改成顯示在頁面上
+                    event.preventDefault(); // 阻止表單提交
+                }
+            });
+
             </script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
         </body>
