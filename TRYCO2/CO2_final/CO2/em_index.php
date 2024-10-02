@@ -67,8 +67,8 @@ $db_handle = new DBController();
                             $result = mysqli_query($link, $sql);
                             $fields = mysqli_num_fields($result); //取得欄位數
                             $rows = mysqli_num_rows($result); //取得記錄數
-                            ?>
-                                                                                <?php
+                        ?>
+                        <?php
                             $rows = mysqli_fetch_array($result);
                             echo '<input type="text" class="form-control" id="address" value="' . $rows[1] . $rows[0] . $rows[2] . '" readonly>';
                         ?>
