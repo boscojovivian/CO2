@@ -83,9 +83,9 @@ if (!isset($_SESSION['em_id'])) {
                     while ($rows = mysqli_fetch_array($result)){
                         $total = $rows["total_carbon"];
                         $total_carbon = sprintf("%.2f", round($total,2));
-                        echo "<a class='total_carbon_text'>公司總碳排&nbsp:&nbsp</a>";
-                        echo "<a class='total_carbon_text2'>" . $total_carbon ."</a>";
-                        echo "<a class='total_carbon_text'>&nbspkg</a>";
+                        echo "<span class='total_carbon_text'>公司總碳排&nbsp:&nbsp</span>";
+                        echo "<span class='total_carbon_text2'>" . $total_carbon ."</span>";
+                        echo "<span class='total_carbon_text'>&nbspkg</sapan>";
                     }
                 ?>
             </div>  

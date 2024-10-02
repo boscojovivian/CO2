@@ -47,8 +47,12 @@ if (!isset($_SESSION['em_id'])) {
                                 echo "<td>".$row["em_id"]."</td>";
                                 echo "<td>".$row["em_name"]."</td>";
                                 echo "<td>".$row["em_email"]."</td>";
-                                echo "<td><button type='button' class='add-button btn btn-success btn-lg'>設定</button></td>";
-                                echo "<td><button type='button' class='remove-button btn btn-danger btn-lg'>解除</button></td>";
+                                echo "<td>
+                                        <select class='form-select'>
+                                            <option value='設定'>擁有者</option>
+                                            <option value='解除'>成員</option>
+                                        </select>
+                                      </td>";
                                 echo "</tr>";
                             }
                         } else {
