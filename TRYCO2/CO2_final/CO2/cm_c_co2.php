@@ -198,7 +198,7 @@
                                             
                                         } else {
                                             // 預設查詢
-                                            $query = "SELECT cm_co2.cc_id, cm_car.cc_name, cm_co2.cCO2_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, SUM(cm_co2.cCO2_carbon) as cCO2_carbon, cm_car.cc_type, cm_co2.cCO2_address
+                                            $query = "SELECT cm_co2.cc_id, cm_car.cc_name, cm_co2.cCO2_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, ROUND(SUM(cm_co2.cCO2_carbon), 2) as cCO2_carbon, cm_car.cc_type, cm_co2.cCO2_address
                                                     FROM cm_co2
                                                     INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
                                                     GROUP BY cm_car.cc_name";
