@@ -79,7 +79,7 @@ $offset = ($pages - 1) * $records_per_page;
 
                                     if (!empty($result)) {
                                         foreach ($result as $row) {
-                                            echo "<option value='" . $row['cc_name'] . "'>" . $row['cc_name'] . "</option>";
+                                            echo "<option value='" . $row['cc_id'] . "'>" . $row['cc_name'] . "</option>";
                                         }
                                     } else {
                                         echo "<option value=''>沒有資料</option>";
@@ -99,7 +99,7 @@ $offset = ($pages - 1) * $records_per_page;
 
                                     if (!empty($result)) {
                                         foreach ($result as $row) {
-                                            echo "<option value='" . $row['em_name'] . "'>" . $row['em_name'] . "</option>";
+                                            echo "<option value='" . $row['em_id'] . "'>" . $row['em_name'] . "</option>";
                                         }
                                     } else {
                                         echo "<option value=''>沒有資料</option>";
@@ -137,39 +137,35 @@ $offset = ($pages - 1) * $records_per_page;
                                         $end_date_display = $_POST['end_date_display'];
                                         $filter_car = $_POST['filter_car'];
                                         $filter_employee = $_POST['filter_employee'];
-
-                                        $query = "SELECT DISTINCT cm_co2.cc_id, cm_car.cc_name, cm_co2.cCO2_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, cm_co2.cCO2_carbon, cm_car.cc_type, employee.em_id, employee.em_name, cm_co2.cCO2_address
+                                        $strSrh = '';
+                                        // 只篩日期
+                                        if((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_car) && empty($filter_employee)){
+                                            $strSrh = "WHERE cCO2_date BETWEEN '$start_date_display' AND '$end_date_display'";
+                                        }else if((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)){ // 只篩車子
+                                            $strSrh = "WHERE cm_co2.cc_id = '$filter_car'";
+                                        }else if((empty($start_date_display) && empty($end_date_display)) && empty($filter_car) && !empty($filter_employee)){ // 只篩員工
+                                            $strSrh = "WHERE cm_co2.em_id = '$filter_employee'";
+                                        }else if((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)){ // 日期車子
+                                            $strSrh = "WHERE cm_co2.cCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND cm_co2.cc_id = '$filter_car'";
+                                        }else if((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)){ // 車子員工
+                                            $strSrh = "WHERE cm_co2.cc_id = '$filter_car' AND cm_co2.em_id = '$filter_employee'";
+                                        }else if((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_car) && !empty($filter_employee)){ // 員工日期
+                                            $strSrh = "WHERE cm_co2.cCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND cm_co2.em_id = '$filter_employee'";
+                                        }else if((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)){ // 全部
+                                            $strSrh = "WHERE cm_co2.cCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND cm_co2.cc_id = '$filter_car' AND cm_co2.em_id = '$filter_employee'";
+                                        }else{
+                                            ;
+                                        }
+                                        
+                                        $query = "SELECT cm_co2.cc_id, cm_car.cc_name, cm_co2.cCO2_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, cm_co2.cCO2_carbon, cm_car.cc_type, employee.em_id, employee.em_name, cm_co2.cCO2_address
                                                 FROM cm_co2
                                                 INNER JOIN employee ON cm_co2.em_id = employee.em_id
                                                 INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
-                                                WHERE 1=1";
-
-                                        if (!empty($start_date_display || $end_date_display)) {
-                                            $filter_start_date = $start_date_display;
-                                            $filter_end_date = $end_date_display;
-                                            $query .= " AND cm_co2.cCO2_date BETWEEN '$filter_start_date' AND '$filter_end_date'";
-                                        }
-
-                                        if (!empty($filter_car)) {
-                                            $sql = "SELECT cc_id FROM cm_car WHERE cc_name = '$filter_car'";
-                                            $result = $db_handle->runQuery($sql);
-
-                                            if (!empty($result)) {
-                                                $filter_car_id = $result[0]['cc_id'];
-                                                $query .= " AND cm_co2.cc_id = '$filter_car_id'";
-                                            }
-                                        }
-
-                                        if (!empty($filter_employee)) {
-                                            $sql = "SELECT em_id FROM employee WHERE em_name = '$filter_employee'";
-                                            $result = $db_handle->runQuery($sql);
-
-                                            if (!empty($result)) {
-                                                $filter_employee_id = $result[0]['em_id'];
-                                                $query .= " AND cm_co2.em_id = '$filter_employee_id'";
-                                            }
-                                        }
+                                                ".$strSrh;
+                                        echo "</br>" . $query;
+                                        
                                     } else {
+                                        // 預設查詢
                                         $query = "SELECT cm_co2.cc_id, cm_car.cc_name, cm_co2.cCO2_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, cm_co2.cCO2_carbon, cm_car.cc_type, employee.em_id, employee.em_name, cm_co2.cCO2_address
                                                 FROM cm_co2
                                                 INNER JOIN employee ON cm_co2.em_id = employee.em_id
@@ -273,12 +269,12 @@ $offset = ($pages - 1) * $records_per_page;
 
         <?php        
         // 篩選日期範圍
-        if (!empty($start_date_display || $end_date_display) && empty($filter_car) && empty($filter_employee)) {
+        if ((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_car) && empty($filter_employee)) {
 
             $start_date = $start_date_display;
             $end_date = $end_date_display;
 
-            echo "<script>console.log($start_date_display, $end_date_display);</script>";
+            echo "<script>console.log($start_date, $end_date);</script>";
             
             $chartQuery = "SELECT cCO2_date, cm_car.cc_name, SUM(cCO2_carbon) AS total_carbon
                     FROM cm_co2
@@ -326,7 +322,7 @@ $offset = ($pages - 1) * $records_per_page;
                 }
 
                 var layout = {
-                    title: '" . $date_range . " 交通車碳排量',
+                    title: '" . $start_date."至".$end_date. " 交通車碳排量',
                     xaxis: {
                         title: '日期',
                         gridcolor: '#67776d'
@@ -347,11 +343,12 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         //篩選員工
-        if (empty($start_date_display || $end_date_display) && empty($filter_car) && !empty($filter_employee)) {
+        if ((empty($start_date_display) && empty($end_date_display)) && empty($filter_car) && !empty($filter_employee)) {
+            echo "<script>console.log($filter_employee)</script>";
             $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
                         INNER JOIN employee ON cm_co2.em_id = employee.em_id
-                        WHERE employee.em_name = '$filter_employee'
+                        WHERE cm_co2.em_id = '$filter_employee'
                         GROUP BY month";
             $chartResults = $db_handle->runQuery($chartQuery);
             $chartData = [
@@ -402,10 +399,10 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         //篩選交通車
-        if (empty($start_date_display || $end_date_display) && !empty($filter_car) && empty($filter_employee)) {
+        if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) {
             $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
-                        WHERE cc_id = '$filter_car_id'
+                        WHERE cm_co2.cc_id = '$filter_car'
                         GROUP BY month";
             $chartResults = $db_handle->runQuery($chartQuery);
             $chartData = [
@@ -456,12 +453,12 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         // 篩選日期、篩選交通車
-        if (!empty($start_date_display || $end_date_display) && !empty($filter_car) && empty($filter_employee)) {
+        if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) {
             $start_date = $start_date_display;
             $end_date = $end_date_display;
             $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
-                        WHERE cc_id = '$filter_car_id' AND cCO2_date BETWEEN '$start_date' AND '$end_date'
+                        WHERE cm_co2.cc_id = '$filter_car_id' AND cm_co2.cCO2_date BETWEEN '$start_date' AND '$end_date'
                         GROUP BY month";
             $chartResults = $db_handle->runQuery($chartQuery);
             $chartData = [
@@ -492,7 +489,7 @@ $offset = ($pages - 1) * $records_per_page;
                 }];
 
                 var layout = {
-                    title: '$start_date 交通車 $filter_car 碳排量',
+                    title: '$start_date 至 $end_date 交通車 $filter_car 碳排量',
                     xaxis: {
                         title: '月份',
                         gridcolor: '#67776d'
@@ -512,14 +509,14 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         // 篩選日期、篩選員工
-        if (!empty($start_date_display || $end_date_display) && empty($filter_car) && !empty($filter_employee)) {
+        if ((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_car) && !empty($filter_employee)) {
             $start_date = $start_date_display;
             $end_date = $end_date_display;
             $chartQuery = "SELECT cCO2_date, cm_car.cc_name, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
                         INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
                         INNER JOIN employee ON cm_co2.em_id = employee.em_id
-                        WHERE cCO2_date BETWEEN '$start_date' AND '$end_date' AND employee.em_name = '$filter_employee'
+                        WHERE cCO2_date BETWEEN '$start_date' AND '$end_date' AND cm_co2.em_id = '$filter_employee'
                         GROUP BY cCO2_date, cm_car.cc_name";
             $chartResults = $db_handle->runQuery($chartQuery);
             $chartData = [
@@ -574,85 +571,73 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         // 篩選交通車、篩選員工
-        if (empty($start_date_display || $end_date_display) && !empty($filter_car) && !empty($filter_employee)) {
-            // 获取交通车ID
-            $sql = "SELECT cc_id FROM cm_car WHERE cc_name = '$filter_car'";
-            $result = $db_handle->runQuery($sql);
+        if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) {
+           
+            // 查询按月份汇总的碳排量
+            $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
+                        FROM cm_co2
+                        WHERE cm_co2.cc_id = '$filter_car' AND cm_co2.em_id = '$filter_employee'
+                        GROUP BY month";
+            $chartResults = $db_handle->runQuery($chartQuery);
+            $chartData = [
+                'months' => [],
+                'carbons' => []
+            ];
 
-            if (!empty($result)) {
-                $filter_car_id = $result[0]['cc_id'];
-
-                // 获取员工ID
-                $sql = "SELECT em_id FROM employee WHERE em_name = '$filter_employee'";
-                $result = $db_handle->runQuery($sql);
-
-                if (!empty($result)) {
-                    $filter_employee_id = $result[0]['em_id'];
-
-                    // 查询按月份汇总的碳排量
-                    $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
-                                FROM cm_co2
-                                WHERE cm_co2.cc_id = '$filter_car_id' AND cm_co2.em_id = '$filter_employee_id'
-                                GROUP BY month";
-                    $chartResults = $db_handle->runQuery($chartQuery);
-                    $chartData = [
-                        'months' => [],
-                        'carbons' => []
-                    ];
-
-                    if (!empty($chartResults)) {
-                        foreach ($chartResults as $row) {
-                            $chartData['months'][] = $row['month'];
-                            $chartData['carbons'][] = $row['total_carbon'];
-                        }
-                    }
-
-                    echo "<script>
-                        var months = " . json_encode($chartData['months']) . ";
-                        var carbons = " . json_encode($chartData['carbons']) . ";
-
-                        var data = [{
-                            x: months,
-                            y: carbons,
-                            type: 'scatter',
-                            mode: 'lines+markers',
-                            name: '碳排量 (kg)',
-                            line: {
-                                color: '#FF6384'
-                            }
-                        }];
-
-                        var layout = {
-                            title: '交通車 $filter_car 員工 $filter_employee 的碳排量',
-                            xaxis: {
-                                title: '月份',
-                                gridcolor: '#67776d'
-                            },
-                            yaxis: {
-                                title: '碳排量 (kg)',
-                                gridcolor: '#67776d'
-                            },
-                            // 设置绘图区域背景颜色
-                            plot_bgcolor: '#e2f7ea',
-                            // 设置整个图表背景颜色
-                            paper_bgcolor: '#e2f7ea',
-                        };
-
-                        Plotly.newPlot('filteredBarChart', data, layout);
-                    </script>";
+            if (!empty($chartResults)) {
+                foreach ($chartResults as $row) {
+                    $chartData['months'][] = $row['month'];
+                    $chartData['carbons'][] = $row['total_carbon'];
                 }
             }
+
+            echo "<script>
+                var months = " . json_encode($chartData['months']) . ";
+                var carbons = " . json_encode($chartData['carbons']) . ";
+
+                var data = [{
+                    x: months,
+                    y: carbons,
+                    type: 'scatter',
+                    mode: 'lines+markers',
+                    name: '碳排量 (kg)',
+                    line: {
+                        color: '#FF6384'
+                    }
+                }];
+
+                var layout = {
+                    title: '交通車 $filter_car 員工 $filter_employee 的碳排量',
+                    xaxis: {
+                        title: '月份',
+                        gridcolor: '#67776d'
+                    },
+                    yaxis: {
+                        title: '碳排量 (kg)',
+                        gridcolor: '#67776d'
+                    },
+                    // 设置绘图区域背景颜色
+                    plot_bgcolor: '#e2f7ea',
+                    // 设置整个图表背景颜色
+                    paper_bgcolor: '#e2f7ea',
+                };
+
+                Plotly.newPlot('filteredBarChart', data, layout);
+            </script>";
         }
+            
+        
 
         // 篩選日期、篩選交通車、篩選員工
-        if (!empty($start_date_display || $end_date_display) && !empty($filter_car) && !empty($filter_employee)) {
+        if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) {
             $start_date = $start_date_display;
             $end_date = $end_date_display;
 
             $chartQuery = "SELECT cCO2_date, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
-                        WHERE cCO2_date BETWEEN '$start_date' AND '$end_date' AND cc_id = '$filter_car' AND em_name = '$filter_employee'
+                        WHERE cCO2_date BETWEEN '$start_date' AND '$end_date' AND cc_id = '$filter_car' AND em_id = '$filter_employee'
                         GROUP BY cCO2_date";
+            echo "<script>consle.log($chartQuery)</script>";
             $chartResults = $db_handle->runQuery($chartQuery);
             $chartData = [
                 'dates' => [],
