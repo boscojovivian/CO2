@@ -1,6 +1,6 @@
 <?php
 // 建立 MySQL 資料庫連結
-$link = mysqli_connect("localhost", "root", "A12345678") 
+$link = mysqli_connect("localhost", "root", "") 
 or die("無法開啟 MySQL 資料庫連結!<br>");
 mysqli_select_db($link, "carbon_emissions");
 
@@ -14,16 +14,16 @@ mysqli_query($link, "SET NAMES utf8");
 $data = json_decode(file_get_contents('php://input'), true);
 
 // 接收 AJAX 發送的數據並進行轉義，防止 SQL 注入
-$start_date_time = mysqli_real_escape_string($link, $_POST['start_date_time']);
-$end_date_time = mysqli_real_escape_string($link, $_POST['end_date_time']);
-$total_time = mysqli_real_escape_string($link, $_POST['total_time']);
-$distance = mysqli_real_escape_string($link, $_POST['distance']);
-$car = mysqli_real_escape_string($link, $_POST['car']);
-$type = mysqli_real_escape_string($link, $_POST['vehicleType']);
-$employee_id = mysqli_real_escape_string($link, $_POST['employee_id']);
+$start_date_time = mysqli_real_escape_string($link, $data['start_date_time']);
+$end_date_time = mysqli_real_escape_string($link, $data['end_date_time']);
+$total_time = mysqli_real_escape_string($link, $data['total_time']);
+$distance = mysqli_real_escape_string($link, $data['distance']);
+$car = mysqli_real_escape_string($link, $data['car']);
+$type = mysqli_real_escape_string($link, $data['vehicleType']);
+$employee_id = mysqli_real_escape_string($link, $data['employee_id']);
 
 // 路徑資料可存儲為 JSON 檔案並存入
-$path = json_encode($_POST['path']);
+$path = json_encode($data['path']);
 $filename = 'path_data_' . time() . '.json';
 file_put_contents('path_files/' . $filename, $path);
 
