@@ -63,13 +63,13 @@ $offset = ($pages - 1) * $records_per_page;
                                 $db_handle = new DBController();
 
                                 // 從資料庫中獲取所有的 em_name 資料
-                                $sql = "SELECT em_name FROM employee";
+                                $sql = "SELECT em_id, em_name FROM employee";
                                 $result = $db_handle->runQuery($sql);
 
                                 // 如果有資料，則建立下拉式選單
                                 if (!empty($result)) {
                                     foreach ($result as $row) {
-                                        echo "<option value='" . $row['em_name'] . "'>" . $row['em_name'] . "</option>";
+                                        echo "<option value='" . $row['em_id'] . "'>" . $row['em_name'] . "</option>";
                                     }
                                 } else {
                                     echo  "<option value=''>沒有資料</option>";
@@ -107,25 +107,27 @@ $offset = ($pages - 1) * $records_per_page;
                                     $end_date_display = $_POST['end_date_display'];
                                     $filter_employee = $_POST['filter_employee'];
                                     
+                                    $strSrh = '';
+                                    // 只篩日期
+                                    if((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_employee)){
+                                        $strSrh = "WHERE em_co2.eCO2_date BETWEEN '$start_date_display' AND '$end_date_display'";
+                                    }else if((empty($start_date_display) && empty($end_date_display)) && !empty($filter_employee)){ // 只篩員工
+                                        $strSrh = "WHERE em_co2.em_id = '$filter_employee'";
+                                    }else if((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_employee)){ // 員工日期
+                                        $strSrh = "WHERE em_co2.eCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND em_co2.em_id = '$filter_employee'";
+                                    }else{
+                                        ;
+                                    }
+                                    
                                     $query = "SELECT employee.em_id, employee.em_name, em_co2.eCO2_date, em_co2.eCO2_carbon, em_co2.eCO2_commute
                                                 FROM em_co2 
                                                 INNER JOIN employee ON em_co2.em_id = employee.em_id
-                                                WHERE 1=1";
-                                    
-                                    if (!empty($start_date_display || $end_date_display)) {
-                                        $filter_start_date = $start_date_display;
-                                        $filter_end_date = $end_date_display;
-                                        $query .= " AND cm_co2.cCO2_date BETWEEN '$filter_start_date' AND '$filter_end_date'";
-                                    }
-                                    
-                                    if (!empty($filter_employee)) {
-                                        $query .= " AND employee.em_name = '$filter_employee'";
-                                    }
+                                                ".$strSrh;
+                                    echo "</br>" . $query . "</br>";    
                                 } else {
                                     $query = "SELECT employee.em_id, employee.em_name, em_co2.eCO2_date, em_co2.eCO2_carbon, em_co2.eCO2_commute
                                                 FROM em_co2 
-                                                INNER JOIN employee ON em_co2.em_id = employee.em_id
-                                                WHERE 1=1";
+                                                INNER JOIN employee ON em_co2.em_id = employee.em_id";
                                 }
 
                                 // 獲取總記錄數
@@ -228,21 +230,25 @@ $offset = ($pages - 1) * $records_per_page;
         </div>
 
         <?php
-        if (!empty($filter_start_date) && !empty($filter_end_date) && empty($filter_employee)) {
-            $dateDiff = (strtotime($filter_end_date) - strtotime($filter_start_date)) / (60 * 60 * 24);
+        if ((!empty($filter_start_date) && !empty($filter_end_date)) && empty($filter_employee)) {
+            $start_date = $start_date_display;
+            $end_date = $end_date_display;
+            $dateDiff = (strtotime($end_date) - strtotime($start_date)) / (60 * 60 * 24);
             
             if ($dateDiff > 30) {
                 $chartQuery = "SELECT 
                                     DATE_FORMAT(em_co2.eCO2_date, '%Y-%m-%d') AS eCO2_date, 
                                     SUM(em_co2.eCO2_carbon) AS total_carbon
                                 FROM em_co2
-                                WHERE em_co2.eCO2_date BETWEEN '$filter_start_date' AND '$filter_end_date'
+                                WHERE em_co2.eCO2_date BETWEEN '$start_date' AND '$end_date'
                                 GROUP BY DATE_FORMAT(em_co2.eCO2_date, '%Y-%u')"; // 按每周分组
+                echo "<script>console.log($chartQuery)</script>";
             } else {
                 $chartQuery = "SELECT em_co2.eCO2_date, SUM(em_co2.eCO2_carbon) AS total_carbon
                                 FROM em_co2
-                                WHERE em_co2.eCO2_date BETWEEN '$filter_start_date' AND '$filter_end_date'
+                                WHERE em_co2.eCO2_date BETWEEN '$start_date' AND '$end_date'
                                 GROUP BY em_co2.eCO2_date";
+                echo "<script>console.log($chartQuery)</script>";
             }
             
             $chartResults = $db_handle->runQuery($chartQuery);
@@ -279,7 +285,7 @@ $offset = ($pages - 1) * $records_per_page;
             }];
                             
             var layout = {
-                title: '$filter_start_date 至 $filter_end_date 每日碳排量',
+                title: '$start_date 至 $end_date 每日碳排量',
                 xaxis: {
                     title: '日期',
                     gridcolor: '#67776d' // 设置x轴网格线的颜色
@@ -302,12 +308,12 @@ $offset = ($pages - 1) * $records_per_page;
 
 
         // 篩選員工
-        if (empty($filter_date) && !empty($filter_employee)) {
+        if ((empty($filter_start_date) && empty($filter_end_date)) && !empty($filter_employee)) {
             $currentYear = date('Y');
             $chartQuery = "SELECT YEAR(em_co2.eCO2_date) AS year, MONTH(em_co2.eCO2_date) AS month, SUM(em_co2.eCO2_carbon) AS total_carbon
                         FROM em_co2
                         INNER JOIN employee ON em_co2.em_id = employee.em_id
-                        WHERE employee.em_name = '$filter_employee' AND YEAR(em_co2.eCO2_date) = '$currentYear'
+                        WHERE em_co2.em_id = '$filter_employee' AND YEAR(em_co2.eCO2_date) = '$currentYear'
                         GROUP BY year, month";
             $chartResults = $db_handle->runQuery($chartQuery);
             $chartData = [
@@ -368,11 +374,13 @@ $offset = ($pages - 1) * $records_per_page;
 
         // 如果篩選日期、篩選員工
         if (!empty($filter_start_date) && !empty($filter_end_date) && !empty($filter_employee)) {
+            $start_date = $start_date_display;
+            $end_date = $end_date_display;
             $chartQuery = "SELECT em_co2.eCO2_date, em_co2.eCO2_commute, SUM(em_co2.eCO2_carbon) AS total_carbon
                         FROM em_co2
                         INNER JOIN employee ON em_co2.em_id = employee.em_id
-                        WHERE employee.em_name = '$filter_employee' 
-                        AND em_co2.eCO2_date BETWEEN '$filter_start_date' AND '$filter_end_date'
+                        WHERE em_co2.em_id = '$filter_employee' 
+                        AND em_co2.eCO2_date BETWEEN '$start_date' AND '$end_date'
                         GROUP BY em_co2.eCO2_date, em_co2.eCO2_commute";
             $chartResults = $db_handle->runQuery($chartQuery);
             $chartData = [
@@ -448,7 +456,7 @@ $offset = ($pages - 1) * $records_per_page;
                 });
 
                 var layout = {
-                    title: '$filter_start_date 至 $filter_end_date 員工 $filter_employee 的碳排量',
+                    title: '$start_date 至 $end_date 員工 $filter_employee 的碳排量',
                     xaxis: {
                         title: '日期',
                         gridcolor: '#67776d' // 设置x轴网格线的颜色
@@ -471,14 +479,18 @@ $offset = ($pages - 1) * $records_per_page;
 
         <?php if (isset($_POST['apply_filter']) && !empty($result)): ?>
             <script>
-            
+                // car參數的問題，迴圈處理資料可能有誤，注意資料結構
                 // 获取 PHP 生成的日期、碳排量和车辆数据
                 var dates = <?php echo json_encode(array_column($result, 'eCO2_date')); ?>;
                 var carbons = <?php echo json_encode(array_column($result, 'eCO2_carbon')); ?>;
                 var cars = <?php echo json_encode(array_column($result, 'ec_name')); ?>;
 
+                var filter_start_date = <?php echo json_encode($start_date_display); ?> || '';
+                var filter_end_date = <?php echo json_encode($end_date_display); ?> || '';
+                console.log(filter_start_date);
+                console.log(filter_end_date);
                 // 调用渲染图表的函数
-                renderChart(dates, carbons, cars, "<?php echo $filter_start_date; ?>", "<?php echo $filter_end_date; ?>");
+                renderChart(dates, carbons, cars, filter_start_date, filter_end_date);
 
                 function renderChart(dates, carbons, cars, startDate, endDate) {
                     var data = [];
@@ -541,8 +553,7 @@ $offset = ($pages - 1) * $records_per_page;
                             title: '碳排量 (kg)'
                         },
                         barmode: 'stack'
-                    },
-                    barmode: 'stack'
+                    };
                     
                     Plotly.newPlot('filteredBarChart', data, layout);
                 };
