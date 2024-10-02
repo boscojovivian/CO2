@@ -49,6 +49,21 @@ class DBController{     //新增一個類別DBController
         $query = "INSERT INTO $table ($columns) VALUES ($values)";
         return $this->executeUpdate($query);
     }
+    
+    function updateUserPermission($table, $data, $conditions) {
+        $updateValues = [];
+        foreach ($data as $column => $value) {
+            $updateValues[] = "$column = '" . mysqli_real_escape_string($this->conn, $value) . "'";
+        }
+        $updateString = implode(", ", $updateValues);
+
+        $conditionString = implode(" AND ", array_map(function($column, $value) {
+            return "$column = '" . mysqli_real_escape_string($this->conn, $value) . "'";
+        }, array_keys($conditions), $conditions));
+
+        $query = "UPDATE $table SET $updateString WHERE $conditionString";
+        return $this->executeUpdate($query);
+    }
 }
 
 
