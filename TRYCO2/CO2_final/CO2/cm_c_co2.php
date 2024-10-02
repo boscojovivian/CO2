@@ -273,11 +273,12 @@ $offset = ($pages - 1) * $records_per_page;
 
         <?php        
         // 篩選日期範圍
-        if (!empty($date_range) && empty($filter_car) && empty($filter_employee)) {
+        if (!empty($start_date_display || $end_date_display) && empty($filter_car) && empty($filter_employee)) {
 
-            list($start_date, $end_date) = explode(' 至 ', $date_range);
+            $start_date = $start_date_display;
+            $end_date = $end_date_display;
 
-            echo "<script>console.log($date_range);</script>";
+            echo "<script>console.log($start_date_display, $end_date_display);</script>";
             
             $chartQuery = "SELECT cCO2_date, cm_car.cc_name, SUM(cCO2_carbon) AS total_carbon
                     FROM cm_co2
@@ -346,7 +347,7 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         //篩選員工
-        if (empty($date_range) && empty($filter_car) && !empty($filter_employee)) {
+        if (empty($start_date_display || $end_date_display) && empty($filter_car) && !empty($filter_employee)) {
             $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
                         INNER JOIN employee ON cm_co2.em_id = employee.em_id
@@ -401,7 +402,7 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         //篩選交通車
-        if (empty($date_range) && !empty($filter_car) && empty($filter_employee)) {
+        if (empty($start_date_display || $end_date_display) && !empty($filter_car) && empty($filter_employee)) {
             $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
                         WHERE cc_id = '$filter_car_id'
@@ -455,8 +456,9 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         // 篩選日期、篩選交通車
-        if (!empty($date_range) && !empty($filter_car) && empty($filter_employee)) {
-            list($start_date, $end_date) = explode(' 至 ', $date_range);
+        if (!empty($start_date_display || $end_date_display) && !empty($filter_car) && empty($filter_employee)) {
+            $start_date = $start_date_display;
+            $end_date = $end_date_display;
             $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
                         WHERE cc_id = '$filter_car_id' AND cCO2_date BETWEEN '$start_date' AND '$end_date'
@@ -510,8 +512,9 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         // 篩選日期、篩選員工
-        if (!empty($date_range) && empty($filter_car) && !empty($filter_employee)) {
-            list($start_date, $end_date) = explode(' 至 ', $date_range);
+        if (!empty($start_date_display || $end_date_display) && empty($filter_car) && !empty($filter_employee)) {
+            $start_date = $start_date_display;
+            $end_date = $end_date_display;
             $chartQuery = "SELECT cCO2_date, cm_car.cc_name, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
                         INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
@@ -571,7 +574,7 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         // 篩選交通車、篩選員工
-        if (empty($date_range) && !empty($filter_car) && !empty($filter_employee)) {
+        if (empty($start_date_display || $end_date_display) && !empty($filter_car) && !empty($filter_employee)) {
             // 获取交通车ID
             $sql = "SELECT cc_id FROM cm_car WHERE cc_name = '$filter_car'";
             $result = $db_handle->runQuery($sql);
@@ -642,8 +645,9 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         // 篩選日期、篩選交通車、篩選員工
-        if (!empty($date_range) && !empty($filter_car) && !empty($filter_employee)) {
-            list($start_date, $end_date) = explode(' 至 ', $date_range);
+        if (!empty($start_date_display || $end_date_display) && !empty($filter_car) && !empty($filter_employee)) {
+            $start_date = $start_date_display;
+            $end_date = $end_date_display;
 
             $chartQuery = "SELECT cCO2_date, SUM(cCO2_carbon) AS total_carbon
                         FROM cm_co2
