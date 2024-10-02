@@ -10,6 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- 引入 Bootstrap 框架的 CSS 文件 -->
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
@@ -420,8 +421,8 @@
 
             // 發送 AJAX 請求
             $.ajax({
-                url: 'save_route_data.php',  // 後端處理的 PHP 文件
                 type: 'POST',
+                url: 'save_route_data.php',  // 後端處理的 PHP 文件
                 data: data,
                 success: function(response) {
                     // 成功訊息
@@ -441,6 +442,8 @@
                     });
                 }
             });
+
+            
         } else {
             console.error("Elapsed time is NaN, data export aborted.");
         }
@@ -528,7 +531,7 @@
         document.getElementById('exportBtn').disabled = true;
 
         // 顯示重置完成提示
-        message('出勤資料已匯出並重置!');
+        console.log('出勤資料已匯出並重置!');
     }
 
 
