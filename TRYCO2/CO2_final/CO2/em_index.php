@@ -219,7 +219,12 @@ $db_handle = new DBController();
                 responsive: true,
                 scales: {
                     y: {
-                        beginAtZero: true
+                        beginAtZero: true,
+                        // text: 'CO2 排放量 (kg)',
+                        title: {
+                            display: true,
+                            text: '碳排放量 (kg)' // 在這裡設置你想顯示的單位
+                        }
                     }
                 }
             }
