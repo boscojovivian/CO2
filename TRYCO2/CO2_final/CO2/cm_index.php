@@ -68,6 +68,27 @@ if (!isset($_SESSION['em_id'])) {
                 <a href="cm_c_co2.php"><button class="search-history-button1">交通車碳排紀錄</button></a><br><br>
                 <a href="cm_e_co2.php"><button class="search-history-button2" style="">員工碳排紀錄</button></a>
             </div>
+            <div class="total_carbon">
+                <?php
+                    $link = mysqli_connect("localhost", "root", "", "carbon_emissions")
+                        or die("無法開啟 MySQL 資料庫連結!<br>");
+                    mysqli_set_charset($link, "utf8");
+
+                    $sql = "SELECT SUM(total_carbon) AS total_carbon
+                            FROM total_carbon";
+
+                    mysqli_query($link, "SET NAMES utf8");
+                    $result = mysqli_query($link, $sql);
+
+                    while ($rows = mysqli_fetch_array($result)){
+                        $total = $rows["total_carbon"];
+                        $total_carbon = sprintf("%.2f", round($total,2));
+                        echo "<a class='total_carbon_text'>公司總碳排&nbsp:&nbsp</a>";
+                        echo "<a class='total_carbon_text2'>" . $total_carbon ."</a>";
+                        echo "<a class='total_carbon_text'>&nbspkg</a>";
+                    }
+                ?>
+            </div>  
         </div>      
     </body>   
 </html>
