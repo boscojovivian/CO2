@@ -230,7 +230,7 @@ $offset = ($pages - 1) * $records_per_page;
         </div>
 
         <?php
-        if ((!empty($filter_start_date) && !empty($filter_end_date)) && empty($filter_employee)) {
+        if ((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_employee)) {
             $start_date = $start_date_display;
             $end_date = $end_date_display;
             $dateDiff = (strtotime($end_date) - strtotime($start_date)) / (60 * 60 * 24);
@@ -308,7 +308,7 @@ $offset = ($pages - 1) * $records_per_page;
 
 
         // 篩選員工
-        if ((empty($filter_start_date) && empty($filter_end_date)) && !empty($filter_employee)) {
+        if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_employee)) {
             $currentYear = date('Y');
             $chartQuery = "SELECT YEAR(em_co2.eCO2_date) AS year, MONTH(em_co2.eCO2_date) AS month, SUM(em_co2.eCO2_carbon) AS total_carbon
                         FROM em_co2
@@ -373,7 +373,7 @@ $offset = ($pages - 1) * $records_per_page;
         }
 
         // 如果篩選日期、篩選員工
-        if (!empty($filter_start_date) && !empty($filter_end_date) && !empty($filter_employee)) {
+        if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_employee)) {
             $start_date = $start_date_display;
             $end_date = $end_date_display;
             $chartQuery = "SELECT em_co2.eCO2_date, em_co2.eCO2_commute, SUM(em_co2.eCO2_carbon) AS total_carbon
@@ -477,88 +477,6 @@ $offset = ($pages - 1) * $records_per_page;
         }
         ?>
 
-        <?php if (isset($_POST['apply_filter']) && !empty($result)): ?>
-            <script>
-                // car參數的問題，迴圈處理資料可能有誤，注意資料結構
-                // 获取 PHP 生成的日期、碳排量和车辆数据
-                var dates = <?php echo json_encode(array_column($result, 'eCO2_date')); ?>;
-                var carbons = <?php echo json_encode(array_column($result, 'eCO2_carbon')); ?>;
-                var cars = <?php echo json_encode(array_column($result, 'ec_name')); ?>;
-
-                var filter_start_date = <?php echo json_encode($start_date_display); ?> || '';
-                var filter_end_date = <?php echo json_encode($end_date_display); ?> || '';
-                console.log(filter_start_date);
-                console.log(filter_end_date);
-                // 调用渲染图表的函数
-                renderChart(dates, carbons, cars, filter_start_date, filter_end_date);
-
-                function renderChart(dates, carbons, cars, startDate, endDate) {
-                    var data = [];
-                    var groupedData = {};
-                    var colors = ['#ff8263', '#ffd063']; // 你可以添加更多颜色
-                    var totalCarbons = {};
-
-                    for (var i = 0; i < dates.length; i++) {
-                        if (!groupedData[cars[i]]) {
-                            groupedData[cars[i]] = { x: [], y: [] };
-                        }
-                        groupedData[cars[i]].x.push(dates[i]);
-                        groupedData[cars[i]].y.push(carbons[i]);
-
-                        if (!totalCarbons[dates[i]]) {
-                            totalCarbons[dates[i]] = 0;
-                        }
-                        totalCarbons[dates[i]] += parseFloat(carbons[i]);
-                    }
-
-                    var colorIndex = 0;
-                    for (var car in groupedData) {
-                        data.push({
-                            x: groupedData[car].x,
-                            y: groupedData[car].y,
-                            type: 'bar',
-                            name: car,
-                            marker: {
-                                color: colors[colorIndex % colors.length]
-                            }
-                        });
-                        colorIndex++;
-                    }
-
-                    var totalDates = Object.keys(totalCarbons).sort();
-                    var totalCarbonsValues = totalDates.map(date => totalCarbons[date]);
-
-                    data.push({
-                        x: totalDates,
-                        y: totalCarbonsValues,
-                        type: 'scatter',
-                        mode: 'lines+markers',
-                        name: '碳排總和',
-                        line: {
-                            color: '#FF5733',
-                            width: 2
-                        },
-                        marker: {
-                            color: '#FF5733',
-                            size: 6
-                        }
-                    });
-
-                    var layout = {
-                        title: startDate + ' 至 ' + endDate + ' 交通車碳排量',
-                        xaxis: {
-                            title: '日期'
-                        },
-                        yaxis: {
-                            title: '碳排量 (kg)'
-                        },
-                        barmode: 'stack'
-                    };
-                    
-                    Plotly.newPlot('filteredBarChart', data, layout);
-                };
-        </script>
-        <?php endif; ?>
 
         <script>
             // 回到最頂端
