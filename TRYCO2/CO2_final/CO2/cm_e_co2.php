@@ -43,44 +43,46 @@ $offset = ($pages - 1) * $records_per_page;
             <div class="col-6 right">
                 <div class="row">
                     <!-- 篩選列 -->
-                    <form action="" method="post" class="row g-3 d-flex align-items-center filter-form">
-                        <!-- 篩選日期 -->
-                        <div class="col-12 col-xl-5 d-flex justify-content-center align-items-center">
-                            <input type="hidden" name="filter_date" id="filter_date" value="">
-                            <label for="date_range">篩選日期：</label>
-                            <input type="text" id="date_range" name="date_range" class="date-range-picker" placeholder="選擇日期">
-                        </div>
+                    <form action="" method="post" class="row g-3 d-flex justify-content-center align-items-center filter-form">
+                        <div class="row w-100">
+                            <!-- 篩選日期 -->
+                            <div class="col-lg-12 d-flex align-items-center">
+                                <label for="date_range">篩選日期：</label>
+                                <input type="date" id="start_date_display" name="start_date_display" class="date-range-picker col-5 me-2" placeholder="開始日期">
+                                <input type="date" id="end_date_display" name="end_date_display" class="date-range-picker col-5" placeholder="結束日期">
+                            </div>
 
-                        <!-- 篩選員工 -->
-                        <div class="col-12 col-xl-5 d-flex justify-content-center align-items-center">
-                            <label for="filter_employee">篩選員工：</label>
-                            <select id="filter_employee" name="filter_employee">
-                            <option value="">請選擇</option>
-                            <?php
-                            // 包含資料庫連線的程式碼
-                            include_once("dropdown_list/dbcontroller.php");
-                            $db_handle = new DBController();
+                            <!-- 篩選員工 -->
+                            <div class="col-lg-6 d-flex justify-content-start align-items-center">
+                                <label for="filter_employee">篩選員工：</label>
+                                <select id="filter_employee" name="filter_employee">
+                                <option value="">請選擇</option>
+                                <?php
+                                // 包含資料庫連線的程式碼
+                                include_once("dropdown_list/dbcontroller.php");
+                                $db_handle = new DBController();
 
-                            // 從資料庫中獲取所有的 em_name 資料
-                            $sql = "SELECT em_name FROM employee";
-                            $result = $db_handle->runQuery($sql);
+                                // 從資料庫中獲取所有的 em_name 資料
+                                $sql = "SELECT em_name FROM employee";
+                                $result = $db_handle->runQuery($sql);
 
-                            // 如果有資料，則建立下拉式選單
-                            if (!empty($result)) {
-                                foreach ($result as $row) {
-                                    echo "<option value='" . $row['em_name'] . "'>" . $row['em_name'] . "</option>";
+                                // 如果有資料，則建立下拉式選單
+                                if (!empty($result)) {
+                                    foreach ($result as $row) {
+                                        echo "<option value='" . $row['em_name'] . "'>" . $row['em_name'] . "</option>";
+                                    }
+                                } else {
+                                    echo  "<option value=''>沒有資料</option>";
                                 }
-                            } else {
-                                echo  "<option value=''>沒有資料</option>";
-                            }
-                            ?>
-                        </select>
-                        </div>
+                                ?>
+                            </select>
+                            </div>
 
-                        <!-- 確認篩選按鈕 --> 
-                        <div class="col-12 col-xl-2 d-flex justify-content-center align-items-end">
-                            <!-- type="submit"設定提交表單 -->
-                            <button type="submit" class="btn btn-success btn-lg" name="apply_filter" data-style="apply_filter">確認篩選</button>
+                            <!-- 確認篩選按鈕 --> 
+                            <div class="col-lg-6 d-flex justify-content-center align-items-center">
+                                <!-- type="submit"設定提交表單 -->
+                                <button type="submit" class="btn btn-success btn-lg" name="apply_filter" data-style="apply_filter">確認篩選</button>
+                            </div>
                         </div>
                     </form>
 
@@ -101,7 +103,8 @@ $offset = ($pages - 1) * $records_per_page;
                                 $db_handle = new DBController();
                                 
                                 if (isset($_POST['apply_filter'])) {
-                                    $date_range = $_POST['date_range'];  // 从隐藏字段获取日期范围
+                                    $start_date_display = $_POST['start_date_display'];
+                                    $end_date_display = $_POST['end_date_display'];
                                     $filter_employee = $_POST['filter_employee'];
                                     
                                     $query = "SELECT employee.em_id, employee.em_name, em_co2.eCO2_date, em_co2.eCO2_carbon, em_co2.eCO2_commute
@@ -109,14 +112,10 @@ $offset = ($pages - 1) * $records_per_page;
                                                 INNER JOIN employee ON em_co2.em_id = employee.em_id
                                                 WHERE 1=1";
                                     
-                                    if (!empty($date_range)) {
-                                        if (strpos($date_range, " 至 ") !== false) {
-                                            list($filter_start_date, $filter_end_date) = explode(" 至 ", $date_range);
-                                        } else {
-                                            // 如果没有分隔符，将开始日期和结束日期都设置为同一日期
-                                            $filter_start_date = $filter_end_date = $date_range;
-                                        }
-                                        $query .= " AND em_co2.eCO2_date BETWEEN '$filter_start_date' AND '$filter_end_date'";
+                                    if (!empty($start_date_display || $end_date_display)) {
+                                        $filter_start_date = $start_date_display;
+                                        $filter_end_date = $end_date_display;
+                                        $query .= " AND cm_co2.cCO2_date BETWEEN '$filter_start_date' AND '$filter_end_date'";
                                     }
                                     
                                     if (!empty($filter_employee)) {
@@ -137,7 +136,7 @@ $offset = ($pages - 1) * $records_per_page;
                                 // 添加LIMIT子句到查詢
                                 $query .= " ORDER BY em_co2.eCO2_date DESC LIMIT $offset, $records_per_page";
                                 $result = $db_handle->runQuery($query);
-
+ 
                                 if (!empty($result)) {
                                     foreach ($result as $record) {
                                         echo "<tr>";
@@ -570,54 +569,6 @@ $offset = ($pages - 1) * $records_per_page;
                 // 不同瀏覽器
                 document.body.scrollTop = 0; // Safari
                 document.documentElement.scrollTop = 0; // Chrome、Firefox、 IE、Opera
-            }
-
-            // 日期選擇器(區間)
-            flatpickr("#date_range", {
-                mode: "range",
-                dateFormat: "Y-m-d",
-                locale: "zh_tw",
-                onReady: function(selectedDates, dateStr, instance) {
-                    const container = instance.calendarContainer;
-                    const weekButton = document.createElement("button");
-                    weekButton.textContent = "本周";
-                    weekButton.type = "button";
-                    weekButton.classList.add("flatpickr_week_button");
-                    weekButton.addEventListener("click", function() {
-                        instance.setDate(getWeekRange());
-                    });
-
-                    const monthButton = document.createElement("button");
-                    monthButton.textContent = "本月";
-                    monthButton.type = "button";
-                    monthButton.classList.add("flatpickr_week_button");
-                    monthButton.addEventListener("click", function() {
-                        instance.setDate(getMonthRange());
-                    });
-
-                    container.appendChild(weekButton);
-                    container.appendChild(monthButton);
-                }
-            });
-
-            function getWeekRange() {
-                const now = new Date();
-                const dayOfWeek = now.getDay();
-                const start = new Date(now);
-                const end = new Date(now);
-
-                start.setDate(now.getDate() - dayOfWeek + 1);
-                end.setDate(now.getDate() + (7 - dayOfWeek));
-
-                return [start, end];
-            }
-
-            function getMonthRange() {
-                const now = new Date();
-                const start = new Date(now.getFullYear(), now.getMonth(), 1);
-                const end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-
-                return [start, end];
             }
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>

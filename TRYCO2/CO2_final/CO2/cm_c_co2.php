@@ -55,44 +55,18 @@ $offset = ($pages - 1) * $records_per_page;
             <div class="col-6 right">
                 <div class="row">
                     <!-- 篩選列 -->
-                    <form action="" method="post" class="g-3 d-flex filter-form">
+                    <form action="" method="post" class="g-3 d-flex justify-content-center align-items-center filter-form">
                         <div class="row w-100">
                             <!-- 篩選日期 -->
-                            <div class="col-lg-12 d-flex justify-content-center align-items-center">
-                                <button class="btn btn-success btn-lg me-3" onclick="showAdvancedSearch()">篩選日期</button>
-                                <input type="text" id="start_date_display" name="start_date_display" class="date-range-picker me-2" placeholder="開始日期">
-                                <input type="text" id="end_date_display" name="end_date_display" class="date-range-picker" placeholder="結束日期">
-                            </div>
-                            <!-- 篩選日期彈窗 -->
-                            <div id="advancedSearchModal" class="modal" tabindex="-1" role="dialog">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">篩選日期</h5>
-                                            <button type="button" class="close" onclick="closeModal()" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="searchForm">
-                                                <div class="form-group">
-                                                    <label for="start_date">開始日期</label>
-                                                    <input type="date" class="form-control" id="start_date" name="start_date" required>
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="end_date">結束日期</label>
-                                                    <input type="date" class="form-control" id="end_date" name="end_date" required>
-                                                </div>
-                                                <button type="button" class="btn btn-success" onclick="performAdvancedSearch()">查詢</button>
-                                                <button type="button" class="btn btn-success" onclick="resetdate()">清除條件</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="col-lg-12 d-flex justify-content-start align-items-center">
+                                <label for="date_range">篩選日期：</label>
+                                <input type="date" id="start_date_display" name="start_date_display" class="date-range-picker col-5 me-2" placeholder="開始日期">
+                                <input type="date" id="end_date_display" name="end_date_display" class="date-range-picker col-5" placeholder="結束日期">
                             </div>
 
+
                             <!-- 篩選交通車 -->
-                            <div class="col-lg-4 d-flex justify-content-center align-items-center">
+                            <div class="col-lg-4 d-flex justify-content-start align-items-center">
                                 <label for="filter_car">交通車：</label>
                                 <select id="filter_car" name="filter_car">
                                     <option value="">請選擇</option>
@@ -159,7 +133,8 @@ $offset = ($pages - 1) * $records_per_page;
                                     $db_handle = new DBController();
 
                                     if (isset($_POST['apply_filter'])) {
-                                        $date_range = $_POST['date_range'];  // 从隐藏字段获取日期范围
+                                        $start_date_display = $_POST['start_date_display'];
+                                        $end_date_display = $_POST['end_date_display'];
                                         $filter_car = $_POST['filter_car'];
                                         $filter_employee = $_POST['filter_employee'];
 
@@ -169,13 +144,9 @@ $offset = ($pages - 1) * $records_per_page;
                                                 INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
                                                 WHERE 1=1";
 
-                                        if (!empty($date_range)) {
-                                            if (strpos($date_range, " 至 ") !== false) {
-                                                list($filter_start_date, $filter_end_date) = explode(" 至 ", $date_range);
-                                            } else {
-                                                // 如果没有分隔符，将开始日期和结束日期都设置为同一日期
-                                                $filter_start_date = $filter_end_date = $date_range;
-                                            }
+                                        if (!empty($start_date_display || $end_date_display)) {
+                                            $filter_start_date = $start_date_display;
+                                            $filter_end_date = $end_date_display;
                                             $query .= " AND cm_co2.cCO2_date BETWEEN '$filter_start_date' AND '$filter_end_date'";
                                         }
 
@@ -830,31 +801,6 @@ $offset = ($pages - 1) * $records_per_page;
                 // 不同瀏覽器
                 document.body.scrollTop = 0; // Safari
                 document.documentElement.scrollTop = 0; // Chrome、Firefox、 IE、Opera
-            }
-
-            // 顯示日期彈窗
-            function showAdvancedSearch() {
-                document.getElementById("advancedSearchModal").style.display = "block";
-            }
-
-            // 關閉彈窗
-            function closeModal() {
-                document.getElementById("advancedSearchModal").style.display = "none";
-                isAdvancedSearch = false;
-            }
-
-            // 日期印到input
-            function performAdvancedSearch() {
-                // 獲取選擇的日期值
-                var startDate = document.getElementById("start_date").value;
-                var endDate = document.getElementById("end_date").value;
-
-                // 設置顯示的日期欄位值
-                document.getElementById("start_date_display").value = startDate;
-                document.getElementById("end_date_display").value = endDate;
-
-                // 關閉彈窗
-                closeModal();
             }
         </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>

@@ -74,24 +74,13 @@ table tbody tr:last-of-type{
 }
 
 /* 日期區間選擇器按鈕 */
-.flatpickr_week_button{
-    cursor: pointer;
-    width: 50%;
-    height: 40px;
-    background-color: #98c39a;
-    border: 2px solid #fff; /* 顯示邊框 */
+.date-range-picker {
+    width: 200px; 
+    height: 40px; 
+    font-size: 1.2em; 
+    padding: 5px;
 }
 
-.flatpickr_week_button:hover{
-    background-color: #fff;
-    border: 2px solid #98c39a; /* 顯示邊框 */
-}
-
-.filteredBarChart{
-    border-radius: 15px; 
-    overflow: hidden; /* 確保內容顯示 */
-    width: 80%;
-}
 
 /* 分頁按鈕樣式 */
 .turn_pages_div{

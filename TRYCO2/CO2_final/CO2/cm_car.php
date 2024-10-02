@@ -48,60 +48,63 @@ $offset = ($pages - 1) * $records_per_page;
 
         <div class="container">
             <!-- 篩選列 -->
-            <form action="" method="post" class="row g-3 d-flex align-items-center filter-form">
-                <!-- 篩選日期 -->
-                <div class="col-12 col-lg-6 col-xl-4 d-flex align-items-center">
-                    <label for="date_range">篩選日期：</label>
-                    <input type="text" id="date_range" name="date_range" class="date-range-picker" placeholder="選擇日期">
-                </div>
+            <form action="" method="post" class="row g-3 d-flex justify-content-center align-items-center filter-form">
+                <div class="row w-100">
+                    <!-- 篩選日期 -->
+                    <div class="col-lg-12 d-flex align-items-center">
+                        <label for="date_range">篩選日期：</label>
+                        <input type="date" id="start_date_display" name="start_date_display" class="date-range-picker col-5 me-2" placeholder="開始日期">
+                        <input type="date" id="end_date_display" name="end_date_display" class="date-range-picker col-5" placeholder="結束日期">
+                    </div>
 
-                <!-- 篩選交通車 -->
-                <div class="col-12 col-lg-6 col-xl-3 d-flex justify-content-center align-items-center">
-                    <label for="filter_car">篩選交通車：</label>
-                    <select id="filter_car" name="filter_car">
-                        <option value="">請選擇</option>
-                        <?php
-                        include_once("dropdown_list/dbcontroller.php");
-                        $db_handle = new DBController();
+                    <!-- 篩選交通車 -->
+                    <div class="col-lg-4 d-flex align-items-center">
+                        <label for="filter_car">篩選交通車：</label>
+                        <select id="filter_car" name="filter_car">
+                            <option value="">請選擇</option>
+                            <?php
+                            include_once("dropdown_list/dbcontroller.php");
+                            $db_handle = new DBController();
 
-                        $sql = "SELECT cc_id, cc_name FROM cm_car";
-                        $result = $db_handle->runQuery($sql);
+                            $sql = "SELECT cc_id, cc_name FROM cm_car";
+                            $result = $db_handle->runQuery($sql);
 
-                        if (!empty($result)) {
-                            foreach ($result as $row) {
-                                echo "<option value='" . $row['cc_name'] . "'>" . $row['cc_name'] . "</option>";
+                            if (!empty($result)) {
+                                foreach ($result as $row) {
+                                    echo "<option value='" . $row['cc_name'] . "'>" . $row['cc_name'] . "</option>";
+                                }
+                            } else {
+                                echo "<option value=''>沒有資料</option>";
                             }
-                        } else {
-                            echo "<option value=''>沒有資料</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                            ?>
+                        </select>
+                    </div>
 
-                <!-- 篩選員工 -->
-                <div class="col-12 col-lg-6 col-xl-3 d-flex justify-content-center align-items-center">
-                    <label for="filter_employee">篩選員工：</label>
-                    <select id="filter_employee" name="filter_employee">
-                        <option value="">請選擇</option>
-                        <?php
-                        $sql = "SELECT em_id, em_name FROM employee";
-                        $result = $db_handle->runQuery($sql);
+                    <!-- 篩選員工 -->
+                    <div class="col-lg-4 d-flex align-items-center">
+                        <label for="filter_employee">篩選員工：</label>
+                        <select id="filter_employee" name="filter_employee">
+                            <option value="">請選擇</option>
+                            <?php
+                            $sql = "SELECT em_id, em_name FROM employee";
+                            $result = $db_handle->runQuery($sql);
 
-                        if (!empty($result)) {
-                            foreach ($result as $row) {
-                                echo "<option value='" . $row['em_name'] . "'>" . $row['em_name'] . "</option>";
+                            if (!empty($result)) {
+                                foreach ($result as $row) {
+                                    echo "<option value='" . $row['em_name'] . "'>" . $row['em_name'] . "</option>";
+                                }
+                            } else {
+                                echo "<option value=''>沒有資料</option>";
                             }
-                        } else {
-                            echo "<option value=''>沒有資料</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
+                            ?>
+                        </select>
+                    </div>
 
-                <!-- 確認篩選按鈕 --> 
-                <div class="col-12 col-lg-6 col-xl-2 d-flex justify-content-center align-items-end">
-                    <!-- type="submit"設定提交表單 -->
-                    <button type="submit" class="btn btn-success btn-lg" name="apply_filter" data-style="apply_filter">確認篩選</button>
+                    <!-- 確認篩選按鈕 --> 
+                    <div class="col-lg-4 d-flex align-items-center">
+                        <!-- type="submit"設定提交表單 -->
+                        <button type="submit" class="btn btn-success btn-lg" name="apply_filter" data-style="apply_filter">確認篩選</button>
+                    </div>
                 </div>
             </form>
 
@@ -112,10 +115,10 @@ $offset = ($pages - 1) * $records_per_page;
                         <tr>
                             <th>交通車名稱</th>
                             <th>車子的類型</th>
-                            <th>員工姓名</th>
                             <th>產生碳排日期</th>
                             <th>產生碳排時間</th>
                             <th>產生的碳排量</th>
+                            <th>員工姓名</th>
                             <th>路程</th>
                         </tr>
                     </thead>
@@ -125,7 +128,8 @@ $offset = ($pages - 1) * $records_per_page;
                         $db_handle = new DBController();
 
                         if (isset($_POST['apply_filter'])) {
-                            $date_range = $_POST['date_range'];
+                            $start_date_display = $_POST['start_date_display'];
+                            $end_date_display = $_POST['end_date_display'];
                             $filter_car = $_POST['filter_car'];
                             $filter_employee = $_POST['filter_employee'];
 
@@ -135,8 +139,9 @@ $offset = ($pages - 1) * $records_per_page;
                                     INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
                                     WHERE 1=1";
 
-                            if (!empty($date_range)) {
-                                list($filter_start_date, $filter_end_date) = explode(" 至 ", $date_range);
+                            if (!empty($start_date_display || $end_date_display)) {
+                                $filter_start_date = $start_date_display;
+                                $filter_end_date = $end_date_display;
                                 $query .= " AND cm_co2.cCO2_date BETWEEN '$filter_start_date' AND '$filter_end_date'";
                             }
 
@@ -183,10 +188,10 @@ $offset = ($pages - 1) * $records_per_page;
                                 echo "<tr>";
                                 echo "<td>" . $row['cc_name'] . "</td>";
                                 echo "<td>" . translateCarType($row["cc_type"]) . "</td>";
-                                echo "<td>" . $row['em_name'] . "</td>";
                                 echo "<td>" . $row['cCO2_date'] . "</td>";
                                 echo "<td>" . $row['cCO2_start_time'] . " ~ " . $row['cCO2_end_time'] . "</td>";
                                 echo "<td>" . $row['cCO2_carbon'] . "公克</td>";
+                                echo "<td>" . $row['em_name'] . "</td>";
                                 echo "<td class='show-tooltip' data-tooltip='" . $address . "'>查看路程</td>";
                                 echo "</tr>";
                             }
