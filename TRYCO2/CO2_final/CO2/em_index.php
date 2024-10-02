@@ -73,7 +73,7 @@ $db_handle = new DBController();
                             echo '<input type="text" class="form-control" id="address" value="' . $rows[1] . $rows[0] . $rows[2] . '" readonly>';
                         ?>
                         <!-- <input type="text" class="form-control" id="address" value="台中市中區中華路一段" readonly> 地址輸入框 -->
-                        <button class="btn btn-outline-secondary" type="button">+</button> <!--新增按鈕-->
+                        <a href="em_add_adrress.php"><button class="btn btn-outline-secondary" type="button">+</button></a> <!--新增按鈕-->
                     </div>
                 </div>
             </div>
@@ -86,7 +86,7 @@ $db_handle = new DBController();
                     <button id="prevWeekBtn" class="btn btn-custom" onclick="changeWeek(-1)">&lt;&lt;上週</button>
                     <button id="nextWeekBtn" class="btn btn-custom" onclick="changeWeek(1)">下週&gt;&gt;</button>
                     <button class="btn btn-custom" onclick="showAdvancedSearch()">進階查詢</button>
-                    <button class="btn btn-new">新增</button>
+                    <a href="em_add_CO2.php"><button class="btn btn-new">新增</button></a>
                 </div>
                 <!-- 進階查詢彈窗 -->
                 <div id="advancedSearchModal" class="modal" tabindex="-1" role="dialog">
