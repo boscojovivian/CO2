@@ -73,8 +73,14 @@
                                 <?php echo $user_name; ?> <!-- 顯示用戶名 -->
                             </a>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a class="dropdown-item" href="cm_index.php">管理者首頁</a></li>
-                                <li><hr class="dropdown-divider"></li>
+                                <?php
+                                    if($_SESSION['flag'] == 1){
+                                        echo "<li><a class='dropdown-item' href='cm_index.php'>管理者首頁</a></li>";
+                                        echo "<li><hr class='dropdown-divider'></li>";
+                                    }
+                                ?>
+                                
+                                
                                 <li>
                                     <form method="post" class="dropdown-item"> <!-- 登出按鈕放在表單裡 -->
                                         <input type="submit" name="logout" value="登出" class="btn btn-success"> <!-- 使用btn-link樣式讓它看起來像連結 -->

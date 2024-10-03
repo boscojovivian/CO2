@@ -34,7 +34,7 @@ $db_handle = new DBController();
                 <h1 class="fw-bold title">碳探你的路</h1>
                 <div class="knowledge-box mt-5 custom-width col col-lg-12 shadow">
                     <h3 class="mt-2">環保小知識</h3>
-                    <p>你知道嗎？..................................<a href="#">閱讀更多</a></p>
+                    <p>你知道嗎？..................................<a href="knowledge_index.php">閱讀更多</a></p>
                 </div>
             </div>
         </div>

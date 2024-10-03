@@ -47,12 +47,25 @@ if (!isset($_SESSION['em_id'])) {
                                 echo "<td>".$row["em_id"]."</td>";
                                 echo "<td>".$row["em_name"]."</td>";
                                 echo "<td>".$row["em_email"]."</td>";
-                                echo "<td>
-                                        <select class='form-select'>
-                                            <option value='設定'>擁有者</option>
-                                            <option value='解除'>成員</option>
-                                        </select>
-                                      </td>";
+                                if($row["em_id"] == $_SESSION["em_id"]){
+                                    echo "<td>" . ($row['flag'] == 1 ? "管理員" : "員工") . "</td>";
+                                }else{
+                                    if($row['flag'] == 1){
+                                        echo "<td>
+                                            <select class='form-select status-select' data-id='".$row["em_id"]."'>
+                                                <option value='設定' selected='selected'>管理者</option>
+                                                <option value='解除'>員工</option>
+                                            </select>
+                                        </td>";
+                                    }else{
+                                        echo "<td>
+                                            <select class='form-select status-select' data-id='".$row["em_id"]."'>
+                                                <option value='設定'>管理者</option>
+                                                <option value='解除' selected='selected'>員工</option>
+                                            </select>
+                                        </td>";
+                                    }
+                                } 
                                 echo "</tr>";
                             }
                         } else {
@@ -61,7 +74,68 @@ if (!isset($_SESSION['em_id'])) {
                     ?>
                 </tbody>
             </table>
+
+            <!-- 隱藏的按鈕 -->
+            <div id="save-button-container" style="display:none;">
+                <button id="save-button" class="btn btn-primary">儲存變更</button>
+            </div>
         </div>
+
+        <script>
+            // 儲存變更的數據
+            var changes = [];
+
+            document.querySelectorAll('.status-select').forEach(function(selectElement) {
+                selectElement.addEventListener('change', function() {
+                    // 顯示儲存按鈕
+                    document.getElementById('save-button-container').style.display = 'block';
+
+                    // 紀錄變更
+                    var userId = this.getAttribute('data-id');
+                    var newStatus = this.value === '設定' ? 1 : 0;
+
+                    // 更新變更的數據
+                    var existingChange = changes.find(change => change.id === userId);
+                    if (existingChange) {
+                        existingChange.status = newStatus;
+                    } else {
+                        changes.push({ id: userId, status: newStatus });
+                    }
+                });
+            });
+
+            // 當按下儲存按鈕
+            document.getElementById('save-button').addEventListener('click', function() {
+                // 發送變更到後端處理
+                fetch('update_user_status.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(changes)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('權限已成功更新');
+                        // 隱藏儲存按鈕
+                        document.getElementById('save-button-container').style.display = 'none';
+                        changes = [];  // 清空變更紀錄
+                        // 根據資料是否更新當前使用者 session，重新載入頁面
+                        if (data.updateSession) {
+                            window.location.reload();  // 更新後重新載入頁面
+                        }
+                    } else {
+                        alert('更新失敗');
+                    }
+                })
+                .catch(error => {
+                    console.error('發生錯誤:', error);
+                });
+            });
+        </script>
+
+
 
         
 

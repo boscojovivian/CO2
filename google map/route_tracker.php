@@ -423,7 +423,7 @@
             $.ajax({
                 type: 'POST',
                 url: 'save_route_data.php',  // 後端處理的 PHP 文件
-                data: data,
+                data: JSON.stringify(data),
                 success: function(response) {
                     // 成功訊息
                     Swal.fire({
