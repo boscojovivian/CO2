@@ -25,24 +25,30 @@ if (!isset($_SESSION['em_id'])) {
         
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="carbon-tab" data-bs-toggle="tab" data-bs-target="#carbon" type="button" role="tab" aria-controls="carbon" aria-selected="true">交通相關</button>
+                <button class="nav-link active" id="know1-tab" data-bs-toggle="tab" data-bs-target="#know1" type="button" role="tab" aria-controls="know1" aria-selected="true">國際清潔空氣藍天日</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="renewable-tab" data-bs-toggle="tab" data-bs-target="#renewable" type="button" role="tab" aria-controls="renewable" aria-selected="false">各國碳稅比較</button>
+                <button class="nav-link" id="know2-tab" data-bs-toggle="tab" data-bs-target="#know2" type="button" role="tab" aria-controls="know2" aria-selected="false">交通相關</button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="waste-tab" data-bs-toggle="tab" data-bs-target="#waste" type="button" role="tab" aria-controls="waste" aria-selected="false">各國碳政策比較</button>
+                <button class="nav-link" id="know3-tab" data-bs-toggle="tab" data-bs-target="#know3" type="button" role="tab" aria-controls="know3" aria-selected="false">各國碳稅比較</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="know4-tab" data-bs-toggle="tab" data-bs-target="#know4" type="button" role="tab" aria-controls="know4" aria-selected="false">各國碳政策比較</button>
             </li>
         </ul>
 
         <div class="tab-content mt-3" id="myTabContent">
-            <div class="tab-pane fade show active" id="carbon" role="tabpanel" aria-labelledby="carbon-tab">
+            <div class="tab-pane fade show active" id="know1" role="tabpanel" aria-labelledby="know1-tab">
+                <?php include('co2_class0.php'); ?>
+            </div>
+            <div class="tab-pane fade" id="know2" role="tabpanel" aria-labelledby="know2-tab">
                 <?php include('co2_class1.php'); ?>
             </div>
-            <div class="tab-pane fade" id="renewable" role="tabpanel" aria-labelledby="renewable-tab">
+            <div class="tab-pane fade" id="know3" role="tabpanel" aria-labelledby="know3-tab">
                 <?php include('co2_class2.php'); ?>
             </div>
-            <div class="tab-pane fade" id="waste" role="tabpanel" aria-labelledby="waste-tab">
+            <div class="tab-pane fade" id="know4" role="tabpanel" aria-labelledby="know4-tab">
                 <?php include('co2_class3.php'); ?>
             </div>
         </div>
