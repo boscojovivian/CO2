@@ -28,7 +28,7 @@ if (isset($_GET['mode'])) {
     if ($result->num_rows > 0) {
         echo '<option value="">請選擇車輛</option>';
         while ($row = $result->fetch_assoc()) {
-            echo '<option value="' . $row['id'] . '">' . $row['name'] . '</option>';
+            echo '<option value="' . $row['name'] . '">' . $row['name'] . '</option>';
         }
     } else {
         echo '<option value="">沒有可用的車輛</option>';
