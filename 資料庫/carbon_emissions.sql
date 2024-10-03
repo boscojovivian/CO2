@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-10-02 15:54:05
+-- 產生時間： 2024-10-03 17:13:35
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -501,6 +501,26 @@ INSERT INTO `cm_car` (`cc_id`, `cc_name`, `cc_type`) VALUES
 (3, 'TRU-0231', 'truck'),
 (4, 'NIL-4553', 'motorcycle');
 
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `cm_car_oil`
+--
+
+DROP TABLE IF EXISTS `cm_car_oil`;
+CREATE TABLE `cm_car_oil` (
+  `id` int(5) NOT NULL,
+  `oil_date` varchar(15) DEFAULT NULL,
+  `liter` float DEFAULT NULL,
+  `price` int(10) DEFAULT NULL,
+  `car_id` int(5) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 資料表新增資料前，先清除舊資料 `cm_car_oil`
+--
+
+TRUNCATE TABLE `cm_car_oil`;
 -- --------------------------------------------------------
 
 --
@@ -11226,9 +11246,9 @@ CREATE TABLE `route_tracker` (
   `end_date_time` varchar(20) DEFAULT NULL,
   `total_time` varchar(10) DEFAULT NULL,
   `distance` varchar(10) DEFAULT NULL,
-  `file` varchar(20) DEFAULT NULL,
+  `file` varchar(50) DEFAULT NULL,
   `car` varchar(20) DEFAULT NULL,
-  `type` varchar(10) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL,
   `employee_id` int(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -11294,6 +11314,19 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 -- 已傾印資料表的索引
 --
+
+--
+-- 資料表索引 `cm_car`
+--
+ALTER TABLE `cm_car`
+  ADD PRIMARY KEY (`cc_id`);
+
+--
+-- 資料表索引 `cm_car_oil`
+--
+ALTER TABLE `cm_car_oil`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `car_id` (`car_id`);
 
 --
 -- 資料表索引 `cm_co2`
@@ -11367,6 +11400,12 @@ ALTER TABLE `transportation`
 --
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `cm_car`
+--
+ALTER TABLE `cm_car`
+  MODIFY `cc_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `cm_co2`
 --
 ALTER TABLE `cm_co2`
@@ -11429,6 +11468,12 @@ ALTER TABLE `transportation`
 --
 -- 已傾印資料表的限制式
 --
+
+--
+-- 資料表的限制式 `cm_car_oil`
+--
+ALTER TABLE `cm_car_oil`
+  ADD CONSTRAINT `cm_car_oil_ibfk_1` FOREIGN KEY (`car_id`) REFERENCES `cm_car` (`cc_id`);
 
 --
 -- 資料表的限制式 `message`
