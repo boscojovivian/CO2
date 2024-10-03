@@ -4,3 +4,56 @@
     color: black;
     margin: 20px 0;
 }
+
+
+
+.nav-link.active {
+    background-color: #c0d2cd !important; 
+    color: #000000 !important; 
+}
+
+.nav-link {
+    color: rgb(79, 77, 77) !important;
+}
+
+.nav-link:hover {
+    background-color: #c0c0c0; 
+}
+
+.tab-content {
+    padding: 20px;
+    background-color: #c0d2cd;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+
+.table {
+    background-color: #ffffff; 
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f2f2f2;
+}
+
+.table-bordered {
+    border: 1px solid #7a8a85; 
+}
+
+.table thead th {
+    background-color: #e9ecef; /* 表頭背景設為淺灰色 */
+    color: #000; /* 表頭文字設為黑色 */
+    border-bottom: 2px solid #7a8a85; /* 表頭底部邊框 */
+}
+
+.table td, .table th {
+    border: 1px solid #7a8a85; /* 單元格邊框顏色 */
+    color: #000; 
+}
+
+
+
+.ot1{
+    color: black;
+    text-decoration: none;
+}
