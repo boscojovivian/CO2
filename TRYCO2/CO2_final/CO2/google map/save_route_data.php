@@ -22,16 +22,19 @@ $car = mysqli_real_escape_string($link, $data['car']);
 $type = mysqli_real_escape_string($link, $data['vehicleType']);
 $employee_id = mysqli_real_escape_string($link, $data['employee_id']);
 
+// 檢查並創建 path_files 目錄
+if (!is_dir('path_files')) {
+    mkdir('path_files', 0777, true);
+}
+
 // 路徑資料可存儲為 JSON 檔案並存入
 $path = json_encode($data['path']);
 $filename = 'path_data_' . time() . '.json';
 file_put_contents('path_files/' . $filename, $path);
 
-$ppp = "555";
-
 // 插入資料到 route_tracker 表
 $sql = "INSERT INTO route_tracker(start_date_time, end_date_time, total_time, distance, file, car, type, employee_id) 
-        VALUES ('$start_date_time', '$end_date_time', '$total_time', '$distance', '$ppp', '$car', '$type', '$employee_id')";
+        VALUES ('$start_date_time', '$end_date_time', '$total_time', '$distance', '$filename', '$car', '$type', '$employee_id')";
 
 // 預處理 SQL
 // $stmt = mysqli_prepare($link, $sql);
