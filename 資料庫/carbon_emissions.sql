@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-10-03 17:13:35
+-- 產生時間： 2024-10-04 19:17:34
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -11242,13 +11242,15 @@ TRUNCATE TABLE `message`;
 DROP TABLE IF EXISTS `route_tracker`;
 CREATE TABLE `route_tracker` (
   `id` int(5) NOT NULL,
-  `start_date_time` varchar(20) DEFAULT NULL,
-  `end_date_time` varchar(20) DEFAULT NULL,
+  `start_date` varchar(10) DEFAULT NULL,
+  `start_time` varchar(10) DEFAULT NULL,
+  `end_date` varchar(10) DEFAULT NULL,
+  `end_time` varchar(10) DEFAULT NULL,
   `total_time` varchar(10) DEFAULT NULL,
   `distance` varchar(10) DEFAULT NULL,
   `file` varchar(50) DEFAULT NULL,
-  `car` varchar(20) DEFAULT NULL,
-  `type` varchar(50) DEFAULT NULL,
+  `car` varchar(10) DEFAULT NULL,
+  `type` varchar(30) DEFAULT NULL,
   `employee_id` int(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
