@@ -85,7 +85,7 @@ if (!isset($_SESSION['em_id'])) {
                         $total_carbon = sprintf("%.2f", round($total,2));
                         echo "<span class='total_carbon_text'>公司總碳排&nbsp:&nbsp</span>";
                         echo "<span class='total_carbon_text2'>" . $total_carbon ."</span>";
-                        echo "<span class='total_carbon_text'>&nbspkg</sapan>";
+                        echo "<span class='total_carbon_text'>&nbsp公噸</sapan>";
                     }
                 ?>
             </div>  
