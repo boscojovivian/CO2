@@ -201,7 +201,7 @@
                                             echo "<tr>";
                                             echo "<td>" . $row['cc_name'] . "</td>";
                                             echo "<td>" . $row['cCO2_date'] . "</td>";
-                                            echo "<td>" . $row['cCO2_carbon'] . " 公斤</td>";
+                                            echo "<td>" . $row['cCO2_carbon'] . " 公噸</td>";
                                             echo "<td>" . $row['em_name'] . "</td>";
                                             echo "</tr>";
                                         }

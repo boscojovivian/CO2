@@ -178,7 +178,7 @@ $offset = ($pages - 1) * $records_per_page;
                                             echo "<tr>";
                                             // echo "<td>" . $record['em_id'] . "</td>";
                                             echo "<td>" . $record['em_name'] . "</td>";
-                                            echo "<td>" . $record['eCO2_carbon'] . " 公斤</td>";
+                                            echo "<td>" . $record['eCO2_carbon'] . " 公噸</td>";
                                             echo "</tr>";
                                         }
                                     } else {
