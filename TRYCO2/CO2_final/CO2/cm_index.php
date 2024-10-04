@@ -19,7 +19,7 @@ if (!isset($_SESSION['em_id'])) {
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     </head>
     <body>
-    <?php include('nav/cm_nav.php') ?>
+        <?php include('nav/cm_nav.php') ?>
         <div class="row">
             <div class="col-xl-10 right">
                 <!-- 圓餅圖 -->

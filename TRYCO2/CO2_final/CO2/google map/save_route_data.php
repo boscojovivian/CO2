@@ -14,13 +14,15 @@ mysqli_query($link, "SET NAMES utf8");
 $data = json_decode(file_get_contents('php://input'), true);
 
 // 接收 AJAX 發送的數據並進行轉義，防止 SQL 注入
-$start_date_time = mysqli_real_escape_string($link, $data['start_date_time']);
-$end_date_time = mysqli_real_escape_string($link, $data['end_date_time']);
-$total_time = mysqli_real_escape_string($link, $data['total_time']);
-$distance = mysqli_real_escape_string($link, $data['distance']);
-$car = mysqli_real_escape_string($link, $data['car']);
-$type = mysqli_real_escape_string($link, $data['vehicleType']);
-$employee_id = mysqli_real_escape_string($link, $data['employee_id']);
+$start_date = $data['start_date'];
+$start_time = $data['start_time'];
+$end_date =  $data['end_date'];
+$end_time =  $data['end_time'];
+$total_time = $data['total_time'];
+$distance =  $data['distance'];
+$car = $data['car'];
+$type = $data['vehicleType'];
+$employee_id = $data['employee_id'];
 
 // 檢查並創建 path_files 目錄
 if (!is_dir('path_files')) {
@@ -33,8 +35,8 @@ $filename = 'path_data_' . time() . '.json';
 file_put_contents('path_files/' . $filename, $path);
 
 // 插入資料到 route_tracker 表
-$sql = "INSERT INTO route_tracker(start_date_time, end_date_time, total_time, distance, file, car, type, employee_id) 
-        VALUES ('$start_date_time', '$end_date_time', '$total_time', '$distance', '$filename', '$car', '$type', '$employee_id')";
+$sql = "INSERT INTO route_tracker(start_date, start_time, end_date, end_time, total_time, distance, file, car, type, employee_id) 
+        VALUES ('$start_date', '$start_time', '$end_date', '$end_time', '$total_time', '$distance', '$filename', '$car', '$type', '$employee_id')";
 
 // 預處理 SQL
 // $stmt = mysqli_prepare($link, $sql);

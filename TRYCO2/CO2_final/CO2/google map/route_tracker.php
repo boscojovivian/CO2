@@ -86,7 +86,7 @@
             </div>
 
             <!-- 是否開公司車 -->
-            <div class="col-11 col-md-7">
+            <!-- <div class="col-11 col-md-7">
                 <div class="m-1">
                     <label class="label_box fs-5" for="transportMode">是否開公司車：</label>
                     &nbsp
@@ -96,7 +96,32 @@
                         <option value="not_cm_car">否</option>
                     </select>
                 </div>
+            </div> -->
+
+            <!-- 是否開公司車 -->
+            <div class="col-11 col-md-7">
+                <div class="m-1 d-flex align-items-center">
+                    <label class="label_box fs-5 me-2">是否開公司車：</label>
+                    <div class="select_box d-flex align-items-center justify-content-center">
+                        <div class="form-check m-4">
+                            <input class="form-check-input radio_box_check" type="radio" name="transportMode" id="cmCarYes" value="is_cm_car" required>
+                            <label class="form-check-label radio_box_font" for="cmCarYes">
+                                <span class="custom-radio"></span> <!-- 加入自定義的 radio box -->
+                                是
+                            </label>
+                        </div>
+                        <div class="form-check m-4">
+                            <input class="form-check-input radio_box_check" type="radio" name="transportMode" id="cmCarNo" value="not_cm_car" required>
+                            <label class="form-check-label radio_box_font" for="cmCarNo">
+                                <span class="custom-radio"></span> <!-- 加入自定義的 radio box -->
+                                否
+                            </label>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+
 
             <!-- 選擇交通工具 -->
             <div class="col-11 col-md-7">
@@ -141,28 +166,36 @@
 
     <!-- 連動下拉式選單 -->
     <script>
-    // 使用 jQuery 監聽選擇變更事件
-    $('#transportMode').on('change', function () {
-        const transportMode = $(this).val();
-        const vehicleTypeSelect = $('#vehicleType');
+        // 確保 DOM 加載完成後再進行操作
+        $(document).ready(function () {
+            // 使用 jQuery 監聽 radio box 的選擇變更事件
+            $('input[name="transportMode"]').on('change', function () {
+                const transportMode = $('input[name="transportMode"]:checked').val();  // 取得選中的 radio 值
+                const vehicleTypeSelect = $('#vehicleType');
 
-        // 清空現有選項並顯示載入中
-        vehicleTypeSelect.html('<option value="">載入中...</option>');
+                if (transportMode) {
+                    // 清空現有選項並顯示載入中
+                    vehicleTypeSelect.html('<option value="">載入中...</option>');
 
-        // 發送 AJAX 請求到 PHP 來獲取資料
-        $.ajax({
-            url: 'get_vehicle_data.php',
-            type: 'GET',
-            data: { mode: transportMode },
-            success: function (response) {
-                vehicleTypeSelect.html(response);  // 用 PHP 返回的選項更新下拉選單
-            },
-            error: function () {
-                vehicleTypeSelect.html('<option value="">資料載入失敗</option>');
-            }
+                    // 發送 AJAX 請求到 PHP 來獲取資料
+                    $.ajax({
+                        url: 'get_vehicle_data.php',
+                        type: 'GET',
+                        data: { mode: transportMode },
+                        success: function (response) {
+                            vehicleTypeSelect.html(response);  // 用 PHP 返回的選項更新下拉選單
+                        },
+                        error: function () {
+                            vehicleTypeSelect.html('<option value="">資料載入失敗</option>');
+                        }
+                    });
+                } else {
+                    console.log("未選中任何 radio box");
+                }
+            });
         });
-    });
     </script>
+
 
     <!-- 路線追蹤 -->
     <script>
@@ -218,7 +251,7 @@
         document.getElementById('startBtn').addEventListener('click', function() {
             // 檢查三個下拉式選單是否都有選取
             const employeeSelect = document.getElementById('employeeSelect').value;
-            const transportMode = document.getElementById('transportMode').value;
+            const transportMode = document.querySelector('input[name="transportMode"]:checked').value;
             const vehicleType = document.getElementById('vehicleType').value;
 
             // 如果有任何一個下拉式選單沒有選取，顯示提示並終止執行
@@ -270,7 +303,10 @@
 
         // 禁用三個下拉式選單
         document.getElementById('employeeSelect').disabled = true;
-        document.getElementById('transportMode').disabled = true;
+        const radios = document.querySelectorAll('input[name="transportMode"]');
+        radios.forEach((radio) => {
+            radio.disabled = true;
+        });
         document.getElementById('vehicleType').disabled = true;
 
         message('開始路線追蹤!');
@@ -376,30 +412,23 @@
 
     function exportData() {
         let elapsedTime = 0;
-        let startTimeFormatted = new Date(startTime).toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
-        let endTimeFormatted = new Date().toLocaleString('zh-TW', { timeZone: 'Asia/Taipei' });
 
-        // if (watchId) {
-        //     elapsedTime = (new Date().getTime() - startTime) / 3600000; // 以小時為單位
-        // } else if (positions.length > 0) {
-        //     const lastPositionTime = new Date(positions[positions.length - 1].timestamp).getTime();
-        //     if (!isNaN(lastPositionTime)) {
-        //         elapsedTime = (lastPositionTime - startTime) / 3600000;
-        //     } else {
-        //         console.error("Invalid timestamp in positions array.");
-        //         elapsedTime = 0;  // 或者处理方式根据业务需求调整
-        //     }
-        // } else {
-        //     console.warn("No positions recorded, cannot calculate elapsed time.");
-        // }
+        // 獲取開始時間的日期和時間
+        let startDate = new Date(startTime).toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
+        let startTimeFormatted = new Date(startTime).toLocaleTimeString('zh-TW', { timeZone: 'Asia/Taipei' });
 
+        // 獲取結束時間的日期和時間
+        let endTimeFormatted = new Date().toLocaleTimeString('zh-TW', { timeZone: 'Asia/Taipei' });
+        let endDate = new Date().toLocaleDateString('zh-TW', { timeZone: 'Asia/Taipei' });
+
+        // 計算總時間
         if (positions.length > 0) {
             const lastPositionTime = positions[positions.length - 1].timestamp;
             if (lastPositionTime) {
                 elapsedTime = (lastPositionTime - startTime) / 3600000; // 以小時為單位
             } else {
                 console.error("Invalid timestamp in positions array.");
-                elapsedTime = 0; // 或者處理方式根據業務需求調整
+                elapsedTime = 0; // 處理錯誤
             }
         } else {
             console.warn("No positions recorded, cannot calculate elapsed time.");
@@ -409,12 +438,14 @@
             const distanceInKm = (totalDistance / 1000).toFixed(2);  // 以公里為單位
 
             const data = {
-                start_date_time: startTimeFormatted,
-                end_date_time: endTimeFormatted,
-                total_time: elapsedTime.toFixed(2) + ' 小時',
-                distance: distanceInKm + ' 公里',
-                path: JSON.stringify(positions),  // 路徑數據作為 JSON 字符串
-                car: document.getElementById('transportMode').value,
+                start_date: startDate, // 開始日期
+                start_time: startTimeFormatted, // 開始時間
+                end_date: endDate, // 結束日期
+                end_time: endTimeFormatted, // 結束時間
+                total_time: elapsedTime.toFixed(2) + ' 小時', // 總時間
+                distance: distanceInKm + ' 公里', // 總距離
+                path: JSON.stringify(positions),  // 路徑數據
+                car: document.querySelector('input[name="transportMode"]:checked').value,
                 vehicleType: document.getElementById('vehicleType').value,
                 employee_id: document.getElementById('employeeSelect').value
             };
@@ -425,7 +456,6 @@
                 url: 'save_route_data.php',  // 後端處理的 PHP 文件
                 data: JSON.stringify(data),
                 success: function(response) {
-                    // 成功訊息
                     Swal.fire({
                         title: '資料已成功儲存',
                         text: '出勤已完成並記錄。',
@@ -443,7 +473,6 @@
                 }
             });
 
-            
         } else {
             console.error("Elapsed time is NaN, data export aborted.");
         }
@@ -451,6 +480,7 @@
         // 重置地圖、表單和按鈕
         resetAll();
     }
+
 
 
 
@@ -515,11 +545,16 @@
 
         // 重置表單
         document.getElementById('employeeSelect').value = '';
-        document.getElementById('transportMode').value = '';
         document.getElementById('vehicleType').value = '';
         document.getElementById('employeeSelect').disabled = false;
-        document.getElementById('transportMode').disabled = false;
         document.getElementById('vehicleType').disabled = false;
+
+        // 重置 name="transportMode" 的 radio box
+        const transportModeRadios = document.querySelectorAll('input[name="transportMode"]');
+        transportModeRadios.forEach((radio) => {
+            radio.checked = false;  // 取消選中
+            radio.disabled = false; // 啟用 radio
+        });
 
         // 重置距離和時間顯示
         document.getElementById('distance').innerText = '0';
