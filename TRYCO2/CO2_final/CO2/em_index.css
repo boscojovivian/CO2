@@ -198,6 +198,6 @@ body {
 }
 
 .pink-bg{
-    background-color: #f2d3bf;
+    background-color: #e3e3e3 !important;
     border-radius: 10px; /* 設置圓角大小 */
 }
