@@ -40,7 +40,7 @@ function translateCarType($type) {
                 <caption>
                     <div class="caption-container">
                     <span>管理交通車</span>
-                    <a href="cm_add_car.php"><button class="commute">新增交通車</button></a>
+                    <a href="cm_add_car.php"><button type="button" class="btn btn-outline-success btn-lg">新增交通車</button></a>
                     </div>
                 </caption>               
                 <thead class="table">
@@ -67,7 +67,7 @@ function translateCarType($type) {
                                 echo "<td>";
                                 echo "<form action='cm_edit_car.php' method='GET'>";
                                 echo "<input type='hidden' name='cc_id' value='".$row["cc_id"]."'>";
-                                echo "<button type='submit' class='edit-button' name='edit_button'>編輯</button>";
+                                echo "<button type='submit' class='btn btn-warning' name='edit_button'>編輯</button>";
                                 echo "</form>";
                                 echo "</td>";
                                 echo "</tr>";
