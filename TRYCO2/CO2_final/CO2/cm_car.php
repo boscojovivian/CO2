@@ -191,7 +191,7 @@ $offset = ($pages - 1) * $records_per_page;
                                 echo "<td>" . translateCarType($row["cc_type"]) . "</td>";
                                 echo "<td>" . $row['cCO2_date'] . "</td>";
                                 echo "<td>" . $row['cCO2_start_time'] . " ~ " . $row['cCO2_end_time'] . "</td>";
-                                echo "<td>" . $row['cCO2_carbon'] . "公克</td>";
+                                echo "<td>" . $row['cCO2_carbon'] . " 公噸</td>";
                                 echo "<td>" . $row['em_name'] . "</td>";
                                 echo "<td class='show-tooltip' data-tooltip='" . $address . "'>查看路程</td>";
                                 echo "</tr>";
