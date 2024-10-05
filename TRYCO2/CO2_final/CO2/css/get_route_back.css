@@ -1,0 +1,129 @@
+/* 回到頂端 */
+.topBtn{
+    font-size: 18px;
+    font-weight: bolder;
+    color: #fff;
+    display: none; /* 初始化不顯示 */
+    position: fixed; /* 按鈕絕對位置 */
+    bottom: 50px;
+    right: 50px;
+    z-index: 99; /* 元素放置在最上層 */
+    font-size: 18px;
+    border: none;
+    outline: none; /* 移除預設外邊框 */
+    cursor: pointer;
+    padding: 15px;
+    background-color: #98c39a;
+    border: 3px solid #98c39a;
+    border-radius: 10px;
+}
+.title1{
+    font-size: 50px;
+    font-weight: bold;
+    color: #516850 !important;
+}
+
+.topBtn:hover{
+    background: #fff;
+    border: 3px solid #98c39a;
+    color: #98c39a;
+}
+
+form{
+    margin-top: 20px !important;
+}
+
+label, input, .btn{
+    font-size: 22px;
+    margin: 2% 0 !important;
+}
+
+input, select{
+    border: 3px solid #98c39a;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.date-range-picker{
+    width: 60%;
+}
+
+table{
+    margin-top: 10px !important;
+    font-family: sans-serif;
+    min-width: 400px;
+    text-align: center;
+}
+
+table thead tr{
+    height: 60px;
+    font-size: 24px;
+    vertical-align: middle; /*表格內水平置中*/
+    background-color: #98c39a;
+}
+
+table tbody tr{
+    height: 60px;
+    font-size: 20px;
+    vertical-align: middle; /*表格內水平置中*/
+}
+
+/* 格行添加背景 */
+table tbody tr:nth-of-type(even){
+    background-color: #f3f3f3;
+}
+
+/* 新增最底深色邊框 */
+table tbody tr:last-of-type{
+    border-bottom: 2px solid #98c39a;
+}
+
+/* 日期區間選擇器按鈕 */
+.date-range-picker {
+    width: 200px; 
+    height: 40px; 
+    font-size: 1.2em; 
+    padding: 5px;
+}
+
+
+/* 分頁按鈕樣式 */
+.turn_pages_div{
+    display: flex;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 5% 0;
+}
+
+/* 換頁按鈕 */
+.turn_pages{
+    background-color: #98c39a;
+    color: #516850;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+.turn_pages:hover{
+    background-color: #516850;
+    color: #98c39a;
+}
+
+/* 當前頁面，不可按 */
+.Noturn_pages, .Noturn_pages:hover{
+    background-color: #516850;
+    color: #98c39a;
+    text-decoration: none;
+    border-radius: 10px;
+    padding: 5px 10px;
+    margin: 5px;
+}
+
+/* 示意more，不可按 */
+.turn_pages_more, .turn_pages_more:hover{
+    color: #516850;
+    text-decoration: none;
+    padding: 5px 10px;
+}
