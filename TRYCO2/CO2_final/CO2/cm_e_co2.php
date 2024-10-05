@@ -103,6 +103,7 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                                                 <th>產生的碳排量</th>";
                                         }else{
                                             echo "<th>員工姓名</th>
+                                                <th>日期區間</th>
                                                 <th>產生的碳排量</th>";
                                         }
                                     ?>
@@ -164,7 +165,7 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                                         echo "<tr><td colspan='4'>沒有資料</td></tr>";
                                     }
                                 } else {
-                                    $query = "SELECT employee.em_id, employee.em_name, em_co2.eCO2_date, ROUND(SUM(em_co2.eCO2_carbon), 2) as eCO2_carbon, em_co2.eCO2_commute
+                                    $query = "SELECT employee.em_id, employee.em_name, MIN(em_co2.eCO2_date) as eCO2_start_date, MAX(em_co2.eCO2_date) as eCO2_end_date, ROUND(SUM(em_co2.eCO2_carbon), 2) as eCO2_carbon, em_co2.eCO2_commute
                                                 FROM em_co2 
                                                 INNER JOIN employee ON em_co2.em_id = employee.em_id
                                                 GROUP BY employee.em_name";
@@ -182,6 +183,7 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                                             echo "<tr>";
                                             // echo "<td>" . $record['em_id'] . "</td>";
                                             echo "<td>" . $record['em_name'] . "</td>";
+                                            echo "<td>".$record['eCO2_start_date']."至".$record['eCO2_end_date']."</td>";
                                             echo "<td>" . $record['eCO2_carbon'] . " 公噸</td>";
                                             echo "</tr>";
                                         }
