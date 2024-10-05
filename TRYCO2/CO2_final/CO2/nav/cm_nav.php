@@ -97,7 +97,7 @@
                                 <?php echo $user_name; ?> <!-- 顯示用戶名 -->
                             </a>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a class="dropdown-item" href="em_index.php">員工首頁</a></li>
+                                <li><a class="dropdown-item" href="index.php">員工首頁</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="post" class="dropdown-item"> <!-- 登出按鈕放在表單裡 -->

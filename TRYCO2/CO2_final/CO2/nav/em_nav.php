@@ -51,7 +51,7 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="em_index.php">個人首頁</a>
+                            <a class="nav-link" aria-current="page" href="index.php">個人首頁</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="em_work.php">交通車出勤紀錄</a>

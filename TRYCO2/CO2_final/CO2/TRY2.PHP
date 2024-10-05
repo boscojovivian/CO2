@@ -95,7 +95,7 @@
     <nav class="navbar navbar-expand-lg navbar-custom">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">
-                <a href="em_index.php"><img src=".\api\img\logo.png" class="logo"></a>
+                <a href="index.php"><img src=".\api\img\logo.png" class="logo"></a>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -146,7 +146,7 @@
 
         <!-- 新增地址表單 -->
         <div id="add-section" class="form-section">
-            <a href="em_index.php" class="back-button">← 返回</a>
+            <a href="index.php" class="back-button">← 返回</a>
             <br>
             <h3>新增地址</h3>
             <form id="add-form">
@@ -190,7 +190,7 @@
 
         <!-- 修改地址表單 -->
         <div id="edit-section" class="form-section" style="display: none;">
-            <a href="em_index.php" class="back-button">← 返回</a>
+            <a href="index.php" class="back-button">← 返回</a>
             <br>
             <h3>修改地址</h3>
             <form id="edit-form">

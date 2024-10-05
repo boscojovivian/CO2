@@ -21,7 +21,7 @@ if (!isset($_SESSION['em_id'])) {
 <body>
     <?php include('nav/em_nav.php') ?>    
     <div class="container">
-        <a href="em_index.php"><img src="img/goback.png" class="gobacklogo"></a>
+        <a href="index.php"><img src="img/goback.png" class="gobacklogo"></a>
         <div class="row">
             <div class="col-md-6 text-center">
                 <h1>生活減碳小知識</h1><br>

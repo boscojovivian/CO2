@@ -19,7 +19,7 @@
                     imageHeight: 100,
                     imageAlt: 'Custom image'
                 }).then(() => {
-                    window.location.href = 'em_index.php';
+                    window.location.href = 'index.php';
                 });
             }
             const showAlert_success = (title) => {
@@ -27,7 +27,7 @@
                     title: title,
                     icon: 'success'
                 }).then(() => {
-                    window.location.href = 'em_index.php';
+                    window.location.href = 'index.php';
                 });
             }
             const showAlert_fail = (title) => {
