@@ -10,6 +10,12 @@ caption{
     color: #516850 !important;
 }
 
+.caption-container {
+    display: flex;
+    justify-content: space-between; /* 將標題和按鈕分別對齊兩側 */
+    align-items: center;
+}
+
 table thead tr{
     height: 60px;
     font-size: 26px;

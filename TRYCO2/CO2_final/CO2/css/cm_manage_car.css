@@ -16,21 +16,6 @@ caption{
     align-items: center;
 }
 
-.commute {
-    padding: 5px 10px;
-    font-size: 26px;
-    background-color: white;
-    color: black;
-    border: 2px solid #98c39a;
-    border-radius: 3px;
-    cursor: pointer;
-}
-
-.commute:hover {
-    background-color: #365137;
-    color: white;
-}
-
 table thead tr{
     height: 60px;
     font-size: 26px;

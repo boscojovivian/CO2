@@ -140,7 +140,8 @@
                                                     <th>員工姓名</th>";
                                     } else {
                                         echo "<th>交通車名稱</th>
-                                                    <th>產生的碳排量</th>";
+                                            <th>日期區間</th>
+                                            <th>總碳排量</th>";
                                     }
                                     ?>
 
@@ -210,7 +211,7 @@
                                     }
                                 } else {
                                     // 預設查詢
-                                    $query = "SELECT cm_co2.cc_id, cm_car.cc_name, cm_co2.cCO2_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, ROUND(SUM(cm_co2.cCO2_carbon), 2) as cCO2_carbon, cm_car.cc_type, cm_co2.cCO2_address
+                                    $query = "SELECT cm_co2.cc_id, cm_car.cc_name, MIN(cm_co2.cCO2_date) as cCO2_start_date, MAX(cm_co2.cCO2_date) as cCO2_end_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, ROUND(SUM(cm_co2.cCO2_carbon), 2) as cCO2_carbon, cm_car.cc_type, cm_co2.cCO2_address
                                                       FROM cm_co2
                                                       INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
                                                       GROUP BY cm_car.cc_name";
@@ -232,6 +233,7 @@
                                             $address = str_replace(',', "\n", $address);
                                             echo "<tr>";
                                             echo "<td>" . $row['cc_name'] . "</td>";
+                                            echo "<td>".$row['cCO2_start_date']."至".$row['cCO2_end_date']."</td>";
                                             echo "<td>" . $row['cCO2_carbon'] . " 公斤</td>";
                                             echo "</tr>";
                                         }

@@ -25,7 +25,12 @@ if (!isset($_SESSION['em_id'])) {
         <div class="container">
             <!-- 表格 -->
             <table class="table table-hover caption-top">
-                <caption>員工資料</caption>
+                <caption>
+                    <div class="caption-container">
+                    <span>員工資料</span>
+                    <a href="cm_add_car.php"><button type="button" class="btn btn-outline-success btn-lg">新增</button></a>
+                    </div>
+                </caption>
                 <thead class="table">
                     <tr>
                         <th>員工編號</th>
@@ -47,9 +52,8 @@ if (!isset($_SESSION['em_id'])) {
                                 echo "<td>".$row["em_id"]."</td>";
                                 echo "<td>".$row["em_name"]."</td>";
                                 echo "<td>".$row["em_email"]."</td>";
-                                echo "<td><button type='button' class='add-button btn btn-success btn-lg'>新增</button></td>";
-                                echo "<td><button type='button' class='fix-button btn btn-warning btn-lg'>修改</button></td>";
-                                echo "<td><button type='button' class='remove-button btn btn-danger btn-lg'>刪除</button></td>";
+                                echo "<td><button type='button' class='fix-button btn btn-warning'>編輯</button></td>";
+                                echo "<td><button type='button' class='remove-button btn btn-danger'>刪除</button></td>";
                                 echo "</tr>";
                             }
                         } else {
