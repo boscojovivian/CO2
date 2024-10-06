@@ -82,10 +82,10 @@
                                     $db_handle = new DBController();
 
                                     $sql = "SELECT cc_id, cc_name FROM cm_car";
-                                    $result = $db_handle->runQuery($sql);
+                                    $result_car = $db_handle->runQuery($sql);
 
-                                    if (!empty($result)) {
-                                        foreach ($result as $row) {
+                                    if (!empty($result_car)) {
+                                        foreach ($result_car as $row) {
                                             // 確保選中的選項保持不變
                                             $selected = (isset($_GET['filter_car']) && $_GET['filter_car'] == $row['cc_id']) ? 'selected' : '';
                                             echo "<option value='" . $row['cc_id'] . "' $selected>" . $row['cc_name'] . "</option>";
@@ -125,6 +125,39 @@
                             </div>
                         </div>
                     </form>
+
+                    <!-- 篩選結果顯示區域 -->
+                    <div class="filter-results">
+                        <?php
+                        if ($filter_applied) {
+                            $start_date_display = isset($_GET['start_date_display']) ? htmlspecialchars($_GET['start_date_display']) : '';
+                            $end_date_display = isset($_GET['end_date_display']) ? htmlspecialchars($_GET['end_date_display']) : '';
+                            $filter_car = isset($_GET['filter_car']) ? htmlspecialchars($_GET['filter_car']) : '';
+                            $filter_employee = isset($_GET['filter_employee']) ? htmlspecialchars($_GET['filter_employee']) : '';
+                            $car_name = !empty($filter_car) ? htmlspecialchars($result_car[array_search($filter_car, array_column($result_car, 'cc_id'))]['cc_name']) : '';
+                            $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
+
+                            if (!empty($start_date_display) && !empty($end_date_display) && empty($filter_car) && empty($filter_employee)) {
+                                echo "<h4>$start_date_display 到 $end_date_display 的所有碳排記錄</h4>";
+                            } elseif (empty($start_date_display) && empty($end_date_display) && !empty($filter_car) && empty($filter_employee)) {
+                                echo "<h4>交通車 $car_name 的所有碳排記錄</h4>";
+                            } elseif (empty($start_date_display) && empty($end_date_display) && empty($filter_car) && !empty($filter_employee)) {
+                                echo "<h4>員工 $employee_name 的所有碳排記錄</h4>";
+                            } elseif (!empty($start_date_display) && !empty($end_date_display) && !empty($filter_car) && empty($filter_employee)) {
+                                echo "<h4>交通車 $car_name 從 $start_date_display 到 $end_date_display 的碳排記錄</h4>";
+                            } elseif (!empty($start_date_display) && !empty($end_date_display) && empty($filter_car) && !empty($filter_employee)) {
+                                echo "<h4>員工 $employee_name 從 $start_date_display 到 $end_date_display 的碳排記錄</h4>";
+                            } elseif (empty($start_date_display) && empty($end_date_display) && !empty($filter_car) && !empty($filter_employee)) {
+                                echo "<h4>員工 $employee_name 使用交通車 $car_name 的所有碳排記錄</h4>";
+                            } elseif (!empty($start_date_display) && !empty($end_date_display) && !empty($filter_car) && !empty($filter_employee)) {
+                                echo "<h4>員工 $employee_name 使用交通車 $car_name 從 $start_date_display 到 $end_date_display 的碳排記錄</h4>";
+                            } else {
+                                echo "所有碳排記錄";
+                            }
+                        }
+                        ?>
+                    </div>
+
 
 
                     <!-- 碳排表格 -->

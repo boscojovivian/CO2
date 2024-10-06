@@ -90,6 +90,28 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                         </div>
                     </form>
 
+                    <!-- 篩選結果顯示區域 -->
+                    <div class="filter-results">
+                        <?php
+                        if ($filter_applied) {
+                            $start_date_display = isset($_GET['start_date_display']) ? $_GET['start_date_display'] : '';
+                            $end_date_display = isset($_GET['end_date_display']) ? $_GET['end_date_display'] : '';
+                            $filter_employee = isset($_GET['filter_employee']) ? $_GET['filter_employee'] : '';
+                            $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
+
+                            if (!empty($start_date_display) && !empty($end_date_display) && empty($filter_employee)) {
+                                echo "<h4>$start_date_display 到 $end_date_display 的所有碳排記錄</h4>";
+                            } elseif (empty($start_date_display) && empty($end_date_display) && !empty($filter_employee)) {
+                                echo "<h4>員工 $employee_name 的所有碳排記錄</h4>";
+                            } elseif (!empty($start_date_display) && !empty($end_date_display) && !empty($filter_employee)) {
+                                echo "<h4>員工 $employee_name 從$start_date_display 到 $end_date_display 的碳排記錄</h4>";
+                            } else {
+                                echo "所有碳排記錄";
+                            }
+                        }
+                        ?>
+                    </div>
+
                     <!-- 碳排表格 -->
                     <div class="information">
                         <table class="table table-bordered table-hover">
