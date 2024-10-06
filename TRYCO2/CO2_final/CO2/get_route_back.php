@@ -53,7 +53,7 @@ $offset = ($pages - 1) * $records_per_page;
             </form>
             <div class="information">
                 <table class="table table-bordered table-hover">
-                    <thead class="table">
+                    <thead class="table thead_bg">
                         <tr>
                             <th>員工</th>
                             <th>日期</th>
@@ -123,7 +123,7 @@ $offset = ($pages - 1) * $records_per_page;
                                 echo "<td>" . $row['type'] . "</td>";
                                 echo "<td>
                                         <form action='get_route_back_show.php' method='GET'>
-                                            <button type='submit' name='get_route_back_show' value='" . $row['id'] . "'>顯示路徑</button>
+                                            <button class='show_route_btn m-1' type='submit' name='get_route_back_show' value='" . $row['id'] . "'>顯示路徑</button>
                                         </form>
                                     </td>";
                                 echo "</tr>";

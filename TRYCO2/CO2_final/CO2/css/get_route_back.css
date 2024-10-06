@@ -59,7 +59,11 @@ table thead tr{
     height: 60px;
     font-size: 24px;
     vertical-align: middle; /*表格內水平置中*/
-    background-color: #98c39a;
+    background-color: #85ad87;
+}
+
+.thead_bg{
+    background-color: #85ad87;
 }
 
 table tbody tr{
@@ -126,4 +130,21 @@ table tbody tr:last-of-type{
     color: #516850;
     text-decoration: none;
     padding: 5px 10px;
+}
+
+.show_route_btn{
+    position: relative;
+    top: -10px;
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    background-color: #ffffff; /* 設置背景背景顏色 */
+    color: #335841; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    border-radius: 5px; /* 增加圓角 */
+    padding: 3px; /* 增加一些內邊距 */
+}
+.show_route_btn:hover{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    background-color: #68997b; /* 設置背景背景顏色 */
+    color: #effff5; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
 }

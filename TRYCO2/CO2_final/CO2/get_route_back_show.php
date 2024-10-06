@@ -23,32 +23,79 @@ if (!isset($_SESSION['em_id'])) {
         <?php include('nav/cm_nav.php') ?>
 
         <div class="container text-center mt-3">
-            <div class="row justify-content-md-center">
-                <div class="col-6 col-md-8 title_text align-items-center">
+            <div class="row justify-content-md-center info_box">
+                <div class="col-6 col-md-6 title_text align-items-center">
                     <div class="map" id="map"></div>
                 </div>
-            </div>
-            <?php
-            $link = mysqli_connect("localhost", "root", "") 
-            or die("無法開啟 MySQL 資料庫連結!<br>");
-            mysqli_select_db($link, "carbon_emissions");
-    
-            $route_id = $_GET['get_route_back_show'];
+                <?php
+                $link = mysqli_connect("localhost", "root", "") 
+                or die("無法開啟 MySQL 資料庫連結!<br>");
+                mysqli_select_db($link, "carbon_emissions");
+        
+                $route_id = $_GET['get_route_back_show'];
 
-            $sql = "SELECT a.id, a.start_date, a.start_time, a.end_date, a.end_time, a.total_time, a.distance, a.file, a.car, a.type, (SELECT b.em_name FROM employee AS b WHERE a.employee_id = b.em_id) AS name
-                    FROM route_tracker AS a
-                    WHERE a.id = " . $route_id;
+                $sql = "SELECT a.id, a.start_date, a.start_time, a.end_date, a.end_time, a.total_time, a.distance, a.file, a.car, a.type, (SELECT b.em_name FROM employee AS b WHERE a.employee_id = b.em_id) AS name
+                        FROM route_tracker AS a
+                        WHERE a.id = " . $route_id;
 
-            mysqli_query($link, "SET NAMES utf8");
+                mysqli_query($link, "SET NAMES utf8");
 
-            $result = mysqli_query($link, $sql);
-            $fields = mysqli_num_fields($result); //取得欄位數
-            $rows = mysqli_num_rows($result); //取得記錄數
-            ?>
-            <div class="row justify-content-md-center">
-                <div class="col-6 col-md-8 title_text align-items-center">
+                $result = mysqli_query($link, $sql);
+                $fields = mysqli_num_fields($result); //取得欄位數
+                $row = mysqli_num_rows($result); //取得記錄數
+
+                while ($row = mysqli_fetch_array($result)){
+                    if ($row["start_date"] == $row["end_date"]){
+                        $date = $row["start_date"];
+                    }
+                    else {
+                        $date = $row["start_date"] . " ~ " . $row["end_date"];
+                    }
+                    $time = $row["start_time"] . " ~ " . $row["end_time"];
+                    $total_time = $row["total_time"];
+                    $distance = $row["distance"];
+                    $file = $row["file"];
+                    if ($row["car"] == "is_cm_car"){
+                        $car = "類別一";
+                    }
+                    else {
+                    $car = "類別三";
+                    }
+                    $type = $row["type"];
+                    $name = $row["name"];
+                }
+                ?>
+                <div class="col-6 col-md-6 title_text align-items-center">
                     <div>
-                        
+                        <table>
+                            <tr class="car_tr" rowspan="2">
+                                <th><?php echo $car; ?></th>
+                            </tr>
+                            <tr>
+                                <th class="w-50">員工姓名 : </th>
+                                <th><?php echo $name; ?></th>
+                            </tr>
+                            <tr>
+                                <th>交通工具 : </th>
+                                <th><?php echo $type; ?></th>
+                            </tr>
+                            <tr>
+                                <th>日期 : </th>
+                                <th><?php echo $date; ?></th>
+                            </tr>
+                            <tr>
+                                <th>時間 : </th>
+                                <th><?php echo $time; ?></th>
+                            </tr>
+                            <tr>
+                                <th>總時長 : </th>
+                                <th><?php echo $total_time; ?></th>
+                            </tr>
+                            <tr>
+                                <th>總距離 : </th>
+                                <th><?php echo $distance; ?></th>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
