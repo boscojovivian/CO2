@@ -320,7 +320,7 @@
                 const pos = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
-                    timestamp: new Date().getTime() // 使用時間戳，後續導出資料時再轉換格式
+                    timestamp: new Date().getTime()
                 };
 
                 positions.push(pos); // 存儲位置和時間戳

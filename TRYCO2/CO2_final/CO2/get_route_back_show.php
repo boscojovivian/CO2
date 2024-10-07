@@ -45,25 +45,23 @@ if (!isset($_SESSION['em_id'])) {
                 $row = mysqli_num_rows($result); //取得記錄數
 
                 while ($row = mysqli_fetch_array($result)){
-                    if ($row["start_date"] == $row["end_date"]){
-                        $date = $row["start_date"];
-                    }
-                    else {
-                        $date = $row["start_date"] . " ~ " . $row["end_date"];
-                    }
+                    $date = $row["start_date"] == $row["end_date"] ? $row["start_date"] : $row["start_date"] . " ~ " . $row["end_date"];
                     $time = $row["start_time"] . " ~ " . $row["end_time"];
                     $total_time = $row["total_time"];
                     $distance = $row["distance"];
                     $file = $row["file"];
-                    if ($row["car"] == "is_cm_car"){
-                        $car = "類別一";
-                    }
-                    else {
-                    $car = "類別三";
-                    }
+                    $car = $row["car"] == "is_cm_car" ? "類別一" : "類別三";
                     $type = $row["type"];
                     $name = $row["name"];
                 }
+
+                // 讀取儲存路徑的 .json 檔案
+                $jsonFilePath = "google map/path_files/" . $file;
+                $jsonData = file_get_contents($jsonFilePath);
+                // 第一次解碼
+                $coordinates = json_decode($jsonData, true);
+                // 第二次解碼
+                $decoded_data = json_decode($coordinates, true);
                 ?>
                 <div class="col-6 col-md-6 title_text align-items-center">
                     <div>
@@ -111,18 +109,22 @@ if (!isset($_SESSION['em_id'])) {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
-            function initMap() {
-                directionsService = new google.maps.DirectionsService();
-                directionsRenderer = new google.maps.DirectionsRenderer();
+            var routeCoordinates = <?php echo json_encode($decoded_data); ?>;
 
-                map = new google.maps.Map(document.getElementById('map'), {
-                    center: { lat: 24.149878365016026, lng: 120.68366751085637 },
+            function initMap() {
+                var mapCenter = routeCoordinates.length > 0 ? { lat: parseFloat(routeCoordinates[0].lat), lng: parseFloat(routeCoordinates[0].lng) } : { lat: 24.149878365016026, lng: 120.68366751085637 };
+                
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: mapCenter,
                     zoom: 15
                 });
 
-                // 創建一條用來表示路徑的折線
-                userPath = new google.maps.Polyline({
-                    path: [],
+                var pathCoordinates = routeCoordinates.map(function(coord) {
+                    return { lat: parseFloat(coord.lat), lng: parseFloat(coord.lng) };
+                });
+
+                var userPath = new google.maps.Polyline({
+                    path: pathCoordinates,
                     geodesic: true,
                     strokeColor: '#FF0000',
                     strokeOpacity: 1.0,
@@ -130,8 +132,8 @@ if (!isset($_SESSION['em_id'])) {
                 });
 
                 userPath.setMap(map);
-                directionsRenderer.setMap(map);
             }
+
         </script>
     </body>
 </html>

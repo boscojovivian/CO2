@@ -63,7 +63,7 @@ table thead tr{
 }
 
 .thead_bg{
-    background-color: #85ad87;
+    background-color: #85ad87 !important;
 }
 
 table tbody tr{
