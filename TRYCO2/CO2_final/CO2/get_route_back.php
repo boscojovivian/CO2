@@ -78,10 +78,10 @@ $offset = ($pages - 1) * $records_per_page;
                                         FROM route_tracker AS a
                                         WHERE 1=1";
 
-                            if (!empty($start_date_display || $end_date_display)) {
+                            if (!empty($start_date_display) && !empty($end_date_display)) {
                                 $filter_start_date = $start_date_display;
                                 $filter_end_date = $end_date_display;
-                                $query .= "AND (a.start_date BETWEEN '$filter_start_date' AND '$filter_end_date') OR (a.end_date BETWEEN '$filter_start_date' AND '$filter_end_date')";
+                                $query .= " AND (a.start_date BETWEEN '$filter_start_date' AND '$filter_end_date' OR a.end_date BETWEEN '$filter_start_date' AND '$filter_end_date')";
                             }
                         }
                         else {
