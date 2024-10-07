@@ -201,3 +201,8 @@ body {
     background-color: #e3e3e3 !important;
     border-radius: 10px; /* 設置圓角大小 */
 }
+
+.text0{
+    color: rgb(101, 101, 101);
+    font-size: 24px !important;
+}
