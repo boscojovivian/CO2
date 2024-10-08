@@ -61,6 +61,8 @@
                                 <li><a class="dropdown-item" href="cm_employee.php">管理者資料</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="em_employee.php">員工資料</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="get_route_back.php">出勤紀錄</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -71,6 +73,8 @@
                                 <li><a class="dropdown-item" href="cm_car.php">交通車資料</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="cm_manage_car.php">管理交通車</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="cm_car_oil.php">加油登記</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
