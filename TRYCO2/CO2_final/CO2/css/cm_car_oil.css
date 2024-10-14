@@ -1,0 +1,14 @@
+
+.oil_form{
+    border: 5px solid #81b595;
+    border-radius: 10px; /* 增加圓角 */
+
+    box-shadow: 2px 2px 5px grey;
+}
+
+
+.oil_btn{
+    background-color: #81b595 !important;
+    color: #fff !important;
+    height: 60px;
+}

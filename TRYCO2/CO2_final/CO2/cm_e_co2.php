@@ -180,7 +180,7 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                                             $commute = str_replace('go', '上班', $commute);
                                             $commute = str_replace('back', '下班', $commute);
                                             echo "<td>" . $commute . "</td>";
-                                            echo "<td>" . $record['eCO2_carbon'] . " 公斤</td>";
+                                            echo "<td>" . $record['eCO2_carbon'] . " 公噸</td>";
                                             echo "</tr>";
                                         }
                                     } else {

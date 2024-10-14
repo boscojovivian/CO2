@@ -101,8 +101,8 @@
             <!-- 是否開公司車 -->
             <div class="col-11 col-md-7">
                 <div class="m-1 d-flex align-items-center">
-                    <label class="label_box fs-5 me-2">是否開公司車：</label>
-                    <div class="select_box d-flex align-items-center justify-content-center">
+                    <label class="label_box fs-5">是否開公司車：</label>
+                    <div class="select_box d-flex align-items-center justify-content-center ms-4">
                         <div class="form-check m-4">
                             <input class="form-check-input radio_box_check" type="radio" name="transportMode" id="cmCarYes" value="is_cm_car" required>
                             <label class="form-check-label radio_box_font" for="cmCarYes">
@@ -319,8 +319,8 @@
             watchId = navigator.geolocation.watchPosition(position => {
                 const pos = {
                     lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                    timestamp: new Date().getTime()
+                    lng: position.coords.longitude
+                    // timestamp: new Date().getTime()
                 };
 
                 positions.push(pos); // 存儲位置和時間戳

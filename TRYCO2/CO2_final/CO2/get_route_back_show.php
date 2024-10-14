@@ -44,10 +44,13 @@ if (!isset($_SESSION['em_id'])) {
                 $fields = mysqli_num_fields($result); //取得欄位數
                 $row = mysqli_num_rows($result); //取得記錄數
 
-                while ($row = mysqli_fetch_array($result)){
+                while ($row = mysqli_fetch_array($result)) {
                     $date = $row["start_date"] == $row["end_date"] ? $row["start_date"] : $row["start_date"] . " ~ " . $row["end_date"];
                     $time = $row["start_time"] . " ~ " . $row["end_time"];
                     $total_time = $row["total_time"];
+                    $hours = floor($total_time / 60);  // 計算小時
+                    $minutes = $total_time % 60;       // 計算剩餘分鐘
+                    $total_time_formatted = $hours . ' 小時 ' . $minutes . ' 分鐘';  // 格式化顯示
                     $distance = $row["distance"];
                     $file = $row["file"];
                     $car = $row["car"] == "is_cm_car" ? "類別一" : "類別三";
@@ -55,13 +58,14 @@ if (!isset($_SESSION['em_id'])) {
                     $name = $row["name"];
                 }
 
+
                 // 讀取儲存路徑的 .json 檔案
                 $jsonFilePath = "google map/path_files/" . $file;
                 $jsonData = file_get_contents($jsonFilePath);
                 // 第一次解碼
                 $coordinates = json_decode($jsonData, true);
                 // 第二次解碼
-                $decoded_data = json_decode($coordinates, true);
+                // $decoded_data = json_decode($coordinates, true);
                 ?>
                 <div class="col-6 col-md-6 title_text align-items-center">
                     <div>
@@ -87,7 +91,7 @@ if (!isset($_SESSION['em_id'])) {
                             </tr>
                             <tr>
                                 <th>總時長 : </th>
-                                <th><?php echo $total_time; ?></th>
+                                <th><?php echo $total_time_formatted; ?></th>
                             </tr>
                             <tr>
                                 <th>總距離 : </th>
@@ -109,20 +113,23 @@ if (!isset($_SESSION['em_id'])) {
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
         <script>
-            var routeCoordinates = <?php echo json_encode($decoded_data); ?>;
+            var routeCoordinates = <?php echo json_encode($coordinates); ?>;
 
             function initMap() {
+                // 設置地圖中心為路徑的第一個座標
                 var mapCenter = routeCoordinates.length > 0 ? { lat: parseFloat(routeCoordinates[0].lat), lng: parseFloat(routeCoordinates[0].lng) } : { lat: 24.149878365016026, lng: 120.68366751085637 };
-                
+
                 var map = new google.maps.Map(document.getElementById('map'), {
                     center: mapCenter,
                     zoom: 15
                 });
 
+                // 將座標轉換為地圖用的經緯度座標對象
                 var pathCoordinates = routeCoordinates.map(function(coord) {
                     return { lat: parseFloat(coord.lat), lng: parseFloat(coord.lng) };
                 });
 
+                // 繪製用戶路徑
                 var userPath = new google.maps.Polyline({
                     path: pathCoordinates,
                     geodesic: true,
@@ -130,10 +137,38 @@ if (!isset($_SESSION['em_id'])) {
                     strokeOpacity: 1.0,
                     strokeWeight: 2
                 });
-
                 userPath.setMap(map);
-            }
 
+                // 標記起點
+                var startMarker = new google.maps.Marker({
+                    position: pathCoordinates[0],
+                    map: map,
+                    label: "起點",  // 可替換成圖示
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 8,
+                        fillColor: "green",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "white"
+                    }
+                });
+
+                // 標記終點
+                var endMarker = new google.maps.Marker({
+                    position: pathCoordinates[pathCoordinates.length - 1],
+                    map: map,
+                    label: "終點",  // 可替換成圖示
+                    icon: {
+                        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+                        scale: 8,
+                        fillColor: "red",
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: "white"
+                    }
+                });
+            }
         </script>
     </body>
 </html>

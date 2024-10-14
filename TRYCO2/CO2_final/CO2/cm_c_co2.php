@@ -216,12 +216,12 @@
                                                       INNER JOIN employee ON cm_co2.em_id = employee.em_id
                                                       INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
                                                       " . $strSrh;
-                                    echo "<br>" . $query;
+                                    // echo "<br>" . $query;
                                     // 獲取總記錄數
                                     $total_records_query = "SELECT COUNT(*) as total FROM ($query) as temp_table";
                                     $total_records_result = $db_handle->runQuery($total_records_query);
                                     $total_records = $total_records_result[0]['total'];
-                                    echo "<br>" . $total_records;
+                                    // echo "<br>" . $total_records;
                                     $total_pages = ceil($total_records / $records_per_page);
 
                                     // 添加LIMIT子句到查詢
@@ -248,12 +248,12 @@
                                                       FROM cm_co2
                                                       INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
                                                       GROUP BY cm_car.cc_name";
-                                    echo "<br>" . $query;
+                                    // echo "<br>" . $query;
                                     // 獲取總記錄數
                                     $total_records_query = "SELECT COUNT(*) as total FROM ($query) as temp_table";
                                     $total_records_result = $db_handle->runQuery($total_records_query);
                                     $total_records = $total_records_result[0]['total'];
-                                    echo "<br>" . $total_records;
+                                    // echo "<br>" . $total_records;
                                     $total_pages = ceil($total_records / $records_per_page);
 
                                     // 添加LIMIT子句到查詢

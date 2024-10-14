@@ -12,7 +12,7 @@ if (!isset($_SESSION['em_id'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>環保教室</title>
+    <title>碳排教室</title>
     <link rel="stylesheet" href="./css/CO2_class.css" type="text/css">
     <link rel="shortcut icon" href="img/logo.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -21,7 +21,7 @@ if (!isset($_SESSION['em_id'])) {
     <?php include('nav/em_nav.php') ?>
 
     <div class="container mt-5">
-        <div class="title1">環保教室</div>
+        <div class="title1">碳排教室</div>
         
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
