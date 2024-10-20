@@ -13,7 +13,7 @@ if (!isset($_SESSION['em_id'])) {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>加油登記</title>
+        <title>油費登錄</title>
         <link rel="stylesheet" href="css/cm_car_oil.css" type="text/css">
         <link rel="shortcut icon" href="img/logo.png" >
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -26,18 +26,18 @@ if (!isset($_SESSION['em_id'])) {
             <div class="row g-3 d-flex justify-content-center align-items-center">
                 <form class="col-11 col-md-8 align-items-center oil_form m-5">
                     <div class="fs-5">
-                        <h1 class="title m-4 text-center fw-bold">加油登記</h1>
+                        <h1 class="title m-4 text-center fw-bold">油費登錄</h1>
 
                         <!-- 日期 -->
                         <div class="mb-3 row justify-content-center align-items-center">
                             <label for="oil_date" class="form-label col-2">加油日期 :</label>
-                            <input type="date" id="oil_date" name="oil_date" class="date-range-picker col-6" placeholder="加油日期" value="oil_date">
+                            <input type="date" id="oil_date" name="oil_date" class="date-range-picker col-6 oil_select" placeholder="加油日期" value="oil_date">
                         </div>
 
                         <!-- 交通車 -->
                         <div class="mb-3 row justify-content-center align-items-center">
                             <label for="oil_car" class="form-label col-2">交通車：</label>
-                            <select id="oil_car" name="oil_car" class="col-6">
+                            <select id="oil_car" name="oil_car" class="col-6 oil_select">
                                 <option value="">請選擇</option>
                                 <?php
                                 include_once("dropdown_list/dbcontroller.php");
@@ -64,19 +64,19 @@ if (!isset($_SESSION['em_id'])) {
                             <label for="choose_oil" class="form-label col-2">加油種類：</label>
                             <div class="col-6">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="choose_oil" id="choose_oil_92" value="choose_oil_92">
+                                    <input class="form-check-input oil_select" type="radio" name="choose_oil" id="choose_oil_92" value="choose_oil_92">
                                     <label class="form-check-label" for="choose_oil_92">92 汽油</label>
                                 </div>
                                     <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="choose_oil" id="choose_oil_95" value="choose_oil_95">
+                                    <input class="form-check-input oil_select" type="radio" name="choose_oil" id="choose_oil_95" value="choose_oil_95">
                                     <label class="form-check-label" for="choose_oil_95">95 汽油</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="choose_oil" id="choose_oil_98" value="choose_oil_98">
+                                    <input class="form-check-input oil_select" type="radio" name="choose_oil" id="choose_oil_98" value="choose_oil_98">
                                     <label class="form-check-label" for="choose_oil_98">98 汽油</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="choose_oil" id="choose_oil_diesel" value="choose_oil_diesel">
+                                    <input class="form-check-input oil_select" type="radio" name="choose_oil" id="choose_oil_diesel" value="choose_oil_diesel">
                                     <label class="form-check-label" for="choose_oil_diesel">柴油</label>
                                 </div>
                             </div>
@@ -88,7 +88,7 @@ if (!isset($_SESSION['em_id'])) {
                             <label for="liter" class="form-label col-2">加油量：</label>
                             <div class="col-6">
                                 <div class="col-6 input-group">
-                                    <input type="text" class="form-control" placeholder="請輸入加油公升數" aria-label="liter" aria-describedby="liter">
+                                    <input type="text" class="form-control oil_select" placeholder="請輸入加油公升數" aria-label="liter" aria-describedby="liter">
                                     <span class="input-group-text" id="liter"> 公升(Liter) </span>
                                 </div>
                             </div>
@@ -102,7 +102,7 @@ if (!isset($_SESSION['em_id'])) {
                             <div class="col-6">
                                 <div class="input-group">
                                     <span class="input-group-text" id="price"> NT </span>
-                                    <input type="text" class="form-control" placeholder="請輸入價格" aria-label="price" aria-describedby="price">
+                                    <input type="text" class="form-control oil_select" placeholder="請輸入價格" aria-label="price" aria-describedby="price">
                                 </div>
                             </div>
                             

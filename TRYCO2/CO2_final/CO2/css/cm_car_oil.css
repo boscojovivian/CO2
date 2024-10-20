@@ -12,3 +12,8 @@
     color: #fff !important;
     height: 60px;
 }
+
+.oil_select{
+    border: 3px solid #98c39a !important;
+    border-radius: 10px;
+}
