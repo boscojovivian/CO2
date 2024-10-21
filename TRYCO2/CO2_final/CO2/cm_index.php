@@ -75,7 +75,7 @@ if (!isset($_SESSION['em_id'])) {
                         </div>
                         <div class="col-12">
                             <div class="button-container d-flex justify-content-center mt-3">
-                                <a href="cm_c_co2.php"><button class="search-history-button1 me-3">交通車碳排紀錄</button></a>
+                                <a href="cm_c_co2.php"><button class="search-history-button1 me-3">公司車碳排紀錄</button></a>
                                 <a href="cm_e_co2.php"><button class="search-history-button2">員工碳排紀錄</button></a>
                             </div>
                         </div>
@@ -130,6 +130,9 @@ if (!isset($_SESSION['em_id'])) {
                                     <div id="result" class="alert alert-primary alert-custom" style="display: none;"></div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-10 text-end">
+                            <button type="submit" class="btn btn-success btn-lg col-8 m-5">匯出碳排報告</button>
                         </div>
                     </div>
                 </div>

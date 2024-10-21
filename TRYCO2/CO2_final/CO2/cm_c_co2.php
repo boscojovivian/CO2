@@ -34,7 +34,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>交通車碳排紀錄</title>
+        <title>公司車碳排紀錄</title>
         <link rel="stylesheet" href="css/cm_c_co2.css" type="text/css">
         <link rel="shortcut icon" href="img/logo.png">
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
@@ -72,9 +72,9 @@
                                     value="<?php echo isset($_GET['end_date_display']) ? htmlspecialchars($_GET['end_date_display']) : ''; ?>">
                             </div>
 
-                            <!-- 篩選交通車 -->
+                            <!-- 篩選公司車 -->
                             <div class="col-lg-4 d-flex justify-content-start align-items-center">
-                                <label for="filter_car">交通車：</label>
+                                <label for="filter_car">公司車：</label>
                                 <select id="filter_car" name="filter_car">
                                     <option value="">請選擇</option>
                                     <?php
@@ -140,17 +140,17 @@
                             if (!empty($start_date_display) && !empty($end_date_display) && empty($filter_car) && empty($filter_employee)) {
                                 echo "<h4>$start_date_display 到 $end_date_display 的所有碳排記錄</h4>";
                             } elseif (empty($start_date_display) && empty($end_date_display) && !empty($filter_car) && empty($filter_employee)) {
-                                echo "<h4>交通車 $car_name 的所有碳排記錄</h4>";
+                                echo "<h4>公司車 $car_name 的所有碳排記錄</h4>";
                             } elseif (empty($start_date_display) && empty($end_date_display) && empty($filter_car) && !empty($filter_employee)) {
                                 echo "<h4>員工 $employee_name 的所有碳排記錄</h4>";
                             } elseif (!empty($start_date_display) && !empty($end_date_display) && !empty($filter_car) && empty($filter_employee)) {
-                                echo "<h4>交通車 $car_name 從 $start_date_display 到 $end_date_display 的碳排記錄</h4>";
+                                echo "<h4>公司車 $car_name 從 $start_date_display 到 $end_date_display 的碳排記錄</h4>";
                             } elseif (!empty($start_date_display) && !empty($end_date_display) && empty($filter_car) && !empty($filter_employee)) {
                                 echo "<h4>員工 $employee_name 從 $start_date_display 到 $end_date_display 的碳排記錄</h4>";
                             } elseif (empty($start_date_display) && empty($end_date_display) && !empty($filter_car) && !empty($filter_employee)) {
-                                echo "<h4>員工 $employee_name 使用交通車 $car_name 的所有碳排記錄</h4>";
+                                echo "<h4>員工 $employee_name 使用公司車 $car_name 的所有碳排記錄</h4>";
                             } elseif (!empty($start_date_display) && !empty($end_date_display) && !empty($filter_car) && !empty($filter_employee)) {
-                                echo "<h4>員工 $employee_name 使用交通車 $car_name 從 $start_date_display 到 $end_date_display 的碳排記錄</h4>";
+                                echo "<h4>員工 $employee_name 使用公司車 $car_name 從 $start_date_display 到 $end_date_display 的碳排記錄</h4>";
                             } else {
                                 echo "所有碳排記錄";
                             }
@@ -167,12 +167,12 @@
                                 <tr>
                                     <?php
                                     if ($filter_applied) {
-                                        echo "<th>交通車名稱</th>
+                                        echo "<th>公司車名稱</th>
                                                     <th>產生碳排日期</th>
                                                     <th>產生的碳排量</th>
                                                     <th>員工姓名</th>";
                                     } else {
-                                        echo "<th>交通車名稱</th>
+                                        echo "<th>公司車名稱</th>
                                             <th>日期區間</th>
                                             <th>總碳排量</th>";
                                     }
@@ -404,7 +404,7 @@
                         }
 
                         var layout = {
-                            title: '" . $start_date . "至" . $end_date . " 交通車碳排量',
+                            title: '" . $start_date . "至" . $end_date . " 公司車碳排量',
                             xaxis: {
                                 title: '日期',
                                 gridcolor: '#67776d'
@@ -487,9 +487,9 @@
                         Plotly.newPlot('filteredBarChart', data, layout);
                     </script>";
             }
-            // 篩選交通車
+            // 篩選公司車
             else if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) {
-                // 查詢數據並檢索交通車名稱
+                // 查詢數據並檢索公司車名稱
                 $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon, cm_car.cc_name
                                 FROM cm_co2
                                 INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
@@ -504,7 +504,7 @@
                     'carbons' => []
                 ];
 
-                // 初始化交通車名稱變數
+                // 初始化公司車名稱變數
                 $carName = '';
 
                 // 處理查詢結果
@@ -512,7 +512,7 @@
                     foreach ($chartResults as $row) {
                         $chartData['months'][] = $row['month'];
                         $chartData['carbons'][] = $row['total_carbon'];
-                        $carName = $row['cc_name']; // 提取交通車名稱
+                        $carName = $row['cc_name']; // 提取公司車名稱
                     }
                 }
 
@@ -533,7 +533,7 @@
                         }];
 
                         var layout = {
-                            title: '交通車 $carName 每年碳排量', // 使用交通車名稱替代 ID
+                            title: '公司車 $carName 每年碳排量', // 使用公司車名稱替代 ID
                             xaxis: {
                                 title: '月份',
                                 gridcolor: '#67776d'
@@ -549,12 +549,12 @@
                         Plotly.newPlot('filteredBarChart', data, layout);
                     </script>";
             }
-            // 篩選日期、篩選交通車
+            // 篩選日期、篩選公司車
             else if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) {
                 $start_date = $start_date_display;
                 $end_date = $end_date_display;
 
-                // 查詢數據並檢索交通車名稱
+                // 查詢數據並檢索公司車名稱
                 $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon, cm_car.cc_name
                             FROM cm_co2
                             INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
@@ -569,7 +569,7 @@
                     'carbons' => []
                 ];
 
-                // 初始化交通車名稱變數
+                // 初始化公司車名稱變數
                 $carName = '';
 
                 // 處理查詢結果
@@ -577,7 +577,7 @@
                     foreach ($chartResults as $row) {
                         $chartData['months'][] = $row['month'];
                         $chartData['carbons'][] = $row['total_carbon'];
-                        $carName = $row['cc_name']; // 提取交通車名稱
+                        $carName = $row['cc_name']; // 提取公司車名稱
                     }
                 }
 
@@ -598,7 +598,7 @@
                     }];
 
                     var layout = {
-                        title: '$start_date 至 $end_date 交通車 $carName 碳排量', // 使用交通車名稱替代 ID
+                        title: '$start_date 至 $end_date 公司車 $carName 碳排量', // 使用公司車名稱替代 ID
                         xaxis: {
                             title: '月份',
                             gridcolor: '#67776d'
@@ -670,7 +670,7 @@
                     var layout = {
                         title: '$start_date 至 $end_date 員工 $employeeName 的碳排量', // 使用員工姓名替代 ID
                         xaxis: {
-                            title: '交通車',
+                            title: '公司車',
                             gridcolor: '#67776d'
                         },
                         yaxis: {
@@ -684,7 +684,7 @@
                     Plotly.newPlot('filteredBarChart', data, layout);
                 </script>";
             }
-            // 篩選交通車、篩選員工
+            // 篩選公司車、篩選員工
             else if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) {
 
                 // 查询按月份汇总的碳排量
@@ -721,7 +721,7 @@
                         }];
 
                         var layout = {
-                            title: '交通車 $filter_car 員工 $filter_employee 的碳排量',
+                            title: '公司車 $filter_car 員工 $filter_employee 的碳排量',
                             xaxis: {
                                 title: '月份',
                                 gridcolor: '#67776d'
@@ -739,12 +739,12 @@
                         Plotly.newPlot('filteredBarChart', data, layout);
                     </script>";
             }
-            // 篩選日期、篩選交通車、篩選員工
+            // 篩選日期、篩選公司車、篩選員工
             else if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) {
                 $start_date = $start_date_display;
                 $end_date = $end_date_display;
 
-                // 修改查詢以包括交通車名稱和員工名稱
+                // 修改查詢以包括公司車名稱和員工名稱
                 $chartQuery = "SELECT cCO2_date, SUM(cCO2_carbon) AS total_carbon, 
                                 cm_car.cc_name, employee.em_name 
                                 FROM cm_co2 
@@ -769,7 +769,7 @@
                     foreach ($chartResults as $row) {
                         $chartData['dates'][] = $row['cCO2_date'];
                         $chartData['carbons'][] = $row['total_carbon'];
-                        // 取得交通車名稱和員工名稱
+                        // 取得公司車名稱和員工名稱
                         $car_name = $row['cc_name'];
                         $employee_name = $row['em_name'];
                     }
@@ -791,7 +791,7 @@
                         }];
 
                         var layout = {
-                            title: '" . $start_date . " 至 " . $end_date . " 交通車 " . $car_name . " 員工 " . $employee_name . " 的碳排量',
+                            title: '" . $start_date . " 至 " . $end_date . " 公司車 " . $car_name . " 員工 " . $employee_name . " 的碳排量',
                             xaxis: {
                                 title: '日期',
                                 gridcolor: '#67776d'
