@@ -34,7 +34,7 @@ if (!is_dir($path_dir)) {
     }
 }
 
-// 儲存路徑資料為基本數組格式的 JSON 檔案
+// 儲存路徑資料為包含經緯度座標物件格式的 JSON 檔案
 $path_data = json_encode($data['path'], JSON_PRETTY_PRINT); // JSON_PRETTY_PRINT 用來讓 JSON 格式更加美觀
 $filename = 'path_data_' . time() . '.json';
 $file_path = $path_dir . '/' . $filename;

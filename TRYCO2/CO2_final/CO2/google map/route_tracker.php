@@ -425,7 +425,8 @@
         if (positions.length > 0) {
             const lastPositionTime = positions[positions.length - 1].timestamp;
             if (lastPositionTime) {
-                elapsedTime = (lastPositionTime - startTime) / 3600000; // 以小時為單位
+                elapsedTime = (lastPositionTime - startTimeFormatted) / 3600000; // 以小時為單位
+                // elapsedTime = (lastPositionTime - start) / 3600000; // 以小時為單位
             } else {
                 console.error("Invalid timestamp in positions array.");
                 elapsedTime = 0; // 處理錯誤
@@ -442,9 +443,9 @@
                 start_time: startTimeFormatted, // 開始時間
                 end_date: endDate, // 結束日期
                 end_time: endTimeFormatted, // 結束時間
-                total_time: elapsedTime.toFixed(2) + ' 小時', // 總時間
-                distance: distanceInKm + ' 公里', // 總距離
-                path: JSON.stringify(positions),  // 路徑數據
+                total_time: elapsedTime.toFixed(2), // 總時間(小時)
+                distance: distanceInKm, // 總距離(公里)
+                path: positions,  // 路徑數據
                 car: document.querySelector('input[name="transportMode"]:checked').value,
                 vehicleType: document.getElementById('vehicleType').value,
                 employee_id: document.getElementById('employeeSelect').value
