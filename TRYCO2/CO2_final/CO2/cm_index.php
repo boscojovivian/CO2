@@ -122,7 +122,7 @@ if (!isset($_SESSION['em_id'])) {
                                     </div>
                                     <div class="mb-3">
                                         <label for="rate" class="form-label">收費費率（每噸收費）</label>
-                                        <input type="number" class="form-control" id="rate" name="rate" placeholder="請輸入收費費率（每噸）" value="500" required>
+                                        <input type="number" class="form-control" id="rate" name="rate" placeholder="請輸入收費費率（每噸）" value="300" required>
                                     </div>
                                     <button type="submit" class="btn btn-success btn-lg" id="btn-submit">計算</button>
                                 </form>

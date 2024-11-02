@@ -13,7 +13,7 @@ if (!isset($_SESSION['em_id'])) {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>油費登錄</title>
+        <title>加油登記</title>
         <link rel="stylesheet" href="css/cm_car_oil.css" type="text/css">
         <link rel="shortcut icon" href="img/logo.png" >
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -24,9 +24,9 @@ if (!isset($_SESSION['em_id'])) {
 
         <div class="container-fluid">
             <div class="row g-3 d-flex justify-content-center align-items-center">
-                <form class="col-11 col-md-8 align-items-center oil_form m-5">
-                    <div class="fs-5">
-                        <h1 class="title m-4 text-center fw-bold">油費登錄</h1>
+                <form class="col-11 col-md-8 align-items-center oil_form mt-5">
+                    <div class="fs-5 m-5">
+                        <h1 class="title m-4 text-center fw-bold">加油登記</h1>
 
                         <!-- 日期 -->
                         <div class="mb-3 row justify-content-center align-items-center">
