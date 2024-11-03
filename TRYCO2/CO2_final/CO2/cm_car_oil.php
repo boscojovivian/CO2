@@ -147,8 +147,15 @@ if (!isset($_SESSION['em_id'])) {
                                 'price' => $oil_price
                             ];
                         
-                            if ($db_handle->insert('cm_car_oil', $data)) {
+                            if ($db_handle->insert('cm_car_oil', data: $data)) {
+                                $last_id = $db_handle->getLastInsertId();
+                                
                                 echo "<script>message('加油記錄已成功保存！');</script>";
+                                
+                                // 將剛新增的 ID 傳遞給 count_carbon.php
+                                $carbon_type = 1;
+                                $type_id = $last_id;  // 設定變數以供 count_carbon.php 使用
+                                include_once("count_carbon/count_carbon.php");
                             } else {
                                 echo "<script>message('無法保存加油記錄');</script>";
                             }
