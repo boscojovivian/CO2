@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-10-04 19:17:34
+-- 產生時間： 2024-11-03 13:54:12
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -511,6 +511,7 @@ DROP TABLE IF EXISTS `cm_car_oil`;
 CREATE TABLE `cm_car_oil` (
   `id` int(5) NOT NULL,
   `oil_date` varchar(15) DEFAULT NULL,
+  `type` varchar(5) NOT NULL,
   `liter` float DEFAULT NULL,
   `price` int(10) DEFAULT NULL,
   `car_id` int(5) DEFAULT NULL
@@ -521,6 +522,14 @@ CREATE TABLE `cm_car_oil` (
 --
 
 TRUNCATE TABLE `cm_car_oil`;
+--
+-- 傾印資料表的資料 `cm_car_oil`
+--
+
+INSERT INTO `cm_car_oil` (`id`, `oil_date`, `type`, `liter`, `price`, `car_id`) VALUES
+(1, '2024-11-01', '95汽油', 130, 530, 1),
+(2, '2024-11-03', '92汽油', 130, 530, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -2332,6 +2341,75 @@ INSERT INTO `cm_co2` (`cCO2_id`, `cCO2_date`, `cCO2_start_time`, `cCO2_end_time`
 (1779, '2024-10-30', '15:53:00', '16:54:00', 42.79, '台中市南屯區公益路二段51號,台中市西屯區文心路一段289號', 1, 4, 'bobo'),
 (1780, '2024-10-30', '12:05:00', '12:57:00', 20.53, '台中市北區三民路三段161號,台中市北區中清路一段231號,台中市南屯區公益路二段51號', 4, 4, 'bobo'),
 (1781, '2024-10-30', '12:18:00', '15:36:00', 29.09, '台中市北區中清路一段231號,台中市西屯區文心路一段289號,台中市北區三民路三段161號', 4, 3, 'yang');
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `count_carbon`
+--
+
+DROP TABLE IF EXISTS `count_carbon`;
+CREATE TABLE `count_carbon` (
+  `id` int(5) NOT NULL,
+  `type` int(1) DEFAULT NULL,
+  `type_id` int(5) DEFAULT NULL,
+  `carbon` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 資料表新增資料前，先清除舊資料 `count_carbon`
+--
+
+TRUNCATE TABLE `count_carbon`;
+--
+-- 傾印資料表的資料 `count_carbon`
+--
+
+INSERT INTO `count_carbon` (`id`, `type`, `type_id`, `carbon`) VALUES
+(1, 1, 2, 344.016);
+
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `daily_quotes`
+--
+
+DROP TABLE IF EXISTS `daily_quotes`;
+CREATE TABLE `daily_quotes` (
+  `id` int(11) NOT NULL,
+  `quote` text NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- 資料表新增資料前，先清除舊資料 `daily_quotes`
+--
+
+TRUNCATE TABLE `daily_quotes`;
+--
+-- 傾印資料表的資料 `daily_quotes`
+--
+
+INSERT INTO `daily_quotes` (`id`, `quote`) VALUES
+(1, '節能減碳，從關燈做起。'),
+(2, '多走樓梯，少搭電梯，健康又環保。'),
+(3, '關掉待機電器，減少不必要的能源消耗。'),
+(4, '隨手關水，節約每一滴資源。'),
+(5, '減少使用紙餐具、拒用非法紙餐具。'),
+(6, '選擇公共交通，減少碳排放。'),
+(7, '騎自行車，不僅健康，還能減少污染。'),
+(8, '少用塑料袋，愛護地球。'),
+(9, '綠色消費，選擇低碳產品。'),
+(10, '使用再生紙，減少森林砍伐。'),
+(11, '關閉不使用的電腦螢幕，節約能源。'),
+(12, '降低車速，不僅安全，還能節省油耗。'),
+(13, '選擇當地食材，減少運輸碳足跡。'),
+(14, '少吃肉，多吃蔬果，減少碳排放。'),
+(15, '使用節能燈泡，減少家庭碳排放。'),
+(16, '節約電力，定期清潔冷氣濾網。'),
+(17, '每少開車一公里，就是為地球減少一份負擔。'),
+(18, '選擇低耗能家電，讓節能變成生活習慣。'),
+(19, '少製造垃圾，多回收再利用。'),
+(20, '換購電動車，開啟綠色出行新風尚。');
 
 -- --------------------------------------------------------
 
@@ -11259,6 +11337,20 @@ CREATE TABLE `route_tracker` (
 --
 
 TRUNCATE TABLE `route_tracker`;
+--
+-- 傾印資料表的資料 `route_tracker`
+--
+
+INSERT INTO `route_tracker` (`id`, `start_date`, `start_time`, `end_date`, `end_time`, `total_time`, `distance`, `file`, `car`, `type`, `employee_id`) VALUES
+(1, '2024/10/5', '下午7:42:25', '2024/10/5', '下午7:48:30', '6', '2.01', 'path_data_1728142989.json', 'is_cm_car', 'JRU-2563', 2),
+(2, '2024/10/5', '下午11:43:16', '2024/10/5', '下午11:43:19', '0.00', '0.00', 'path_data_1728142999.json', 'not_cm_car', '高鐵', 4),
+(3, '2024/10/7', '下午2:18:28', '2024/10/7', '下午2:18:31', '0.00', '0.00', 'path_data_1728281911.json', 'is_cm_car', 'HGF-1255', 4),
+(4, '2024/10/7', '下午2:23:36', '2024/10/7', '下午2:23:42', '0.00', '0', 'path_data_1728282222.json', 'is_cm_car', 'HGF-1255', 5),
+(5, '2024/10/7', '下午2:34:30', '2024/10/7', '下午2:34:40', '0.00', '0', 'path_data_1728282880.json', 'not_cm_car', '台鐵南迴線、莒光號、東部幹線部分區段', 1),
+(6, '2024/10/7', '下午2:35:43', '2024/10/7', '下午2:35:59', '0.00', '0', 'path_data_1728282959.json', 'is_cm_car', 'NIL-4553', 2),
+(7, '2024/10/7', '下午2:40:09', '2024/10/7', '下午2:40:13', '0.00', '0', 'path_data_1728283213.json', 'not_cm_car', '台鐵南迴線、莒光號、東部幹線部分區段', 3),
+(9, '2024/11/2', '下午4:54:08', '2024/11/2', '下午4:54:25', '0.00', '0', 'path_data_1730537665.json', 'not_cm_car', '台鐵南迴線、莒光號、東部幹線部分區段', 2);
+
 -- --------------------------------------------------------
 
 --
@@ -11294,14 +11386,14 @@ TRUNCATE TABLE `transportation`;
 --
 
 INSERT INTO `transportation` (`id`, `type`, `num`) VALUES
-(1, '自行開車', 1.15),
-(2, '自行騎機車', 9.51),
-(3, '計程車', 1.33),
-(4, '公車/客運', 9.44),
-(5, '台鐵南迴線、莒光號、東部幹線部分區段', 7),
-(6, '台鐵區間車、捷運', 5.4),
-(7, '高鐵', 3.4),
-(8, '飛機', 2.81);
+(1, '自行開車', 0.115),
+(2, '自行騎機車', 0.0951),
+(3, '計程車', 0.133),
+(4, '公車/客運', 0.0944),
+(5, '台鐵南迴線、莒光號、東部幹線部分區段', 70),
+(6, '台鐵區間車、捷運', 54),
+(7, '高鐵', 0.034),
+(8, '飛機', 0.281);
 
 -- --------------------------------------------------------
 
@@ -11337,6 +11429,18 @@ ALTER TABLE `cm_co2`
   ADD PRIMARY KEY (`cCO2_id`),
   ADD KEY `cc_id` (`cc_id`),
   ADD KEY `cm_co2_em_id` (`em_id`);
+
+--
+-- 資料表索引 `count_carbon`
+--
+ALTER TABLE `count_carbon`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- 資料表索引 `daily_quotes`
+--
+ALTER TABLE `daily_quotes`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- 資料表索引 `employee`
@@ -11408,10 +11512,28 @@ ALTER TABLE `cm_car`
   MODIFY `cc_id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
+-- 使用資料表自動遞增(AUTO_INCREMENT) `cm_car_oil`
+--
+ALTER TABLE `cm_car_oil`
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- 使用資料表自動遞增(AUTO_INCREMENT) `cm_co2`
 --
 ALTER TABLE `cm_co2`
   MODIFY `cCO2_id` bigint(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1782;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `count_carbon`
+--
+ALTER TABLE `count_carbon`
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `daily_quotes`
+--
+ALTER TABLE `daily_quotes`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `employee`
@@ -11459,7 +11581,7 @@ ALTER TABLE `message`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `route_tracker`
 --
 ALTER TABLE `route_tracker`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `transportation`
