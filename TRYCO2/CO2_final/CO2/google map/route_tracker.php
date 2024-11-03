@@ -25,7 +25,7 @@
                 imageHeight: 100,
             });
         }
-        </script>
+    </script>
 </head>
 <body>
     <div class="container text-center mt-3">

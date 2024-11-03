@@ -35,11 +35,7 @@ class DBController{     //新增一個類別DBController
         return $rowcount;
     }
 
-    function executeUpdate($query){
-        $result = mysqli_query($this->conn, $query);
-        return $result;
-    }
-
+    // 用於插入數據
     function insert($table, $data) {
         $columns = implode(", ", array_keys($data));
         $values  = implode(", ", array_map(function($value) {
@@ -48,6 +44,11 @@ class DBController{     //新增一個類別DBController
 
         $query = "INSERT INTO $table ($columns) VALUES ($values)";
         return $this->executeUpdate($query);
+    }
+
+    function executeUpdate($query){
+        $result = mysqli_query($this->conn, $query);
+        return $result;
     }
     
     function updateUserPermission($table, $data, $conditions) {
@@ -63,6 +64,13 @@ class DBController{     //新增一個類別DBController
 
         $query = "UPDATE $table SET $updateString WHERE $conditionString";
         return $this->executeUpdate($query);
+    }
+
+    // 關閉資料庫連線
+    function close() {
+        if ($this->conn) {
+            mysqli_close($this->conn);
+        }
     }
 }
 
