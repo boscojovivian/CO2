@@ -39,7 +39,6 @@ $offset = ($pages - 1) * $records_per_page;
                 <div class="col-6 left">
                     <div id="filteredBarChart" class="filteredBarChart d-flex justify-content-center align-items-center"></div>
                 </div>
-
                 <?php
                 // 連接資料庫
                 include_once("dropdown_list/dbcontroller.php");
