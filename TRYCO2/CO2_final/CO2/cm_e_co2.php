@@ -35,10 +35,70 @@ $offset = ($pages - 1) * $records_per_page;
         <?php include('nav/cm_nav.php') ?>
 
         <div class="container-fluid row">
-            <!-- 左區塊 -->
-            <div class="col-6 left">
-                <div id="filteredBarChart" class="filteredBarChart d-flex justify-content-center align-items-center"></div>
-            </div>
+           <!-- 左區塊 -->
+                <div class="col-6 left">
+                    <div id="filteredBarChart" class="d-flex justify-content-center align-items-center"></div>
+                </div>
+
+                <?php
+                // 連接資料庫
+                include_once("dropdown_list/dbcontroller.php");
+                $db_handle = new DBController();
+
+                // 查詢 em_co2 表，抓取 em_name 和對應的碳排放量
+                $pizzaChartQuery = "SELECT em_co2.em_name, SUM(em_co2.eCO2_carbon) as total_carbon
+                                    FROM em_co2
+                                    GROUP BY em_co2.em_name";
+                $pizzaChartResult = $db_handle->runQuery($pizzaChartQuery);
+
+                // 準備資料供 Plotly 使用
+                $pizzaChartData = [
+                    'labels' => [],
+                    'values' => []
+                ];
+
+                // 檢查查詢結果，並將資料填入陣列
+                if (!empty($pizzaChartResult)) {
+                    foreach ($pizzaChartResult as $row) {
+                        $pizzaChartData['labels'][] = $row['em_name'];
+                        $pizzaChartData['values'][] = $row['total_carbon'];
+                    }
+                }
+
+                // 將資料轉換成 JSON 格式以便前端 JavaScript 使用
+                echo "<script>
+                        var pizzaLabels = " . json_encode($pizzaChartData['labels']) . ";
+                        var pizzaValues = " . json_encode($pizzaChartData['values']) . ";
+                    </script>";
+                ?>
+
+                <script>
+                // 確認資料是否已成功載入
+                if (pizzaLabels && pizzaValues) {
+                    var pieData = [{
+                        labels: pizzaLabels,
+                        values: pizzaValues,
+                        type: 'pie',
+                        textinfo: 'label+percent',
+                        hoverinfo: 'label+value',
+                        hole: 0.3, // 圓環圖設定
+                        marker: {
+                            colors: ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854']
+                        }
+                    }];
+
+                    var pieLayout = {
+                        title: '各員工碳排放分佈',
+                        height: 400,
+                        plot_bgcolor: '#e2f7ea',
+                        paper_bgcolor: '#e2f7ea',
+                        margin: { t: 50, b: 50 }
+                    };
+
+                    // 使用 Plotly 繪製圓環圖
+                    Plotly.newPlot('filteredBarChart', pieData, pieLayout);
+                }
+                </script>
             <!-- 右區塊 -->
             <div class="col-6 right">
                 <div class="row">
