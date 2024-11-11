@@ -50,7 +50,7 @@
             <div class="container-fluid row">
                 <!-- 左區塊 -->
                 <div class="col-6 left">
-                    <div id="filteredBarChart" class="d-flex justify-content-center align-items-center"></div>
+                    <div id="filteredBarChart" class="filteredBarChart d-flex justify-content-center align-items-center"></div>
                 </div>
                 <?php
                     // 連接資料庫

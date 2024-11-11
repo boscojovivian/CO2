@@ -37,7 +37,7 @@ $offset = ($pages - 1) * $records_per_page;
         <div class="container-fluid row">
            <!-- 左區塊 -->
                 <div class="col-6 left">
-                    <div id="filteredBarChart" class="d-flex justify-content-center align-items-center"></div>
+                    <div id="filteredBarChart" class="filteredBarChart d-flex justify-content-center align-items-center"></div>
                 </div>
 
                 <?php
