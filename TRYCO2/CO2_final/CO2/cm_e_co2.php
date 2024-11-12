@@ -236,8 +236,8 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                                             echo "<td>" . $record['eCO2_date'] . "</td>";
                                             // 替換 eCO2_commute 的值
                                             $commute = $record['eCO2_commute'];
-                                            $commute = str_replace('go', '上班', $commute);
-                                            $commute = str_replace('back', '下班', $commute);
+                                            $commute = str_replace('0', '上班', $commute);
+                                            $commute = str_replace('1', '下班', $commute);
                                             echo "<td>" . $commute . "</td>";
                                             echo "<td>" . $record['eCO2_carbon'] . " 公噸</td>";
                                             echo "</tr>";
