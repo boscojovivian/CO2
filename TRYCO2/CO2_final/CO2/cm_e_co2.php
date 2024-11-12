@@ -426,6 +426,7 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
             // 篩選員工
             if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_employee)) {
                 $currentYear = date('Y');
+                $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
                 $chartQuery = "SELECT YEAR(em_co2.eCO2_date) AS year, MONTH(em_co2.eCO2_date) AS month, SUM(em_co2.eCO2_carbon) AS total_carbon
                             FROM em_co2
                             INNER JOIN employee ON em_co2.em_id = employee.em_id
@@ -466,7 +467,7 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                     }];
     
                     var layout = {
-                        title: '員工 $filter_employee ' + $currentYear + ' 年度碳排量',
+                        title: '員工 $employee_name ' + $currentYear + ' 年度碳排量',
                         xaxis: {
                             title: '月份',
                             type: 'category',
@@ -491,6 +492,7 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
             if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_employee)) {
                 $start_date = $start_date_display;
                 $end_date = $end_date_display;
+                $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
                 $chartQuery = "SELECT em_co2.eCO2_date, em_co2.eCO2_commute, SUM(em_co2.eCO2_carbon) AS total_carbon
                             FROM em_co2
                             INNER JOIN employee ON em_co2.em_id = employee.em_id
@@ -571,7 +573,7 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                     });
     
                     var layout = {
-                        title: '$start_date 至 $end_date 員工 $filter_employee 的碳排量',
+                        title: '$start_date 至 $end_date 員工  $employee_name 的碳排量',
                         xaxis: {
                             title: '日期',
                             gridcolor: '#67776d' // 设置x轴网格线的颜色
