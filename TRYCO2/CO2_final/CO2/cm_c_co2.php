@@ -1,4 +1,4 @@
-    <?php
+<?php
     session_start();
     // 檢查用戶是否已登入
     if (!isset($_SESSION['em_id'])) {
@@ -28,6 +28,7 @@
     $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_display']) || !empty($_GET['filter_car']) || !empty($_GET['filter_employee']);
     ?>
 
+
     <!doctype html>
     <html lang="en">
 
@@ -56,6 +57,64 @@
             <div class="col-6 left">
                 <div id="filteredBarChart" class="filteredBarChart d-flex justify-content-center align-items-center"></div>
             </div>
+            <?php
+                // 連接資料庫
+                include_once("dropdown_list/dbcontroller.php");
+                $db_handle = new DBController();
+
+                // 查詢 cm_co2 表，抓取車輛 ID 和對應的碳排放量
+                $pizzaChartQuery = "SELECT cm_car.cc_name, SUM(cm_co2.cCO2_carbon) as total_carbon
+                                    FROM cm_co2
+                                    INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
+                                    GROUP BY cm_car.cc_id, cm_car.cc_name";
+                $pizzaChartResult = $db_handle->runQuery($pizzaChartQuery);
+
+                // 準備資料供 Plotly 使用
+                $pizzaChartData = [
+                    'labels' => [],
+                    'values' => []
+                ];
+
+                if (!empty($pizzaChartResult)) {
+                    foreach ($pizzaChartResult as $row) {
+                        $pizzaChartData['labels'][] = $row['cc_name'];
+                        $pizzaChartData['values'][] = $row['total_carbon'];
+                    }
+                }
+
+                // 將資料轉換成 JSON 格式以便 JavaScript 使用
+                echo "<script>
+                    var pizzaLabels = " . json_encode($pizzaChartData['labels']) . ";
+                    var pizzaValues = " . json_encode($pizzaChartData['values']) . ";
+                </script>";
+            ?>
+            <script>
+                // 確認資料是否已載入
+                if (pizzaLabels && pizzaValues) {
+                    var pieData = [{
+                        labels: pizzaLabels,
+                        values: pizzaValues,
+                        type: 'pie',
+                        textinfo: 'label+percent',
+                        hoverinfo: 'label+value',
+                        hole: 0.3, // 新增這一行，使圖表變成圓環圖
+                        marker: {
+                            colors: ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854']
+                        }
+                    }];
+
+                    var pieLayout = {
+                        title: '各交通車碳排放分佈',
+                        height: 400,
+                        plot_bgcolor: '#e2f7ea',
+                        paper_bgcolor: '#e2f7ea',
+                        margin: { t: 50, b: 50 }
+                    };
+
+                    // 繪製圓餅圖
+                    Plotly.newPlot('filteredBarChart', pieData, pieLayout);
+                }
+            </script>
             <!-- 右區塊 -->
             <div class="col-6 right">
                 <div class="row">
@@ -686,7 +745,8 @@
             }
             // 篩選公司車、篩選員工
             else if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) {
-
+                $car_name = !empty($filter_car) ? htmlspecialchars($result_car[array_search($filter_car, array_column($result_car, 'cc_id'))]['cc_name']) : '';
+                $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
                 // 查询按月份汇总的碳排量
                 $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
                                 FROM cm_co2
@@ -721,7 +781,7 @@
                         }];
 
                         var layout = {
-                            title: '公司車 $filter_car 員工 $filter_employee 的碳排量',
+                            title: '公司車  $car_name 員工  $employee_name 的碳排量',
                             xaxis: {
                                 title: '月份',
                                 gridcolor: '#67776d'
