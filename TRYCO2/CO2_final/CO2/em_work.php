@@ -21,7 +21,7 @@ $results = $db_handle->runQuery($query);
 <!DOCTYPE html>
 <html>
     <head>
-        <title>新增交通車出勤紀錄</title>
+        <title>新增公司車出勤紀錄</title>
         <meta charset="utf-8"></meta>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></meta> <!-- 設置網頁的字符集與 viewport，方便手機瀏覽 -->
         <!-- <link rel="stylesheet" href="css.css" type="text/css"> -->
@@ -83,7 +83,7 @@ $results = $db_handle->runQuery($query);
         <!-- 導入導覽列 -->
         <?php include('nav/em_nav.php') ?>
         
-        <!-- 新增交通車出勤紀錄 -->
+        <!-- 新增公司車出勤紀錄 -->
         <div class="container mt-5">
             <div class="row justify-content-center">
                 <!-- 地圖區塊 -->
@@ -93,14 +93,14 @@ $results = $db_handle->runQuery($query);
 
                 <!-- 表單區塊 -->
                 <div class="col-12 col-md-6">
-                    <h1 class="fw-bold m-3 text-center text-md-start">新增交通車出勤紀錄</h1>
+                    <h1 class="fw-bold m-3 text-center text-md-start">新增公司車出勤紀錄</h1>
                     <form id="routingForm" method="post">
                         <div id="text-center">
                             <div class="text-left">
-                                <!-- 選擇交通車、出勤日期時間 -->
+                                <!-- 選擇公司車、出勤日期時間 -->
                                 <div class="justify-left">
 
-                                    <!-- 選擇交通車 -->
+                                    <!-- 選擇公司車 -->
                                     <?php
                                     $link = mysqli_connect("localhost", "root", "") 
                                     or die("無法開啟 MySQL 資料庫連結!<br>");
@@ -117,10 +117,10 @@ $results = $db_handle->runQuery($query);
                                     ?>
 
                                     <div class="choose_div">
-                                        <label class="work_word" for="transportMode">出勤交通車：</label>
+                                        <label class="work_word" for="transportMode">出勤公司車：</label>
                                         &nbsp&nbsp&nbsp&nbsp
                                         <select class="choose_car" id="transportMode" name="transportMode" required>
-                                            <option value="">選擇交通車</option>
+                                            <option value="">選擇公司車</option>
                                             <?php
                                             while ($rows = mysqli_fetch_array($result)){
                                                 echo "<option value='" . $rows[1] . "'>" . $rows[0] . "</option>";

@@ -61,16 +61,20 @@
                                 <li><a class="dropdown-item" href="cm_employee.php">管理者資料</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="em_employee.php">員工資料</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="get_route_back.php">出勤紀錄</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                交通車資料
+                                公司車資料
                             </a>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a class="dropdown-item" href="cm_car.php">交通車資料</a></li>
+                                <li><a class="dropdown-item" href="cm_car.php">公司車</a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="cm_manage_car.php">管理交通車</a></li>
+                                <li><a class="dropdown-item" href="cm_manage_car.php">管理公司車</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="cm_car_oil.php">加油登記</a></li>
                             </ul>
                         </li>
                         <li class="nav-item dropdown">
@@ -78,7 +82,7 @@
                                 碳排紀錄
                             </a>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a class="dropdown-item" href="cm_c_co2.php">交通車碳排紀錄</a></li>
+                                <li><a class="dropdown-item" href="cm_c_co2.php">公司車碳排紀錄</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="cm_e_co2.php">員工碳排紀錄</a></li>
                             </ul>
@@ -97,7 +101,7 @@
                                 <?php echo $user_name; ?> <!-- 顯示用戶名 -->
                             </a>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a class="dropdown-item" href="em_index.php">員工首頁</a></li>
+                                <li><a class="dropdown-item" href="index.php">員工首頁</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="post" class="dropdown-item"> <!-- 登出按鈕放在表單裡 -->

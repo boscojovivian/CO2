@@ -57,7 +57,7 @@
 
     <div class="container">
         <div id="add-section" class="form-section">
-            <a href="em_index.php" class="back-button">← 返回</a>
+            <a href="index.php" class="back-button">← 返回</a>
             <br>
             <h3>新增地址</h3>
             <form id="add-form">

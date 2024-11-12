@@ -17,6 +17,11 @@
     border: 3px solid #98c39a;
     border-radius: 10px;
 }
+.title1{
+    font-size: 50px;
+    font-weight: bold;
+    color: #516850 !important;
+}
 
 .topBtn:hover{
     background: #fff;
@@ -24,30 +29,13 @@
     color: #98c39a;
 }
 
-/* 圖表 */
-.left{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 80%;
-    height: 100vh;
-}
-
-.filteredBarChart{
-    border-radius: 15px;
-    overflow: hidden; 
-    width: 80%;
-}
-
-/* 篩選列、表格 */
-.row{
-    width: 100%;
-    padding: 5px 0;
+form{
+    margin-top: 20px !important;
 }
 
 label, input, .btn{
-    font-size: 20px;
-    margin: 10px 0 !important;
+    font-size: 22px;
+    margin: 2% 0 !important;
 }
 
 input, select{
@@ -71,7 +59,11 @@ table thead tr{
     height: 60px;
     font-size: 24px;
     vertical-align: middle; /*表格內水平置中*/
-    background-color: #98c39a;
+    background-color: #85ad87 !important;
+}
+
+.table thead tr th{
+    background-color: #85ad87 !important;
 }
 
 table tbody tr{
@@ -91,18 +83,13 @@ table tbody tr:last-of-type{
 }
 
 /* 日期區間選擇器按鈕 */
-.flatpickr_week_button{
-    cursor: pointer;
-    width: 50%;
-    height: 40px;
-    background-color: #98c39a;
-    border: 2px solid #fff; /* 顯示邊框 */
+.date-range-picker {
+    width: 200px; 
+    height: 40px; 
+    font-size: 1.2em; 
+    padding: 5px;
 }
 
-.flatpickr_week_button:hover{
-    background-color: #fff;
-    border: 2px solid #98c39a; /* 顯示邊框 */
-}
 
 /* 分頁按鈕樣式 */
 .turn_pages_div{
@@ -143,4 +130,21 @@ table tbody tr:last-of-type{
     color: #516850;
     text-decoration: none;
     padding: 5px 10px;
+}
+
+.show_route_btn{
+    position: relative;
+    top: -10px;
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    background-color: #ffffff; /* 設置背景背景顏色 */
+    color: #335841; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
+    border-radius: 5px; /* 增加圓角 */
+    padding: 3px; /* 增加一些內邊距 */
+}
+.show_route_btn:hover{
+    border: 2px solid #93CDA9; /* 顯示邊框 */
+    background-color: #68997b; /* 設置背景背景顏色 */
+    color: #effff5; /* 設置文本顏色 */
+    cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
 }

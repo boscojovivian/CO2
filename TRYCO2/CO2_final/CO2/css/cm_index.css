@@ -1,18 +1,23 @@
-.row{
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 30px !important;
+.button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
-.search-history-button1 {
-    font-size: 20px;
-    width: 200px; /* 設置按鈕寬度 */
-    color: #ffffff; /* 設置文字顏色 */
-    border: 2px solid #69919c;
-    border-radius: 5px; /* 設置按鈕圓角 */
-    cursor: pointer; /* 滑鼠懸停時顯示手型光標 */
+
+.search-history-button1, .search-history-button2 {
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+    border-radius: 5px;
+    cursor: pointer;
     padding: 20px;
     white-space: nowrap;
+    width: auto; /* 或者設置一個固定寬度 */
+}
+
+.search-history-button1 {
+    color: #ffffff; /* 設置文字顏色 */
+    border: 2px solid #69919c;
     background-color: #8cb4bf;
 }
 
@@ -23,14 +28,8 @@
 }
 
 .search-history-button2 {
-    font-size: 20px;
-    width: 200px; /* 設置按鈕寬度 */
     color: #ffffff; /* 設置文字顏色 */
     border: 2px solid  #a89068; /* 設置按鈕邊框 */
-    border-radius: 5px; /* 設置按鈕圓角 */
-    cursor: pointer; /* 滑鼠懸停時顯示手型光標 */
-    padding: 20px;
-    white-space: nowrap;
     background-color:#cbb48e ;
 }
 
@@ -40,19 +39,6 @@
     color: #ffffff;
 }
 
-.right{
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    max-width: 700px !important ;
-    min-height: 500px;
-    /* border: 2px solid #3f6d51; */
-}
-
-.left{
-    margin: 20px !important;
-}
-
 .total_carbon{
     display: flex ;
     align-items: center ;
@@ -60,13 +46,68 @@
 }
 
 .total_carbon_text{
-    font-size: 20px;
+    font-size: 40px;
     color: black;
 
 }
 
 .total_carbon_text2{
     font-size: 40px;
+    font-weight: 900;
     color: red;
 }
 
+.small-title-bold-bar{
+    color: black;
+    font-size: 30px;
+    font-weight: 600;
+    margin-left: 10%;
+    padding-left: 1rem;
+    border-left: 5px solid #98c39a;
+}
+
+.text{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    font-size: 20px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+}
+
+.text:hover::before{
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    font-weight: bolder;
+    border: 3px solid#a89068;
+    background-color: antiquewhite;
+    padding: 5px;
+    border-radius: 6px;
+    content: "「非高碳洩漏風險產業」碳洩漏風險係數值為1";
+}
+
+form{
+    background-color: #dfeeea;
+    border-radius: 6px;
+    font-size: 20px;
+    font-weight: bolder;
+    padding: 2%;
+    margin-left: 10% !important;
+    max-width: 80% !important;
+}
+
+.btn{
+    display: flex;
+    justify-content: right;
+}
+
+.alert-custom{
+    font-size: 20px;
+    font-weight: bolder;
+    padding: 2%;
+    margin-left: 10% !important;
+    max-width: 80% !important;
+}

@@ -31,7 +31,7 @@ $offset = ($pages - 1) * $records_per_page;
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>交通車資料</title>
+        <title>公司車資料</title>
         <link rel="stylesheet" href="css/cm_car.css" type="text/css">
         <link rel="shortcut icon" href="img/logo.png" >
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -47,7 +47,7 @@ $offset = ($pages - 1) * $records_per_page;
         <?php include('nav/cm_nav.php') ?>
 
         <div class="container">
-            <div class="title1">交通車資料</div>
+            <div class="title1">公司車資料</div>
             <!-- 篩選列 -->
             <form action="" method="post" class="row g-3 d-flex justify-content-center align-items-center filter-form">
                 <div class="row w-100">
@@ -58,9 +58,9 @@ $offset = ($pages - 1) * $records_per_page;
                         <input type="date" id="end_date_display" name="end_date_display" class="date-range-picker col-5" placeholder="結束日期">
                     </div>
 
-                    <!-- 篩選交通車 -->
+                    <!-- 篩選公司車 -->
                     <div class="col-lg-4 d-flex align-items-center">
-                        <label for="filter_car">篩選交通車：</label>
+                        <label for="filter_car">篩選公司車：</label>
                         <select id="filter_car" name="filter_car">
                             <option value="">請選擇</option>
                             <?php
@@ -114,7 +114,7 @@ $offset = ($pages - 1) * $records_per_page;
                 <table class="table table-bordered table-hover">
                     <thead class="table">
                         <tr>
-                            <th>交通車名稱</th>
+                            <th>公司車名稱</th>
                             <th>車子的類型</th>
                             <th>產生碳排日期</th>
                             <th>產生碳排時間</th>
@@ -191,7 +191,7 @@ $offset = ($pages - 1) * $records_per_page;
                                 echo "<td>" . translateCarType($row["cc_type"]) . "</td>";
                                 echo "<td>" . $row['cCO2_date'] . "</td>";
                                 echo "<td>" . $row['cCO2_start_time'] . " ~ " . $row['cCO2_end_time'] . "</td>";
-                                echo "<td>" . $row['cCO2_carbon'] . "公克</td>";
+                                echo "<td>" . $row['cCO2_carbon'] . " 公噸</td>";
                                 echo "<td>" . $row['em_name'] . "</td>";
                                 echo "<td class='show-tooltip' data-tooltip='" . $address . "'>查看路程</td>";
                                 echo "</tr>";

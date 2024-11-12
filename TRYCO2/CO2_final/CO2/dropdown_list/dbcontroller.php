@@ -35,11 +35,7 @@ class DBController{     //新增一個類別DBController
         return $rowcount;
     }
 
-    function executeUpdate($query){
-        $result = mysqli_query($this->conn, $query);
-        return $result;
-    }
-
+    // 用於插入數據
     function insert($table, $data) {
         $columns = implode(", ", array_keys($data));
         $values  = implode(", ", array_map(function($value) {
@@ -48,6 +44,38 @@ class DBController{     //新增一個類別DBController
 
         $query = "INSERT INTO $table ($columns) VALUES ($values)";
         return $this->executeUpdate($query);
+    }
+
+    // 新增的select方法，用於取得指定條件的資料
+    function select($table, $columns = "*", $conditions = []) {
+        $conditionString = "";
+        if (!empty($conditions)) {
+            $conditionArray = [];
+            foreach ($conditions as $column => $value) {
+                $conditionArray[] = "$column = '" . mysqli_real_escape_string($this->conn, $value) . "'";
+            }
+            $conditionString = "WHERE " . implode(" AND ", $conditionArray);
+        }
+
+        $query = "SELECT $columns FROM $table $conditionString";
+        $result = mysqli_query($this->conn, $query);
+
+        $resultset = [];
+        while ($row = mysqli_fetch_assoc($result)) {
+            $resultset[] = $row;
+        }
+
+        return !empty($resultset) ? $resultset : null;
+    }
+
+    // 用於取得最後插入的 ID
+    function getLastInsertId() {
+        return mysqli_insert_id($this->conn);
+    }
+
+    function executeUpdate($query){
+        $result = mysqli_query($this->conn, $query);
+        return $result;
     }
     
     function updateUserPermission($table, $data, $conditions) {
@@ -63,6 +91,13 @@ class DBController{     //新增一個類別DBController
 
         $query = "UPDATE $table SET $updateString WHERE $conditionString";
         return $this->executeUpdate($query);
+    }
+
+    // 關閉資料庫連線
+    function close() {
+        if ($this->conn) {
+            mysqli_close($this->conn);
+        }
     }
 }
 
