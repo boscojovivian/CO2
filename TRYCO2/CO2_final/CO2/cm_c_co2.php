@@ -745,7 +745,8 @@
             }
             // 篩選公司車、篩選員工
             else if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) {
-
+                $car_name = !empty($filter_car) ? htmlspecialchars($result_car[array_search($filter_car, array_column($result_car, 'cc_id'))]['cc_name']) : '';
+                $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
                 // 查询按月份汇总的碳排量
                 $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
                                 FROM cm_co2
@@ -780,7 +781,7 @@
                         }];
 
                         var layout = {
-                            title: '公司車 $filter_car 員工 $filter_employee 的碳排量',
+                            title: '公司車  $car_name 員工  $employee_name 的碳排量',
                             xaxis: {
                                 title: '月份',
                                 gridcolor: '#67776d'
