@@ -72,7 +72,7 @@ $db_handle = new DBController();
                             mysqli_select_db($link, "carbon_emissions");
                             $em_id = $_SESSION['em_id'];
 
-                            $sql = "SELECT area.area_name, city.city_name, em_address.ea_address_detial
+                            $sql = "SELECT area.area_name, city.city_name, em_address.ea_address_detial, em_address.ea_id
                                     FROM em_address
                                     join area on em_address.ea_address_area = area.area_id
                                     join city on em_address.ea_address_city = city.city_id
@@ -89,7 +89,15 @@ $db_handle = new DBController();
                             echo '<input type="text" class="form-control" id="address" value="' . $rows[1] . $rows[0] . $rows[2] . '" readonly>';
                         ?>
                         <!-- <input type="text" class="form-control" id="address" value="台中市中區中華路一段" readonly> 地址輸入框 -->
-                        <a href="em_add_adrress.php"><button class="btn btn-outline-secondary" type="button">+</button></a> <!--新增按鈕-->
+                        <form action='em_add_address.php' method='GET'>
+                            <button type="submit" name='add_address' class="btn btn-outline-secondary" value="<?php echo $rows[3]; ?>">編輯</button> <!--新增按鈕-->
+                        </form>
+                        
+                        <?php
+                        if (isset($_GET['add_address'])) {
+                            $_SESSION['editAddress_id'] = $_GET['add_address'];
+                        }
+                        ?>
                     </div>
                 </div>
             </div>
