@@ -182,6 +182,7 @@ $offset = ($pages - 1) * $records_per_page;
                         $query .= " ORDER BY cm_co2.cCO2_date DESC LIMIT $offset, $records_per_page";
                         $result = $db_handle->runQuery($query);
 
+                     
                         if (!empty($result)) {
                             foreach ($result as $row) {
                                 $address = htmlspecialchars($row['cCO2_address'], ENT_QUOTES, 'UTF-8');
@@ -200,6 +201,7 @@ $offset = ($pages - 1) * $records_per_page;
                             echo "<tr><td colspan='7'>沒有資料</td></tr>";
                         }
                         ?>
+
                     </tbody>
                 </table>
             </div>
