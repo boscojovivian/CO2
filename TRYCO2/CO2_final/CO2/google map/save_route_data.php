@@ -57,10 +57,13 @@ if ($db_handle->insert('route_tracker', $insertData)) {
     $last_id = $db_handle->getLastInsertId();
     echo '<script>console.log("資料已成功存入資料庫。");</script>';
 
-    // 將剛新增的 ID 傳遞給 count_carbon.php
-    $carbon_type = 3;
-    $type_id = $last_id; // 設定變數以供 count_carbon.php 使用
-    include_once("../count_carbon/count_carbon.php");
+    if ($car = 'not_cm_car'){
+        // 將剛新增的 ID 傳遞給 count_carbon.php
+        $carbon_type = 3;
+        $type_id = $last_id; // 設定變數以供 count_carbon.php 使用
+        include_once("../count_carbon/count_carbon.php");
+    }
+    
 } else {
     echo '錯誤: 無法將資料插入資料庫';
 }
