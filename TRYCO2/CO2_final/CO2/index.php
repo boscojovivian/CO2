@@ -90,7 +90,7 @@ $db_handle = new DBController();
                         ?>
                         <!-- <input type="text" class="form-control" id="address" value="台中市中區中華路一段" readonly> 地址輸入框 -->
                         <form action='em_add_address.php' method='GET'>
-                            <button type="submit" name='add_address' class="btn btn-outline-secondary" value="<?php $rows[3] ?>">編輯</button> <!--新增按鈕-->
+                            <button type="submit" name='add_address' class="btn btn-outline-secondary" value="<?php echo $rows[3]; ?>">編輯</button> <!--新增按鈕-->
                         </form>
                         
                         <?php

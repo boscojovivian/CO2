@@ -1,14 +1,9 @@
-
-
 <?php
 session_start();
-
 include("dropdown_list/dbcontroller.php");
 
-$db_handle = new DBController();    //將DBController類別實體化為物件，透過new這個關鍵字來初始化
-
+$db_handle = new DBController();
 $query = "SELECT * FROM city";
-
 $results = $db_handle->runQuery($query);
 ?>
 
@@ -23,39 +18,25 @@ $results = $db_handle->runQuery($query);
     <script src="https://js.api.here.com/v3/3.1/mapsjs-core.js"></script>
     <script src="https://js.api.here.com/v3/3.1/mapsjs-service.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.3/dist/sweetalert2.all.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
-      <script>
-            const showAlert_success = (title) => {
-                // var icon = 'img/logo.png';
-                Swal.fire({
-                    title: title,
-                    icon: 'success'
-                }).then(() => {
-                    window.location.href = 'index.php';
-                });
-            }
-            const showAlert_fail = (title) => {
-                // var icon = 'img/logo.png';
-                Swal.fire({
-                    title: title,
-                    icon: 'error'
-                })
-            }
+
+    <script>
+        const showAlert_success = (title) => {
+            Swal.fire({
+                title: title,
+                icon: 'success'
+            }).then(() => {
+                window.location.href = 'index.php';
+            });
+        }
+        const showAlert_fail = (title) => {
+            Swal.fire({
+                title: title,
+                icon: 'error'
+            })
+        }
     </script>
-
-    <style>
-        /* 修改表單中標籤和輸入框的字體 */
-        form label, form input, form select {
-            font-size: 30px; /* 調整字體大小 */
-        }
-
-        /* 修改按鈕字體 */
-        input[type="submit"], input[type="button"] {
-            font-size: 40px; /* 調整按鈕字體大小 */
-        }
-    </style>
 </head>
 <body class="body1">
 
@@ -63,14 +44,33 @@ $results = $db_handle->runQuery($query);
     <?php include 'nav/em_nav.php'?>
 
     <?php
-        $link = mysqli_connect("localhost", "root", "") 
-        or die("無法開啟 MySQL 資料庫連結!<br>");
+        $link = mysqli_connect("localhost", "root", "") or die("無法開啟 MySQL 資料庫連結!<br>");
         mysqli_select_db($link, "carbon_emissions");
+        mysqli_query($link, "SET NAMES utf8");
 
         $em_id = $_SESSION['em_id'];
         $editAddress_id = intval($_GET['add_address']);
-        // $_SESSION['editAddress_id'] = $editAddress_id;
 
+        if (isset($_POST['update_address'])) {
+            $address_name = $_POST['address_name'];
+            $city_id = $_POST['city'];
+            $area_id = $_POST['area'];
+            $address_detail = $_POST['address_detail'];
+
+            // 更新資料庫
+            $update_sql = "UPDATE em_address SET 
+                ea_name = '$address_name', 
+                ea_address_city = $city_id, 
+                ea_address_area = $area_id, 
+                ea_address_detial = '$address_detail'
+                WHERE ea_id = $editAddress_id";
+
+            if (mysqli_query($link, $update_sql)) {
+                echo "<script>showAlert_success('地址已成功更新');</script>";
+            } else {
+                echo "<script>showAlert_fail('更新失敗，請稍後再試');</script>";
+            }
+        }
 
         $sql = "SELECT a.ea_name, 
                     (SELECT city_id FROM city AS b WHERE a.ea_address_city=b.city_id) AS city_id, 
@@ -79,52 +79,69 @@ $results = $db_handle->runQuery($query);
                     (SELECT area_name FROM area AS c WHERE a.ea_address_area=c.area_id) AS area_name, 
                     a.ea_address_detial
                 FROM em_address AS a
-                WHERE a.ea_id = " . $editAddress_id;
-
-        mysqli_query($link, "SET NAMES utf8");
+                WHERE a.ea_id = $editAddress_id";
 
         $result = mysqli_query($link, $sql);
-        // $fields = mysqli_num_fields($result); //取得欄位數
-        // $rows = mysqli_num_rows($result); //取得記錄數
     ?>
 
-    
-    <!-- 新增地址 -->
+    <!-- 編輯地址 -->
     <div class="address container">
-    <div class="address_item">
-        <div class="container-fluid">
-            <div class="row g-3 d-flex justify-content-center align-items-center">
-                <form class="col-11 col-md-8 align-items-center add_form mt-5" method="POST">
-                    <a href="index.php" class="goback_add ms-3"><img src="img/goback.png" class="goback_img"></a>
-                    <div class="fs-5 m-5">
-                        <h1 class="title m-4 text-center fw-bold">編輯地址</h1>
+        <div class="address_item">
+            <div class="container-fluid">
+                <div class="row g-3 d-flex justify-content-center align-items-center">
+                    <form class="col-11 col-md-10 align-items-center add_form mt-5" method="POST">
+                        <a href="index.php" class="goback_add ms-3"><img src="img/goback.png" class="goback_img"></a>
+                        <div class="fs-4 mt-2 mb-5 ms-5 me-5">
+                            <h1 class="title mb-5 text-center fw-bold">編輯地址</h1>
 
-                        <?php
-                        while ($rows = mysqli_fetch_array($result)) {
-                        ?>
+                            <?php while ($rows = mysqli_fetch_array($result)) { ?>
 
-                        <div class="mb-3 row justify-content-center align-items-center">
-                            <label for="address_name">地址代名：</label>
-                            <input type="text" id="address_name" name="address_name" value="<?php echo $rows['ea_name']; ?>" required>
+                            <!-- 地址代名 -->
+                            <div class="mb-3 row justify-content-center align-items-center">
+                                <label for="address_name" class="form-label col-2">地址代名：</label>
+                                <input type="text" id="address_name" name="address_name" class="add_select date-range-picker col-6 oil_select" value="<?php echo $rows['ea_name']; ?>" required>
+                            </div>
+
+                            <!-- 城市 -->
+                            <div class="mb-3 row justify-content-center align-items-center">
+                                <label for="address_city" class="form-label col-2">城市：</label>
+                                <select class="add_select col-6 oil_select" id="city_list" name="city" onChange='getArea(this.value);' required>
+                                    <option value="">請選擇</option>
+                                    <?php
+                                    foreach($results as $city){
+                                        $selected = ($city["city_name"] == $rows[2]) ? "selected" : "";
+                                    ?>
+                                    <option value="<?php echo $city["city_id"]; ?>" <?php echo $selected; ?>><?php echo $city["city_name"]; ?></option>
+                                    <?php } ?>
+                                </select>
+                            </div>
+
+                            <!-- 鄉鎮區 -->
+                            <div class="mb-3 row justify-content-center align-items-center">
+                                <label for="address_area" class="form-label col-2">鄉鎮區：</label>
+                                <select class="add_select col-6 oil_select" id="area_list" name="area" required>
+                                    <option value="">請選擇鄉鎮區</option>
+                                    <option value="<?php echo $rows[3]; ?>" selected><?php echo $rows[4]; ?></option>
+                                </select>
+                            </div>
+
+                            <!-- 詳細地址 -->
+                            <div class="mb-3 row justify-content-center align-items-center">
+                                <label for="address_detail" class="form-label col-2">詳細地址：</label>
+                                <input type="text" id="address_detail" name="address_detail" class="add_select date-range-picker col-6 oil_select" value="<?php echo $rows[5]; ?>" required>
+                            </div>
+
+                            <div class="mb-3 row justify-content-center align-items-center">
+                                <button type="submit" name="update_address" class="btn add_btn col-6 fs-5 mt-4">確認修改</button>
+                            </div>
+
+                            <?php } ?>
+
                         </div>
-
-                    
-
-                        <div class="mb-3 row justify-content-center align-items-center">
-                            <button type="submit" name="car_oil" class="btn add_btn col-6 fs-5">確認修改</button>
-                        </div>
-                        
-                        <?php } ?>
-                    </div>
-                </form>
-            </div>
-        </div> 
-            <?php
-                // if (isset($_POST["address_submit"])) {
-                //     include_once('inc/em_add_address.inc');
-                // }
-            ?>
-    </div>
+                    </form>
+                </div>
+            </div> 
+        </div>
     </div>
 
     <script type="text/javascript">
@@ -133,80 +150,10 @@ $results = $db_handle->runQuery($query);
                 type : "POST",
                 url : "dropdown_list/getArea.php",
                 data : "city_id=" + val,
-
                 success : function(data){
                     $("#area_list").html(data);
                 }
             })
-        }
-
-        // 初始化 HERE 平台
-        const platform = new H.service.Platform({
-            apikey: 'vLOV0OZxoNgUvE2m00AvrNTQzGhZtOPuCSwU9_BFcBg'
-        });
-
-        // 地理编码函数
-        function geocode(address, callback) {
-            const geocoder = platform.getSearchService();
-            const geocodingParameters = { q: address };
-
-            geocoder.geocode(geocodingParameters, (result) => {
-                const locations = result.items;
-                if (locations.length > 0) {
-                    callback(true);
-                } else {
-                    // alert('未找到地址，請輸入正確地址');
-                    showAlert_fail('未找到地址，請輸入正確地址');
-                    callback(false);
-                }
-            }, (error) => {
-                showAlert_fail('地理編碼失敗');
-                // alert('地理編碼失敗');
-                callback(false);
-            });
-        }
-
-        // 处理表单提交
-        function handleFormSubmission(event) {
-            event.preventDefault();
-
-            const address_name = document.getElementById('address_name').value;
-            const city = document.getElementById('city_list').options[document.getElementById('city_list').selectedIndex].text;
-            const area = document.getElementById('area_list').options[document.getElementById('area_list').selectedIndex].text;
-            const address_detail = document.getElementById('address_detail').value;
-            const isDefault = document.querySelector('.default_checkbox').checked ? 1 : 0;
-
-            // 组合地址进行地理编码
-            const address = city + area + address_detail;
-
-            console.log(address);
-
-            geocode(address, (isValid) => {
-                if (isValid) {
-                    // 如果地址有效，通过 AJAX 提交表单数据
-                    const xhr = new XMLHttpRequest();
-                    xhr.open('POST', 'em_add_address_inc.php', true);
-                    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState == 4 && xhr.status == 200) {
-                            // 处理服务器的响应
-                            console.log(isDefault);
-                            console.log(xhr.responseText);
-                            if (xhr.responseText.includes('地址新增成功')) {
-                                // alert('地址新增成功');
-                                showAlert_success('地址新增成功!');
-                                // window.location.href = 'em_index.php';
-                            }
-                            else if(xhr.responseText.includes('該地址代名已存在')) {
-                                showAlert_fail('該地址代名已存在');
-                            }
-                        }
-                    };
-                    const params = `address_name=${address_name}&city=${city}&area=${area}&address_detail=${address_detail}&default_checkbox=${isDefault}`;
-                    console.log(params);
-                    xhr.send(params);
-                }
-            });
         }
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
