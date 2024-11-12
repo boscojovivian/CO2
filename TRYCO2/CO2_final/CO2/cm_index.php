@@ -132,7 +132,7 @@ if (!isset($_SESSION['em_id'])) {
                             </div>
                         </div>
                         <div class="col-10 text-end">
-                            <button type="submit" class="btn btn-success btn-lg col-8 m-5">匯出碳排報告</button>
+                            <button type="submit" class="btn btn-success btn-lg col-8 m-5" onclick="downloadExcel()">匯出碳排報告</button>
                         </div>
                     </div>
                 </div>
@@ -171,6 +171,10 @@ if (!isset($_SESSION['em_id'])) {
                 result.style.display = "block";
                 result.textContent = "碳費應繳費額為：" + fee.toFixed(2) + "元"; // 取小數點第二位
             });
+            
+            function downloadExcel() {
+                window.location.href = 'export_excel.php';
+            }
         </script>
     </body>   
 </html>
