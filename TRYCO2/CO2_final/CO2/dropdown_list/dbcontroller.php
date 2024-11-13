@@ -99,6 +99,9 @@ class DBController{     //新增一個類別DBController
             mysqli_close($this->conn);
         }
     }
+    public function getConnection() {
+        return $this->conn;
+    }
 }
 
 
