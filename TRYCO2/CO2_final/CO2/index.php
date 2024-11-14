@@ -28,29 +28,33 @@ $db_handle = new DBController();
     <!-- 導入導覽列 -->
     <?php include 'nav/em_nav.php'?>
 
-    <div class="custom-bg-position">
-        <div class="custom-bg">
-            <div class="text-white text-center p-5 row justify-content-md-center">
-                <h1 class="fw-bold title">碳探你的路</h1>
-                <div class="knowledge-box mt-5 custom-width col col-lg-12 shadow">      
-                    <h3 class="mt-2">環保小知識</h3>
-                    <?php
-                    include_once("dropdown_list/dbcontroller.php");
-                    $db_handle = new DBController();
-    
-                    // 隨機選取一句每日減碳提示
-                    $sql = "SELECT quote FROM daily_quotes ORDER BY RAND() LIMIT 1";
-                    $result = $db_handle->runQuery($sql);
-    
-                    if (!empty($result)) {
-                        // 顯示隨機選取的每日一句
-                        echo '<p class="text0">' . $result[0]['quote'] . '</p>';
-                    } else {
-                        echo '<p>沒有每日一句。</p>';
-                    
-                    }
-                    ?>
-                    <p>你知道嗎？..................................<a href="knowledge_index.php">閱讀更多</a></p>         
+    <div class="text-center row justify-content-md-center">
+        <div class="col-12">
+            <div class="custom-bg-position">
+                <div class="custom-bg">
+                    <div class="text-white text-center p-5 row justify-content-md-center">
+                        <h1 class="fw-bold title">碳探你的路</h1>
+                        <div class="knowledge-box mt-5 custom-width col col-lg-12 shadow">      
+                            <h3 class="mt-2">環保小知識</h3>
+                            <?php
+                            include_once("dropdown_list/dbcontroller.php");
+                            $db_handle = new DBController();
+            
+                            // 隨機選取一句每日減碳提示
+                            $sql = "SELECT quote FROM daily_quotes ORDER BY RAND() LIMIT 1";
+                            $result = $db_handle->runQuery($sql);
+            
+                            if (!empty($result)) {
+                                // 顯示隨機選取的每日一句
+                                echo '<p class="text0">' . $result[0]['quote'] . '</p>';
+                            } else {
+                                echo '<p>沒有每日一句。</p>';
+                            
+                            }
+                            ?>
+                            <p>你知道嗎？..................................<a href="knowledge_index.php">閱讀更多</a></p>         
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
