@@ -82,20 +82,26 @@ $offset = ($pages - 1) * $records_per_page;
             </form>
             <div class="information">
             <?php
-            // 取得當前頁數，預設為第 1 頁
             $pages = isset($_GET['pages']) ? (int)$_GET['pages'] : 1;
-            $records_per_page = 10; // 每頁顯示 10 筆資料
+            $records_per_page = 10; 
             $offset = ($pages - 1) * $records_per_page;
 
-            // 初始查詢（無篩選條件）
-            $query = "SELECT DISTINCT a.id, a.start_date, a.start_time, a.end_date, a.end_time, a.total_time, a.distance, a.file, a.car, a.type, 
-                            (SELECT b.em_name FROM employee AS b WHERE a.employee_id = b.em_id) AS name,
+            $query = "
+                SELECT DISTINCT 
+                    a.id, a.start_date, a.start_time, a.end_date, a.end_time, 
+                    a.total_time, a.distance, a.file, a.car, a.type, 
+                    (SELECT b.em_name FROM employee AS b WHERE a.employee_id = b.em_id) AS name,
+                    (CASE 
+                        WHEN a.car = 'is_cm_car' THEN 
+                            (SELECT SUM(o.liter * 2.31) FROM cm_car_oil AS o WHERE o.car_id = a.id)
+                        ELSE 
                             (CASE 
                                 WHEN a.type = 1 THEN (SELECT c.carbon * 0.0005 FROM count_carbon AS c WHERE c.type_id = a.id AND c.type = 1)
                                 ELSE (SELECT c.carbon FROM count_carbon AS c WHERE c.type_id = a.id AND c.type = 3)
-                            END) AS carbon
-                    FROM route_tracker AS a
-                    WHERE 1=1";
+                            END)
+                    END) AS carbon
+                FROM route_tracker AS a
+                WHERE 1=1";
 
             // 加入篩選條件
             if (isset($_POST['apply_filter'])) {
@@ -156,10 +162,17 @@ $offset = ($pages - 1) * $records_per_page;
                                 echo "<td>" . htmlspecialchars($row['distance']) . " 公里</td>";
                                 echo "<td>" . ($row['car'] == 'is_cm_car' ? '類別一' : '類別三') . "</td>";
                                 echo "<td>" . htmlspecialchars($row['type']) . "</td>";
-                                $carbon = $row['carbon'] ?? 0;
-                                echo "<td>" . htmlspecialchars($carbon) . "</td>";
-                                $carbon_fee = $carbon * 0.0003;
-                                echo "<td>" . number_format($carbon_fee, 4) . "</td>";
+
+                                if ($row['car'] == 'is_cm_car') {
+                                    echo "<td>--</td>";
+                                    echo "<td>--</td>";
+                                } else {
+                                    $carbon = $row['carbon'] ?? 0;
+                                    echo "<td>" . htmlspecialchars($carbon) . "</td>";
+                                    $carbon_fee = $carbon * 0.0003;
+                                    echo "<td>" . number_format($carbon_fee, 4) . "</td>";
+                                }
+                                
                                 if (isset($row['id'])) {
                                     echo "<td>
                                             <form action='get_route_back_show.php' method='GET'>
@@ -176,6 +189,7 @@ $offset = ($pages - 1) * $records_per_page;
                         }
                         ?>
                     </tbody>
+
                 </table>
             </div>
 
