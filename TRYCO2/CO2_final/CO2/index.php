@@ -324,9 +324,7 @@ $db_handle = new DBController();
                                 <td>${row.ec_type === "car" ? "汽車" : (row.ec_type === "bicycle" ? "機車" : "大眾運輸")}</td>
                                 <td>${row.eCO2_carbon}kg</td>
                                 <td>
-                                    <form action='em_edit_CO2.php' method='GET'>
-                                        <button name='edit_CO2' class='btn btn-sm btn-outline-secondary' value='${row.eCO2_id}'>編輯</button>
-                                    </form>
+                                    <a href='em_edit_CO2.php?edit_CO2=${row.eCO2_id}' class='btn btn-sm btn-outline-secondary'>編輯</a>
                                 </td>
                             `;
                             tableBody.appendChild(tr);
