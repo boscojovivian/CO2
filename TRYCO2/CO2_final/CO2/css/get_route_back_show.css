@@ -32,3 +32,7 @@ table tbody tr{
     font-size: 20px;
     vertical-align: middle; /*表格內水平置中*/
 }
+
+.goback_img{
+    width: 50px !important;
+}

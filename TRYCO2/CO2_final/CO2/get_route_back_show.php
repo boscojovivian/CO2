@@ -22,10 +22,15 @@ if (!isset($_SESSION['em_id'])) {
         <!-- 導入導覽列 -->
         <?php include('nav/cm_nav.php') ?>
 
+        
+
         <div class="container text-center mt-3">
             <div class="row justify-content-md-center info_box">
+                <div class="text-start">
+                    <a href="get_route_back.php" class="m-3"><img src="img/goback.png" class="goback_img"></a>
+                </div>
                 <div class="col-6 col-md-6 title_text align-items-center">
-                    <div class="map" id="map"></div>
+                    <div class="map mt-3" id="map"></div>
                 </div>
                 <?php
                 $link = mysqli_connect("localhost", "root", "") 
