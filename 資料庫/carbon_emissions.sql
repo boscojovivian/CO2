@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-11-12 13:15:57
+-- 產生時間： 2024-11-15 14:47:08
 -- 伺服器版本： 10.4.32-MariaDB
 -- PHP 版本： 8.2.12
 
@@ -20,8 +20,6 @@ SET time_zone = "+00:00";
 --
 -- 資料庫： `carbon_emissions`
 --
-CREATE DATABASE IF NOT EXISTS `carbon_emissions` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
-USE `carbon_emissions`;
 
 -- --------------------------------------------------------
 
@@ -29,18 +27,12 @@ USE `carbon_emissions`;
 -- 資料表結構 `area`
 --
 
-DROP TABLE IF EXISTS `area`;
 CREATE TABLE `area` (
   `area_id` int(3) NOT NULL,
   `area_name` varchar(5) DEFAULT NULL,
   `city_id` int(3) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `area`
---
-
-TRUNCATE TABLE `area`;
 --
 -- 傾印資料表的資料 `area`
 --
@@ -434,17 +426,11 @@ INSERT INTO `area` (`area_id`, `area_name`, `city_id`) VALUES
 -- 資料表結構 `city`
 --
 
-DROP TABLE IF EXISTS `city`;
 CREATE TABLE `city` (
   `city_id` int(3) NOT NULL,
   `city_name` varchar(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `city`
---
-
-TRUNCATE TABLE `city`;
 --
 -- 傾印資料表的資料 `city`
 --
@@ -479,18 +465,12 @@ INSERT INTO `city` (`city_id`, `city_name`) VALUES
 -- 資料表結構 `cm_car`
 --
 
-DROP TABLE IF EXISTS `cm_car`;
 CREATE TABLE `cm_car` (
   `cc_id` int(5) NOT NULL,
   `cc_name` varchar(255) DEFAULT NULL,
   `cc_type` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `cm_car`
---
-
-TRUNCATE TABLE `cm_car`;
 --
 -- 傾印資料表的資料 `cm_car`
 --
@@ -507,7 +487,6 @@ INSERT INTO `cm_car` (`cc_id`, `cc_name`, `cc_type`) VALUES
 -- 資料表結構 `cm_car_oil`
 --
 
-DROP TABLE IF EXISTS `cm_car_oil`;
 CREATE TABLE `cm_car_oil` (
   `id` int(5) NOT NULL,
   `oil_date` varchar(15) DEFAULT NULL,
@@ -518,18 +497,15 @@ CREATE TABLE `cm_car_oil` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- 資料表新增資料前，先清除舊資料 `cm_car_oil`
---
-
-TRUNCATE TABLE `cm_car_oil`;
---
 -- 傾印資料表的資料 `cm_car_oil`
 --
 
 INSERT INTO `cm_car_oil` (`id`, `oil_date`, `type`, `liter`, `price`, `car_id`) VALUES
 (1, '2024-11-01', '95汽油', 130, 530, 1),
 (2, '2024-11-03', '92汽油', 130, 530, 1),
-(3, '2024-11-01', '98汽油', 150, 540, 3);
+(3, '2024-11-01', '98汽油', 150, 540, 3),
+(4, '2024-10-10', '92汽油', 130, 530, 1),
+(5, '2024-10-10', '92汽油', 130, 530, 1);
 
 -- --------------------------------------------------------
 
@@ -537,7 +513,6 @@ INSERT INTO `cm_car_oil` (`id`, `oil_date`, `type`, `liter`, `price`, `car_id`) 
 -- 資料表結構 `cm_co2`
 --
 
-DROP TABLE IF EXISTS `cm_co2`;
 CREATE TABLE `cm_co2` (
   `cCO2_id` bigint(255) NOT NULL,
   `cCO2_date` date NOT NULL,
@@ -550,11 +525,6 @@ CREATE TABLE `cm_co2` (
   `em_name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `cm_co2`
---
-
-TRUNCATE TABLE `cm_co2`;
 --
 -- 傾印資料表的資料 `cm_co2`
 --
@@ -2349,26 +2319,27 @@ INSERT INTO `cm_co2` (`cCO2_id`, `cCO2_date`, `cCO2_start_time`, `cCO2_end_time`
 -- 資料表結構 `count_carbon`
 --
 
-DROP TABLE IF EXISTS `count_carbon`;
 CREATE TABLE `count_carbon` (
   `id` int(5) NOT NULL,
   `type` int(1) DEFAULT NULL,
   `type_id` int(5) DEFAULT NULL,
+  `name` varchar(5) NOT NULL,
   `carbon` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- 資料表新增資料前，先清除舊資料 `count_carbon`
---
-
-TRUNCATE TABLE `count_carbon`;
---
 -- 傾印資料表的資料 `count_carbon`
 --
 
-INSERT INTO `count_carbon` (`id`, `type`, `type_id`, `carbon`) VALUES
-(1, 1, 2, 344.016),
-(2, 1, 3, 396.942);
+INSERT INTO `count_carbon` (`id`, `type`, `type_id`, `name`, `carbon`) VALUES
+(1, 1, 2, '', 344.016),
+(2, 1, 3, '', 396.942),
+(3, 1, 4, 'CO2', 338.78),
+(4, 1, 4, 'CH2', 0.51649),
+(5, 1, 4, 'N2O', 4.71965),
+(6, 1, 5, 'CO2', 338.78),
+(7, 1, 5, 'CH2', 0.51649),
+(8, 1, 5, 'N2O', 4.71965);
 
 -- --------------------------------------------------------
 
@@ -2376,17 +2347,11 @@ INSERT INTO `count_carbon` (`id`, `type`, `type_id`, `carbon`) VALUES
 -- 資料表結構 `daily_quotes`
 --
 
-DROP TABLE IF EXISTS `daily_quotes`;
 CREATE TABLE `daily_quotes` (
   `id` int(11) NOT NULL,
   `quote` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `daily_quotes`
---
-
-TRUNCATE TABLE `daily_quotes`;
 --
 -- 傾印資料表的資料 `daily_quotes`
 --
@@ -2419,7 +2384,6 @@ INSERT INTO `daily_quotes` (`id`, `quote`) VALUES
 -- 資料表結構 `employee`
 --
 
-DROP TABLE IF EXISTS `employee`;
 CREATE TABLE `employee` (
   `em_id` int(5) NOT NULL,
   `em_name` varchar(10) DEFAULT NULL,
@@ -2428,11 +2392,6 @@ CREATE TABLE `employee` (
   `flag` int(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `employee`
---
-
-TRUNCATE TABLE `employee`;
 --
 -- 傾印資料表的資料 `employee`
 --
@@ -2450,7 +2409,6 @@ INSERT INTO `employee` (`em_id`, `em_name`, `em_psd`, `em_email`, `flag`) VALUES
 -- 資料表結構 `em_address`
 --
 
-DROP TABLE IF EXISTS `em_address`;
 CREATE TABLE `em_address` (
   `ea_id` int(5) NOT NULL,
   `ea_name` varchar(10) DEFAULT NULL,
@@ -2462,11 +2420,6 @@ CREATE TABLE `em_address` (
   `ec_default` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `em_address`
---
-
-TRUNCATE TABLE `em_address`;
 --
 -- 傾印資料表的資料 `em_address`
 --
@@ -2488,7 +2441,6 @@ INSERT INTO `em_address` (`ea_id`, `ea_name`, `ea_address_city`, `ea_address_are
 -- 資料表結構 `em_co2`
 --
 
-DROP TABLE IF EXISTS `em_co2`;
 CREATE TABLE `em_co2` (
   `eCO2_id` bigint(255) NOT NULL,
   `eCO2_date` date DEFAULT NULL,
@@ -2500,11 +2452,6 @@ CREATE TABLE `em_co2` (
   `ea_id` int(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `em_co2`
---
-
-TRUNCATE TABLE `em_co2`;
 --
 -- 傾印資料表的資料 `em_co2`
 --
@@ -11152,7 +11099,6 @@ INSERT INTO `em_co2` (`eCO2_id`, `eCO2_date`, `eCO2_commute`, `eCO2_carbon`, `em
 -- 資料表結構 `em_thtf`
 --
 
-DROP TABLE IF EXISTS `em_thtf`;
 CREATE TABLE `em_thtf` (
   `ID` int(4) DEFAULT NULL,
   `日期` varchar(10) DEFAULT NULL,
@@ -11165,11 +11111,6 @@ CREATE TABLE `em_thtf` (
   `下班碳排量(KG)` varchar(4) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `em_thtf`
---
-
-TRUNCATE TABLE `em_thtf`;
 --
 -- 傾印資料表的資料 `em_thtf`
 --
@@ -17459,7 +17400,6 @@ INSERT INTO `em_thtf` (`ID`, `日期`, `員工姓名`, `員工上班地址`, `�
 -- 資料表結構 `feedback`
 --
 
-DROP TABLE IF EXISTS `feedback`;
 CREATE TABLE `feedback` (
   `id` int(11) NOT NULL,
   `time` timestamp NOT NULL DEFAULT current_timestamp(),
@@ -17467,18 +17407,12 @@ CREATE TABLE `feedback` (
   `message` varchar(100) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `feedback`
---
-
-TRUNCATE TABLE `feedback`;
 -- --------------------------------------------------------
 
 --
 -- 資料表結構 `ghg`
 --
 
-DROP TABLE IF EXISTS `ghg`;
 CREATE TABLE `ghg` (
   `id` int(5) NOT NULL,
   `name` varchar(5) DEFAULT NULL,
@@ -17486,11 +17420,6 @@ CREATE TABLE `ghg` (
   `num` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `ghg`
---
-
-TRUNCATE TABLE `ghg`;
 --
 -- 傾印資料表的資料 `ghg`
 --
@@ -17509,18 +17438,12 @@ INSERT INTO `ghg` (`id`, `name`, `type`, `num`) VALUES
 -- 資料表結構 `gwp`
 --
 
-DROP TABLE IF EXISTS `gwp`;
 CREATE TABLE `gwp` (
   `id` int(5) NOT NULL,
   `name` varchar(5) DEFAULT NULL,
   `num` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `gwp`
---
-
-TRUNCATE TABLE `gwp`;
 --
 -- 傾印資料表的資料 `gwp`
 --
@@ -17536,7 +17459,6 @@ INSERT INTO `gwp` (`id`, `name`, `num`) VALUES
 -- 資料表結構 `knowledge_drive`
 --
 
-DROP TABLE IF EXISTS `knowledge_drive`;
 CREATE TABLE `knowledge_drive` (
   `id` int(10) NOT NULL,
   `title` varchar(30) NOT NULL,
@@ -17544,11 +17466,6 @@ CREATE TABLE `knowledge_drive` (
   `img_id` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `knowledge_drive`
---
-
-TRUNCATE TABLE `knowledge_drive`;
 --
 -- 傾印資料表的資料 `knowledge_drive`
 --
@@ -17570,7 +17487,6 @@ INSERT INTO `knowledge_drive` (`id`, `title`, `content`, `img_id`) VALUES
 -- 資料表結構 `knowledge_life`
 --
 
-DROP TABLE IF EXISTS `knowledge_life`;
 CREATE TABLE `knowledge_life` (
   `id` int(10) NOT NULL,
   `title` varchar(30) NOT NULL,
@@ -17578,11 +17494,6 @@ CREATE TABLE `knowledge_life` (
   `img_id` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `knowledge_life`
---
-
-TRUNCATE TABLE `knowledge_life`;
 --
 -- 傾印資料表的資料 `knowledge_life`
 --
@@ -17608,25 +17519,18 @@ INSERT INTO `knowledge_life` (`id`, `title`, `content`, `img_id`) VALUES
 -- 資料表結構 `message`
 --
 
-DROP TABLE IF EXISTS `message`;
 CREATE TABLE `message` (
   `mes_id` int(5) NOT NULL,
   `mes_message` varchar(50) DEFAULT NULL,
   `em_id` int(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `message`
---
-
-TRUNCATE TABLE `message`;
 -- --------------------------------------------------------
 
 --
 -- 資料表結構 `route_tracker`
 --
 
-DROP TABLE IF EXISTS `route_tracker`;
 CREATE TABLE `route_tracker` (
   `id` int(5) NOT NULL,
   `start_date` varchar(10) DEFAULT NULL,
@@ -17641,11 +17545,6 @@ CREATE TABLE `route_tracker` (
   `employee_id` int(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `route_tracker`
---
-
-TRUNCATE TABLE `route_tracker`;
 --
 -- 傾印資料表的資料 `route_tracker`
 --
@@ -17666,7 +17565,6 @@ INSERT INTO `route_tracker` (`id`, `start_date`, `start_time`, `end_date`, `end_
 -- 替換檢視表以便查看 `total_carbon`
 -- (請參考以下實際畫面)
 --
-DROP VIEW IF EXISTS `total_carbon`;
 CREATE TABLE `total_carbon` (
 `category` varchar(3)
 ,`total_carbon` double
@@ -17678,18 +17576,12 @@ CREATE TABLE `total_carbon` (
 -- 資料表結構 `transportation`
 --
 
-DROP TABLE IF EXISTS `transportation`;
 CREATE TABLE `transportation` (
   `id` int(5) NOT NULL,
   `type` varchar(20) DEFAULT NULL,
   `num` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- 資料表新增資料前，先清除舊資料 `transportation`
---
-
-TRUNCATE TABLE `transportation`;
 --
 -- 傾印資料表的資料 `transportation`
 --
@@ -17711,7 +17603,6 @@ INSERT INTO `transportation` (`id`, `type`, `num`) VALUES
 --
 DROP TABLE IF EXISTS `total_carbon`;
 
-DROP VIEW IF EXISTS `total_carbon`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `total_carbon`  AS SELECT '交通車' AS `category`, sum(`cm_co2`.`cCO2_carbon`) AS `total_carbon` FROM `cm_co2`union select '員工' AS `category`,sum(`em_co2`.`eCO2_carbon`) AS `total_carbon` from `em_co2`  ;
 
 --
@@ -17824,7 +17715,7 @@ ALTER TABLE `cm_car`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `cm_car_oil`
 --
 ALTER TABLE `cm_car_oil`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `cm_co2`
@@ -17836,7 +17727,7 @@ ALTER TABLE `cm_co2`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `count_carbon`
 --
 ALTER TABLE `count_carbon`
-  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `daily_quotes`

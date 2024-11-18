@@ -11,6 +11,9 @@ img, table, canvas {
     max-width: 100%;
     height: auto;
 } */
+/* body {
+    background-size: cover;
+} */
 
 .ms-6 {  /* 左邊距 */
     margin-left: 6rem;
@@ -200,12 +203,12 @@ img, table, canvas {
 .plaid-bg::before {
     content: "";
     position: absolute;
-    top: 0;
-    left: 0;
+    /* top: 0;
+    left: 0; */
     width: 100%;
     height: 140%;
     background-image: url('api/img/background_plaid.jpg');
-    /*background-size: cover;  確保背景圖完整覆蓋 */
+    background-size: cover; /* 確保背景圖完整覆蓋 */
     opacity: 0.1; /* 設置背景透明度 */
     z-index: -1; /* 確保背景圖片在內容後面 */
 }
