@@ -93,12 +93,17 @@ $offset = ($pages - 1) * $records_per_page;
                     (SELECT b.em_name FROM employee AS b WHERE a.employee_id = b.em_id) AS name,
                     (CASE 
                         WHEN a.car = 'is_cm_car' THEN 
-                            (SELECT SUM(o.liter * 2.31) FROM cm_car_oil AS o WHERE o.car_id = a.id)
+                            (SELECT SUM(o.liter * 2.31) 
+                            FROM cm_car_oil AS o 
+                            WHERE o.car_id = a.id)
+                        WHEN a.type = 1 THEN 
+                            (SELECT SUM(c.carbon) 
+                            FROM count_carbon AS c 
+                            WHERE c.type_id = a.id AND c.type = 1)
                         ELSE 
-                            (CASE 
-                                WHEN a.type = 1 THEN (SELECT c.carbon * 0.0005 FROM count_carbon AS c WHERE c.type_id = a.id AND c.type = 1)
-                                ELSE (SELECT c.carbon FROM count_carbon AS c WHERE c.type_id = a.id AND c.type = 3)
-                            END)
+                            (SELECT SUM(c.carbon) 
+                            FROM count_carbon AS c 
+                            WHERE c.type_id = a.id AND c.type = 3)
                     END) AS carbon
                 FROM route_tracker AS a
                 WHERE 1=1";
@@ -151,7 +156,6 @@ $offset = ($pages - 1) * $records_per_page;
                     </thead>
                     <tbody>
                         <?php
-                        // 顯示資料
                         if (!empty($result)) {
                             foreach ($result as $row) {
                                 echo "<tr>";
@@ -161,7 +165,27 @@ $offset = ($pages - 1) * $records_per_page;
                                 echo "<td>" . htmlspecialchars($row['total_time']) . "</td>";
                                 echo "<td>" . htmlspecialchars($row['distance']) . " 公里</td>";
                                 echo "<td>" . ($row['car'] == 'is_cm_car' ? '類別一' : '類別三') . "</td>";
-                                echo "<td>" . htmlspecialchars($row['type']) . "</td>";
+
+                                if ($row['car'] == 'is_cm_car') {
+                                    // 查詢汽車名稱與總碳排
+                                    $car_total_carbon = 0;
+                                    $car_name = "";
+                                    $car_query = "SELECT SUM(o.liter * 2.31) AS total_carbon FROM cm_car_oil AS o WHERE o.car_id = '" . $row['id'] . "'";
+                                    $car_result = $db_handle->runQuery($car_query);
+                                    if (!empty($car_result)) {
+                                        $car_name = $car_result[0]['cc_name'] ?? "未知車輛";
+                                        $car_total_carbon = $car_result[0]['total_carbon'] ?? 0;
+                                    }
+
+                                    // 顯示交通工具資訊
+                                    echo "<td>
+                                            <span class='show-tooltip' data-tooltip='" . htmlspecialchars(number_format($car_total_carbon, 2)) . " 公斤'>
+                                                " . htmlspecialchars($row['type']) . "
+                                            </span>
+                                        </td>";
+                                } else {
+                                    echo "<td>" . htmlspecialchars($row['type']) . "</td>";
+                                }
 
                                 if ($row['car'] == 'is_cm_car') {
                                     echo "<td>--</td>";
@@ -172,7 +196,7 @@ $offset = ($pages - 1) * $records_per_page;
                                     $carbon_fee = $carbon * 0.0003;
                                     echo "<td>" . number_format($carbon_fee, 4) . "</td>";
                                 }
-                                
+
                                 if (isset($row['id'])) {
                                     echo "<td>
                                             <form action='get_route_back_show.php' method='GET'>
@@ -190,13 +214,13 @@ $offset = ($pages - 1) * $records_per_page;
                         ?>
                     </tbody>
 
+
                 </table>
             </div>
 
             <!-- 分頁按鈕 -->
             <div class="turn_pages_div">
                 <?php
-                // 顯示最前面一頁和上一頁
                 if ($pages > 1) {
                     echo "<a class='turn_pages' href='?pages=1'><<</a> ";
                     echo "<a class='turn_pages' href='?pages=" . ($pages - 1) . "'><</a> ";
@@ -205,7 +229,6 @@ $offset = ($pages - 1) * $records_per_page;
                     echo "<a class='Noturn_pages'><</a> ";
                 }
 
-                // 確定分頁範圍
                 $start_page = max(1, $pages - 4);
                 $end_page = min($total_pages, $pages + 4);
 
@@ -225,7 +248,6 @@ $offset = ($pages - 1) * $records_per_page;
                     echo "<a class='turn_pages_more'> ...</a>";
                 }
 
-                // 顯示下一頁和最後面一頁
                 if ($pages < $total_pages) {
                     echo "<a class='turn_pages' href='?pages=" . ($pages + 1) . "'>></a> ";
                     echo "<a class='turn_pages' href='?pages=" . $total_pages . "'>>></a>";

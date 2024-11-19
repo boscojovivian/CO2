@@ -148,3 +148,35 @@ table tbody tr:last-of-type{
     color: #effff5; /* 設置文本顏色 */
     cursor: pointer; /* 滑鼠移到按鈕上顯示手型 */
 }
+
+
+
+
+
+
+
+
+
+
+.show-tooltip {
+    position: relative;
+    cursor: pointer;
+}
+
+.show-tooltip:hover::after {
+    content: attr(data-tooltip);
+    white-space: pre; /* 保留換行符 */
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 8px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: left;
+    z-index: 10;
+    white-space: pre-wrap; /* 支援換行 */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+}
