@@ -12,6 +12,12 @@
     height: 60px;
 }
 
+.del_btn{
+    background-color: #ff8787 !important;
+    color: #fff !important;
+    height: 60px;
+}
+
 .add_select{
     border: 3px solid #98c39a !important;
     border-radius: 10px;

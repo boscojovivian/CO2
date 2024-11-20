@@ -25,7 +25,7 @@ function translateCarType($type) {
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>管理交通車</title>
+        <title>管理公司車</title>
         <link rel="stylesheet" href="./css/cm_manage_car.css" type="text/css">
         <link rel="shortcut icon" href="img/logo.png" >
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -39,7 +39,7 @@ function translateCarType($type) {
             <table class="table table-hover caption-top">
                 <caption>
                     <div class="caption-container">
-                    <span>管理交通車</span>
+                    <span>管理公司車</span>
                     <a href="cm_add_car.php"><button type="button" class="btn btn-outline-success btn-lg">新增交通車</button></a>
                     </div>
                 </caption>               

@@ -24,10 +24,6 @@ $offset = ($pages - 1) * $records_per_page;
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> <!-- 引入 Bootstrap 框架的 CSS 文件 -->
     </head>
     <body>
-        <!-- 回到最頂端 -->
-        <!-- <button onclick="topFunction()" class="topBtn" id="myBtn" title="GOtop">TOP</button> -->
-
-        <!-- 導入導覽列 -->
         <?php include('nav/cm_nav.php') ?>
 
         <!-- <div id="map" style="height: 500px;"></div> -->
@@ -155,64 +151,83 @@ $offset = ($pages - 1) * $records_per_page;
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        if (!empty($result)) {
-                            foreach ($result as $row) {
-                                echo "<tr>";
-                                echo "<td>" . htmlspecialchars($row['name']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['start_date']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['start_time']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['total_time']) . "</td>";
-                                echo "<td>" . htmlspecialchars($row['distance']) . " 公里</td>";
-                                echo "<td>" . ($row['car'] == 'is_cm_car' ? '類別一' : '類別三') . "</td>";
+    <?php
+    include_once("dropdown_list/get_route_back_db.php"); // 引用資料庫連線
+    if (!empty($result)) {
+        foreach ($result as $row) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['name']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['start_date']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['start_time']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['total_time']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['distance']) . " 公里</td>";
+            echo "<td>" . ($row['car'] == 'is_cm_car' ? '類別一' : '類別三') . "</td>";
 
-                                if ($row['car'] == 'is_cm_car') {
-                                    // 查詢汽車名稱與總碳排
-                                    $car_total_carbon = 0;
-                                    $car_name = "";
-                                    $car_query = "SELECT SUM(o.liter * 2.31) AS total_carbon FROM cm_car_oil AS o WHERE o.car_id = '" . $row['id'] . "'";
-                                    $car_result = $db_handle->runQuery($car_query);
-                                    if (!empty($car_result)) {
-                                        $car_name = $car_result[0]['cc_name'] ?? "未知車輛";
-                                        $car_total_carbon = $car_result[0]['total_carbon'] ?? 0;
-                                    }
+            if ($row['car'] == 'is_cm_car') {
+                $car_total_carbon = 0;
 
-                                    // 顯示交通工具資訊
-                                    echo "<td>
-                                            <span class='show-tooltip' data-tooltip='" . htmlspecialchars(number_format($car_total_carbon, 2)) . " 公斤'>
-                                                " . htmlspecialchars($row['type']) . "
-                                            </span>
-                                        </td>";
-                                } else {
-                                    echo "<td>" . htmlspecialchars($row['type']) . "</td>";
-                                }
+                // SQL 查詢：計算碳排放
+                $car_query = "
+                    SELECT 
+                        SUM(ca.carbon) AS total_carbon
+                    FROM 
+                        route_tracker rt
+                    LEFT JOIN 
+                        cm_car cc ON rt.type = cc.cc_name
+                    LEFT JOIN 
+                        count_carbon ca ON cc.cc_id = ca.car_id
+                    WHERE 
+                        rt.id = :route_id
+                    GROUP BY 
+                        rt.id;
+                ";
+                $stmt = $db_handle->prepare($car_query);
+                $stmt->bindValue(':route_id', $row['id'], PDO::PARAM_INT);
+                $stmt->execute();
+                $car_result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-                                if ($row['car'] == 'is_cm_car') {
-                                    echo "<td>--</td>";
-                                    echo "<td>--</td>";
-                                } else {
-                                    $carbon = $row['carbon'] ?? 0;
-                                    echo "<td>" . htmlspecialchars($carbon) . "</td>";
-                                    $carbon_fee = $carbon * 0.0003;
-                                    echo "<td>" . number_format($carbon_fee, 4) . "</td>";
-                                }
+                $car_total_carbon = $car_result['total_carbon'] ?? 0;
 
-                                if (isset($row['id'])) {
-                                    echo "<td>
-                                            <form action='get_route_back_show.php' method='GET'>
-                                                <button class='show_route_btn m-1' type='submit' name='get_route_back_show' value='" . htmlspecialchars($row['id']) . "'>顯示路徑</button>
-                                            </form>
-                                        </td>";
-                                } else {
-                                    echo "<td>無法顯示路徑</td>";
-                                }
-                                echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='10' class='text-center'>未找到符合條件的紀錄</td></tr>";
-                        }
-                        ?>
-                    </tbody>
+                // 顯示加總結果
+                echo "<td>
+                        <span class='show-tooltip' data-tooltip='油耗總碳排:" . htmlspecialchars(number_format($car_total_carbon, 2)) . " 公斤'>
+                            " . htmlspecialchars($row['type']) . "
+                        </span>
+                      </td>";
+            } else {
+                echo "<td>" . htmlspecialchars($row['type']) . "</td>";
+            }
+
+            // 顯示碳費用
+            if ($row['car'] == 'is_cm_car') {
+                echo "<td>--</td>";
+                echo "<td>--</td>";
+            } else {
+                $carbon = $row['carbon'] ?? 0;
+                echo "<td>" . htmlspecialchars($carbon) . "</td>";
+                $carbon_fee = $carbon * 0.0003;
+                echo "<td>" . number_format($carbon_fee, 4) . "</td>";
+            }
+
+            // 顯示路徑按鈕
+            if (isset($row['id'])) {
+                echo "<td>
+                        <form action='get_route_back_show.php' method='GET'>
+                            <button class='show_route_btn m-1' type='submit' name='get_route_back_show' value='" . htmlspecialchars($row['id']) . "'>顯示路徑</button>
+                        </form>
+                      </td>";
+            } else {
+                echo "<td>無法顯示路徑</td>";
+            }
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='10' class='text-center'>未找到符合條件的紀錄</td></tr>";
+    }
+    ?>
+</tbody>
+
+
 
 
                 </table>
@@ -261,6 +276,23 @@ $offset = ($pages - 1) * $records_per_page;
 
         
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+        <script>
+            i// 初始化所有带有 'data-tooltip' 的元素的 Tooltip
+            document.addEventListener('DOMContentLoaded', function () {
+                var tooltipElements = document.querySelectorAll('[data-tooltip]');
+                tooltipElements.forEach(function (element) {
+                    if (!element.tooltipInitialized) { // 確保初始化一次
+                        new bootstrap.Tooltip(element, {
+                            title: element.getAttribute('data-tooltip'),
+                            placement: 'top'
+                        });
+                        element.tooltipInitialized = true; // 標記為已初始化
+                    }
+                });
+            });
+
+        </script>
+
 
     </body>
 </html>
