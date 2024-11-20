@@ -28,7 +28,7 @@ if (!isset($_SESSION['em_id'])) {
                 <caption>
                     <div class="caption-container">
                     <span>員工資料</span>
-                    <a href="cm_add_car.php"><button type="button" class="btn btn-outline-success btn-lg">新增</button></a>
+                    <a href="add_employee.php"><button type="button" class="btn btn-outline-success btn-lg">新增</button></a>
                     </div>
                 </caption>
                 <thead class="table">
