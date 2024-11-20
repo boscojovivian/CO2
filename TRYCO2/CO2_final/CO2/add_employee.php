@@ -98,26 +98,25 @@ include("dropdown_list/dbcontroller.php");
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-    const form = document.querySelector("form.add_form");
-    if (form) {
-        form.addEventListener("submit", function(event) {
-            const password = document.getElementById("em_psd").value;
-            const confirmPassword = document.getElementById("confirm_psd").value;
+            const form = document.querySelector("form.add_form");
+            if (form) {
+                form.addEventListener("submit", function(event) {
+                    const password = document.getElementById("em_psd").value;
+                    const confirmPassword = document.getElementById("confirm_psd").value;
 
-            if (password !== confirmPassword) {
-                event.preventDefault(); // 阻止表單提交
-                Swal.fire({
-                    title: '密碼不一致',
-                    text: '請確認兩次輸入的密碼相同。',
-                    icon: 'error'
+                    if (password !== confirmPassword) {
+                        event.preventDefault(); // 阻止表單提交
+                        Swal.fire({
+                            title: '密碼不一致',
+                            text: '請確認兩次輸入的密碼相同。',
+                            icon: 'error'
+                        });
+                    }
                 });
+            } else {
+                console.error("無法找到表單，請確認表單的 class 或 DOM 結構是否正確。");
             }
         });
-    } else {
-        console.error("無法找到表單，請確認表單的 class 或 DOM 結構是否正確。");
-    }
-});
-
     </script>
 </body>
 </html>

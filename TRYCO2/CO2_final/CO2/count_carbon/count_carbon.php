@@ -25,7 +25,8 @@ if ($carbon_type = 1) {
                 $calculation_results[] = [
                     'name' => $GWP_row['name'],
                     'type' => $oil_type,
-                    'result' => $result
+                    'result' => $result,
+                    'car_id' => $car_id
                 ];
 
                 // 累加到總碳排放量
@@ -64,7 +65,8 @@ foreach ($calculation_results as $result_data) {
         'type_id' => $type_id,
         'name' => $result_data['name'],
         // 'type' => $result_data['type'],
-        'carbon' => $result_data['result']
+        'carbon' => $result_data['result'],
+        'car_id' => 0
     ];
 
     if ($db_handle->insert('count_carbon', $carbon_data)) {
