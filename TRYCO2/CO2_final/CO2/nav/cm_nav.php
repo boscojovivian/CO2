@@ -70,7 +70,7 @@
                                 公司車資料
                             </a>
                             <ul class="dropdown-menu dropdown-menu-custom">
-                                <li><a class="dropdown-item" href="cm_car.php">公司車</a></li>
+                                <li><a class="dropdown-item" href="cm_car.php">公司車資料</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item" href="cm_manage_car.php">管理公司車</a></li>
                                 <li><hr class="dropdown-divider"></li>
