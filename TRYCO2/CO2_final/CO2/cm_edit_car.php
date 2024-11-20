@@ -10,7 +10,7 @@ $results = $db_handle->runQuery($query);
 <!DOCTYPE html>
 <html>
 <head>
-    <title>編輯交通車</title>
+    <title>編輯公司車</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/em_edit_CO2.css" type="text/css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -62,7 +62,7 @@ $results = $db_handle->runQuery($query);
             if (mysqli_query($link, $update_sql)) {
                 echo "<script>
                     Swal.fire({
-                        title: '已成功編輯交通車資訊',
+                        title: '已成功編輯公司車資訊',
                         icon: 'success'
                     }).then(() => {
                         window.location.href = 'cm_manage_car.php';
@@ -86,13 +86,13 @@ $results = $db_handle->runQuery($query);
                         <form class="col-11 col-md-10 align-items-center add_form mt-5" method="POST">
                             <a href="cm_manage_car.php" class="goback_add ms-3"><img src="img/goback.png" class="goback_img"></a>
                             <div class="fs-4 mt-2 mb-5 ms-5 me-5">
-                                <h1 class="title mb-3 text-center fw-bold">編輯交通車資訊</h1>
+                                <h1 class="title mb-3 text-center fw-bold">編輯公司車資訊</h1>
 
                                 <?php 
                                 if ($result && mysqli_num_rows($result) > 0) {
                                     while ($rows = mysqli_fetch_array($result)) { ?>
 
-                                    <h4 class="mb-5 text-center">交通車編號 : <?php echo $rows['cc_id']; ?></h4>
+                                    <h4 class="mb-5 text-center">公司車編號 : <?php echo $rows['cc_id']; ?></h4>
 
                                     <div class="mb-3 row justify-content-center align-items-center">
                                         <label for="cc_name" class="form-label col-2">名稱：</label>
