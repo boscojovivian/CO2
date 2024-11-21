@@ -41,64 +41,64 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                     <div id="filteredBarChart" class="filteredBarChart d-flex justify-content-center align-items-center"></div>
                 </div>
                 <?php
-                // 連接資料庫
-                include_once("dropdown_list/dbcontroller.php");
-                $db_handle = new DBController();
+                    // 連接資料庫
+                    include_once("dropdown_list/dbcontroller.php");
+                    $db_handle = new DBController();
 
-                // 查詢 em_co2 表，抓取 em_name 和對應的碳排放量
-                $pizzaChartQuery = "SELECT em_co2.em_name, SUM(em_co2.eCO2_carbon) as total_carbon
-                                    FROM em_co2
-                                    GROUP BY em_co2.em_name";
-                $pizzaChartResult = $db_handle->runQuery($pizzaChartQuery);
+                    // 查詢 em_co2_transformed 表，抓取 em_name 和對應的碳排放量
+                    $pizzaChartQuery = "SELECT em_co2_transformed.em_name, SUM(em_co2_transformed.eCO2_carbon) as total_carbon
+                                        FROM em_co2_transformed
+                                        GROUP BY em_co2_transformed.em_name";
+                    $pizzaChartResult = $db_handle->runQuery($pizzaChartQuery);
 
-                // 準備資料供 Plotly 使用
-                $pizzaChartData = [
-                    'labels' => [],
-                    'values' => []
-                ];
+                    // 準備資料供 Plotly 使用
+                    $pizzaChartData = [
+                        'labels' => [],
+                        'values' => []
+                    ];
 
-                // 檢查查詢結果，並將資料填入陣列
-                if (!empty($pizzaChartResult)) {
-                    foreach ($pizzaChartResult as $row) {
-                        $pizzaChartData['labels'][] = $row['em_name'];
-                        $pizzaChartData['values'][] = $row['total_carbon'];
-                    }
-                }
-
-                // 將資料轉換成 JSON 格式以便前端 JavaScript 使用
-                echo "<script>
-                        var pizzaLabels = " . json_encode($pizzaChartData['labels']) . ";
-                        var pizzaValues = " . json_encode($pizzaChartData['values']) . ";
-                    </script>";
-                ?>
-
-                <script>
-                // 確認資料是否已成功載入
-                if (pizzaLabels && pizzaValues) {
-                    var pieData = [{
-                        labels: pizzaLabels,
-                        values: pizzaValues,
-                        type: 'pie',
-                        textinfo: 'label+percent',
-                        hoverinfo: 'label+value',
-                        hole: 0.3, // 圓環圖設定
-                        marker: {
-                            colors: ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854']
+                    // 檢查查詢結果，並將資料填入陣列
+                    if (!empty($pizzaChartResult)) {
+                        foreach ($pizzaChartResult as $row) {
+                            $pizzaChartData['labels'][] = $row['em_name'];
+                            $pizzaChartData['values'][] = $row['total_carbon'];
                         }
-                    }];
+                    }
 
-                    var pieLayout = {
-                        title: '各員工碳排放分佈',
-                        height: 400,
-                        plot_bgcolor: '#e2f7ea',
-                        paper_bgcolor: '#e2f7ea',
-                        margin: { t: 50, b: 50 }
-                    };
+                    // 將資料轉換成 JSON 格式以便前端 JavaScript 使用
+                    echo "<script>
+                            var pizzaLabels = " . json_encode($pizzaChartData['labels']) . ";
+                            var pizzaValues = " . json_encode($pizzaChartData['values']) . ";
+                        </script>";
+                    ?>
 
-                    // 使用 Plotly 繪製圓環圖
-                    Plotly.newPlot('filteredBarChart', pieData, pieLayout);
-                }
-                </script>
+                    <script>
+                    // 確認資料是否已成功載入
+                    if (pizzaLabels && pizzaValues) {
+                        var pieData = [{
+                            labels: pizzaLabels,
+                            values: pizzaValues,
+                            type: 'pie',
+                            textinfo: 'label+percent',
+                            hoverinfo: 'label+value',
+                            hole: 0.3, // 圓環圖設定
+                            marker: {
+                                colors: ['#66c2a5', '#fc8d62', '#8da0cb', '#e78ac3', '#a6d854']
+                            }
+                        }];
+
+                        var pieLayout = {
+                            title: '各員工碳排放分佈',
+                            height: 400,
+                            plot_bgcolor: '#e2f7ea',
+                            paper_bgcolor: '#e2f7ea',
+                            margin: { t: 50, b: 50 }
+                        };
+
+                        // 使用 Plotly 繪製圓環圖
+                        Plotly.newPlot('filteredBarChart', pieData, pieLayout);
+                    }
+                    </script>
             <!-- 右區塊 -->
             <div class="col-6 right">
                 <div class="row">
@@ -114,31 +114,31 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                                     value="<?php echo isset($_GET['end_date_display']) ? htmlspecialchars($_GET['end_date_display']) : ''; ?>">
                             </div>
 
-                            <!-- 篩選員工 -->
+                              <!-- 篩選員工 -->
                             <div class="col-lg-6 d-flex justify-content-start align-items-center">
                                 <label for="filter_employee">篩選員工：</label>
                                 <select id="filter_employee" name="filter_employee">
-                                <option value="">請選擇</option>
-                                <?php
-                                // 包含資料庫連線的程式碼
-                                include_once("dropdown_list/dbcontroller.php");
-                                $db_handle = new DBController();
+                                    <option value="">請選擇</option>
+                                    <?php
+                                    // 包含資料庫連線的程式碼
+                                    include_once("dropdown_list/dbcontroller.php");
+                                    $db_handle = new DBController();
 
-                                // 從資料庫中獲取所有的 em_name 資料
-                                $sql = "SELECT em_id, em_name FROM employee";
-                                $result = $db_handle->runQuery($sql);
+                                    // 從資料庫中獲取所有的 em_name 資料
+                                    $sql = "SELECT DISTINCT em_name FROM em_co2_transformed";
+                                    $result = $db_handle->runQuery($sql);
 
-                                // 如果有資料，則建立下拉式選單
-                                if (!empty($result)) {
-                                    foreach ($result as $row) {
-                                        $selected = (isset($_GET['filter_employee']) && $_GET['filter_employee'] == $row['em_id']) ? 'selected' : '';
-                                        echo "<option value='" . $row['em_id'] . "' $selected>" . $row['em_name'] . "</option>";
+                                    // 如果有資料，則建立下拉式選單
+                                    if (!empty($result)) {
+                                        foreach ($result as $row) {
+                                            $selected = (isset($_GET['filter_employee']) && $_GET['filter_employee'] == $row['em_name']) ? 'selected' : '';
+                                            echo "<option value='" . htmlspecialchars($row['em_name']) . "' $selected>" . htmlspecialchars($row['em_name']) . "</option>";
+                                        }
+                                    } else {
+                                        echo "<option value=''>沒有資料</option>";
                                     }
-                                } else {
-                                    echo  "<option value=''>沒有資料</option>";
-                                }
-                                ?>
-                            </select>
+                                    ?>
+                                </select>
                             </div>
 
                             <!-- 確認篩選按鈕 --> 
@@ -155,21 +155,21 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                         if ($filter_applied) {
                             $start_date_display = isset($_GET['start_date_display']) ? $_GET['start_date_display'] : '';
                             $end_date_display = isset($_GET['end_date_display']) ? $_GET['end_date_display'] : '';
-                            $filter_employee = isset($_GET['filter_employee']) ? $_GET['filter_employee'] : '';
-                            $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
+                            $filter_employee = isset($_GET['filter_employee']) ? $_GET['filter_employee'] : ''; // 這裡會直接是 em_name
 
                             if (!empty($start_date_display) && !empty($end_date_display) && empty($filter_employee)) {
                                 echo "<h4>$start_date_display 到 $end_date_display 的所有碳排記錄</h4>";
                             } elseif (empty($start_date_display) && empty($end_date_display) && !empty($filter_employee)) {
-                                echo "<h4>員工 $employee_name 的所有碳排記錄</h4>";
+                                echo "<h4>員工 " . htmlspecialchars($filter_employee) . " 的所有碳排記錄</h4>";
                             } elseif (!empty($start_date_display) && !empty($end_date_display) && !empty($filter_employee)) {
-                                echo "<h4>員工 $employee_name 從$start_date_display 到 $end_date_display 的碳排記錄</h4>";
+                                echo "<h4>員工 " . htmlspecialchars($filter_employee) . " 從 $start_date_display 到 $end_date_display 的碳排記錄</h4>";
                             } else {
                                 echo "所有碳排記錄";
                             }
                         }
                         ?>
                     </div>
+
 
                     <!-- 碳排表格 -->
                     <div class="information">
@@ -192,10 +192,10 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
+                            <?php
                                 include_once("dropdown_list/dbcontroller.php");
                                 $db_handle = new DBController();
-                                
+
                                 if ($filter_applied) {
                                     $start_date_display = isset($_GET['start_date_display']) ? $_GET['start_date_display'] : '';
                                     $end_date_display = isset($_GET['end_date_display']) ? $_GET['end_date_display'] : '';
@@ -203,20 +203,19 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                                     
                                     $strSrh = '';
                                     // 只篩日期
-                                    if((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_employee)){
-                                        $strSrh = "WHERE em_co2.eCO2_date BETWEEN '$start_date_display' AND '$end_date_display'";
-                                    }else if((empty($start_date_display) && empty($end_date_display)) && !empty($filter_employee)){ // 只篩員工
-                                        $strSrh = "WHERE em_co2.em_id = '$filter_employee'";
-                                    }else if((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_employee)){ // 員工日期
-                                        $strSrh = "WHERE em_co2.eCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND em_co2.em_id = '$filter_employee'";
-                                    }else{
+                                    if ((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_employee)) {
+                                        $strSrh = "WHERE em_co2_transformed.eCO2_date BETWEEN '$start_date_display' AND '$end_date_display'";
+                                    } else if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_employee)) { // 只篩員工
+                                        $strSrh = "WHERE em_co2_transformed.em_name = '$filter_employee'";
+                                    } else if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_employee)) { // 員工日期
+                                        $strSrh = "WHERE em_co2_transformed.eCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND em_co2_transformed.em_name = '$filter_employee'";
+                                    } else {
                                         ;
                                     }
                                     
-                                    $query = "SELECT employee.em_id, employee.em_name, em_co2.eCO2_date, em_co2.eCO2_carbon, em_co2.eCO2_commute
-                                                FROM em_co2 
-                                                INNER JOIN employee ON em_co2.em_id = employee.em_id
-                                                ".$strSrh;
+                                    $query = "SELECT em_co2_transformed.em_name, em_co2_transformed.eCO2_date, em_co2_transformed.eCO2_carbon, em_co2_transformed.eCO2_commute
+                                                FROM em_co2_transformed
+                                                $strSrh";
                                     // echo "</br>" . $query . "</br>";
 
                                     // 獲取總記錄數
@@ -225,56 +224,53 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                                     $total_records = $total_records_result[0]['total'];
                                     $total_pages = ceil($total_records / $records_per_page);
                                     // 添加LIMIT子句到查詢
-                                    $query .= " ORDER BY em_co2.eCO2_date DESC LIMIT $offset, $records_per_page";
+                                    $query .= " ORDER BY em_co2_transformed.eCO2_date DESC LIMIT $offset, $records_per_page";
                                     $result = $db_handle->runQuery($query);
-    
+
                                     if (!empty($result)) {
                                         foreach ($result as $record) {
                                             echo "<tr>";
-                                            // echo "<td>" . $record['em_id'] . "</td>";
                                             echo "<td>" . $record['em_name'] . "</td>";
                                             echo "<td>" . $record['eCO2_date'] . "</td>";
                                             // 替換 eCO2_commute 的值
                                             $commute = $record['eCO2_commute'];
-                                            $commute = str_replace('0', '上班', $commute);
-                                            $commute = str_replace('1', '下班', $commute);
+                                            $commute = str_replace('go', '上班', $commute);
+                                            $commute = str_replace('back', '下班', $commute);
                                             echo "<td>" . $commute . "</td>";
-                                            echo "<td>" . $record['eCO2_carbon'] . " 公噸</td>";
+                                            echo "<td>" . $record['eCO2_carbon'] . " 公斤</td>";
                                             echo "</tr>";
                                         }
                                     } else {
                                         echo "<tr><td colspan='4'>沒有資料</td></tr>";
                                     }
                                 } else {
-                                    $query = "SELECT employee.em_id, employee.em_name, MIN(em_co2.eCO2_date) as eCO2_start_date, MAX(em_co2.eCO2_date) as eCO2_end_date, ROUND(SUM(em_co2.eCO2_carbon), 2) as eCO2_carbon, em_co2.eCO2_commute
-                                                FROM em_co2 
-                                                INNER JOIN employee ON em_co2.em_id = employee.em_id
-                                                GROUP BY employee.em_name";
+                                    $query = "SELECT em_co2_transformed.em_name, MIN(em_co2_transformed.eCO2_date) as eCO2_start_date, MAX(em_co2_transformed.eCO2_date) as eCO2_end_date, 
+                                                    ROUND(SUM(em_co2_transformed.eCO2_carbon), 2) as eCO2_carbon
+                                                FROM em_co2_transformed
+                                                GROUP BY em_co2_transformed.em_name";
                                     // 獲取總記錄數
                                     $total_records_query = "SELECT COUNT(*) as total FROM ($query) as temp_table";
                                     $total_records_result = $db_handle->runQuery($total_records_query);
                                     $total_records = $total_records_result[0]['total'];
                                     $total_pages = ceil($total_records / $records_per_page);
                                     // 添加LIMIT子句到查詢
-                                    $query .= " ORDER BY em_co2.eCO2_date DESC LIMIT $offset, $records_per_page";
+                                    $query .= " ORDER BY em_co2_transformed.eCO2_date DESC LIMIT $offset, $records_per_page";
                                     $result = $db_handle->runQuery($query);
-    
+
                                     if (!empty($result)) {
                                         foreach ($result as $record) {
                                             echo "<tr>";
-                                            // echo "<td>" . $record['em_id'] . "</td>";
                                             echo "<td>" . $record['em_name'] . "</td>";
                                             echo "<td>".$record['eCO2_start_date']."至".$record['eCO2_end_date']."</td>";
-                                            echo "<td>" . $record['eCO2_carbon'] . " 公噸</td>";
+                                            echo "<td>" . $record['eCO2_carbon'] . " 公斤</td>";
                                             echo "</tr>";
                                         }
                                     } else {
                                         echo "<tr><td colspan='4'>沒有資料</td></tr>";
                                     }
                                 }
-
-                                
                                 ?>
+
                             </tbody>
                         </table>
                     </div>
@@ -348,27 +344,27 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
         </div>
 
         <?php
-        if($filter_applied){
-            if ((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_employee)) {
-                $start_date = $start_date_display;
-                $end_date = $end_date_display;
-                $dateDiff = (strtotime($end_date) - strtotime($start_date)) / (60 * 60 * 24);
-                
-                if ($dateDiff > 30) {
-                    $chartQuery = "SELECT 
-                                        DATE_FORMAT(em_co2.eCO2_date, '%Y-%m-%d') AS eCO2_date, 
-                                        SUM(em_co2.eCO2_carbon) AS total_carbon
-                                    FROM em_co2
-                                    WHERE em_co2.eCO2_date BETWEEN '$start_date' AND '$end_date'
-                                    GROUP BY DATE_FORMAT(em_co2.eCO2_date, '%Y-%u')"; // 按每周分组
-                    // echo "<script>console.log($chartQuery)</script>";
-                } else {
-                    $chartQuery = "SELECT em_co2.eCO2_date, SUM(em_co2.eCO2_carbon) AS total_carbon
-                                    FROM em_co2
-                                    WHERE em_co2.eCO2_date BETWEEN '$start_date' AND '$end_date'
-                                    GROUP BY em_co2.eCO2_date";
-                    // echo "<script>console.log($chartQuery)</script>";
-                }
+            if ($filter_applied) {
+                if ((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_employee)) {
+                    $start_date = $start_date_display;
+                    $end_date = $end_date_display;
+                    $dateDiff = (strtotime($end_date) - strtotime($start_date)) / (60 * 60 * 24);
+                    
+                    if ($dateDiff > 30) {
+                        // 按每周分组的查询
+                        $chartQuery = "SELECT 
+                                            DATE_FORMAT(em_co2_transformed.eCO2_date, '%Y-%m-%d') AS eCO2_date, 
+                                            SUM(em_co2_transformed.eCO2_carbon) AS total_carbon
+                                        FROM em_co2_transformed
+                                        WHERE em_co2_transformed.eCO2_date BETWEEN '$start_date' AND '$end_date'
+                                        GROUP BY DATE_FORMAT(em_co2_transformed.eCO2_date, '%Y-%u')"; // 按每周分组
+                    } else {
+                        // 按日期分组的查询
+                        $chartQuery = "SELECT em_co2_transformed.eCO2_date, SUM(em_co2_transformed.eCO2_carbon) AS total_carbon
+                                        FROM em_co2_transformed
+                                        WHERE em_co2_transformed.eCO2_date BETWEEN '$start_date' AND '$end_date'
+                                        GROUP BY em_co2_transformed.eCO2_date";
+                    }
                 
                 $chartResults = $db_handle->runQuery($chartQuery);
                 $chartData = [
@@ -423,14 +419,17 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                 Plotly.newPlot('filteredBarChart', data, layout);
             </script>";
             }
-            // 篩選員工
+           // 篩選員工
             if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_employee)) {
                 $currentYear = date('Y');
-                $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
-                $chartQuery = "SELECT YEAR(em_co2.eCO2_date) AS year, MONTH(em_co2.eCO2_date) AS month, SUM(em_co2.eCO2_carbon) AS total_carbon
-                            FROM em_co2
-                            INNER JOIN employee ON em_co2.em_id = employee.em_id
-                            WHERE em_co2.em_id = '$filter_employee' AND YEAR(em_co2.eCO2_date) = '$currentYear'
+                $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_name'))]['em_name']) : '';
+                $chartQuery = "SELECT 
+                                    YEAR(em_co2_transformed.eCO2_date) AS year, 
+                                    MONTH(em_co2_transformed.eCO2_date) AS month, 
+                                    SUM(em_co2_transformed.eCO2_carbon) AS total_carbon
+                            FROM em_co2_transformed
+                            WHERE em_co2_transformed.em_name = '$filter_employee' 
+                                    AND YEAR(em_co2_transformed.eCO2_date) = '$currentYear'
                             GROUP BY year, month";
                 $chartResults = $db_handle->runQuery($chartQuery);
                 $chartData = [
@@ -488,17 +487,19 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                     Plotly.newPlot('filteredBarChart', data, layout);
                 </script>";
             }
-            // 如果篩選日期、篩選員工
-            if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_employee)) {
-                $start_date = $start_date_display;
-                $end_date = $end_date_display;
-                $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
-                $chartQuery = "SELECT em_co2.eCO2_date, em_co2.eCO2_commute, SUM(em_co2.eCO2_carbon) AS total_carbon
-                            FROM em_co2
-                            INNER JOIN employee ON em_co2.em_id = employee.em_id
-                            WHERE em_co2.em_id = '$filter_employee' 
-                            AND em_co2.eCO2_date BETWEEN '$start_date' AND '$end_date'
-                            GROUP BY em_co2.eCO2_date, em_co2.eCO2_commute";
+           // 如果篩選日期、篩選員工
+                if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_employee)) {
+                    $start_date = $start_date_display;
+                    $end_date = $end_date_display;
+                    $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_name'))]['em_name']) : '';
+                    $chartQuery = "SELECT 
+                                        em_co2_transformed.eCO2_date, 
+                                        em_co2_transformed.eCO2_commute, 
+                                        SUM(em_co2_transformed.eCO2_carbon) AS total_carbon
+                                FROM em_co2_transformed
+                                WHERE em_co2_transformed.em_name = '$filter_employee' 
+                                        AND em_co2_transformed.eCO2_date BETWEEN '$start_date' AND '$end_date'
+                                GROUP BY em_co2_transformed.eCO2_date, em_co2_transformed.eCO2_commute";
                 $chartResults = $db_handle->runQuery($chartQuery);
                 $chartData = [
                     'dates' => [],
@@ -523,8 +524,8 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                     var groupedData = {};
                     var totalCarbons = {};
                     var colors = {
-                        '0': '#63ff87', // 上班
-                        '1': '#ff8263'  // 下班
+                        'go': '#63ff87', // 上班
+                        'back': '#ff8263'  // 下班
                     };
     
                     for (var i = 0; i < dates.length; i++) {
@@ -546,7 +547,7 @@ $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_
                             x: groupedData[commute].x,
                             y: groupedData[commute].y,
                             type: 'bar',
-                            name: commute === '0' ? '上班' : '下班',
+                            name: commute === 'go' ? '上班' : '下班',
                             marker: {
                                 color: colors[commute]
                             }
