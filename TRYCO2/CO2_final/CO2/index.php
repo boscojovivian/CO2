@@ -30,7 +30,7 @@ $db_handle = new DBController();
 
     <div class="custom-bg-position">
         <div class="custom-bg">
-            <div class="text-white text-center p-5 row justify-content-md-center">
+            <div class="text-white text-center row justify-content-md-center">
                 <h1 class="fw-bold title">碳探你的路</h1>
                 <div class="knowledge-box mt-5 custom-width col col-lg-12 shadow">      
                     <h3 class="mt-2">環保小知識</h3>
@@ -159,7 +159,7 @@ $db_handle = new DBController();
     <div class="plaid-bg d-flex justify-content-center align-items-center" style="z-index: 99">
         <div class="col-lg-8 col-md-8"> <!-- 設置寬度比例 -->
             <h2 class="text-center mt-6">個人碳排記錄</h2>
-            <div class="p-5">
+            <div class="">
                 <canvas class="p-4 pink-bg mt-4" id="carbonChart"></canvas> <!-- 碳排記錄的圖表區 -->
             </div>
         </div>

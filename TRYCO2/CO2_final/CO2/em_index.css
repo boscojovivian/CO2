@@ -15,41 +15,8 @@ img, table, canvas {
     background-size: cover;
 } */
 
-.ms-6 {  /* 左邊距 */
-    margin-left: 6rem;
-}
-.me-6 {  /* 右邊距 */
-    margin-right: 6rem;
-}
-.mt-6 {  /* 上邊距 */
-    margin-top: 6rem;
-}
-.mb-6 {  /* 下邊距 */
-    margin-bottom: 6rem;
-}
-.ms-8 {  /* 左邊距 */
-    margin-left: 8rem;
-}
-.me-8 {  /* 右邊距 */
-    margin-right: 8rem;
-}
-.mt-8 {  /* 上邊距 */
-    margin-top: 8rem;
-}
-.mb-8 {  /* 下邊距 */
-    margin-bottom: 8rem;
-}
-.ms-10 {  /* 左邊距 */
-    margin-left: 10rem;
-}
-.me-10 {  /* 右邊距 */
-    margin-right: 10rem;
-}
-.mt-10 {  /* 上邊距 */
-    margin-top: 10rem;
-}
-.mb-10 {  /* 下邊距 */
-    margin-bottom: 10rem;
+body{
+    margin: 0;
 }
 
 .green-font{
