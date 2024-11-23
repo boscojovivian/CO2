@@ -58,36 +58,36 @@
                 <div id="filteredBarChart" class="filteredBarChart d-flex justify-content-center align-items-center"></div>
             </div>
             <?php
-                // 連接資料庫
-                include_once("dropdown_list/dbcontroller.php");
-                $db_handle = new DBController();
+            // 連接資料庫
+            include_once("dropdown_list/dbcontroller.php");
+            $db_handle = new DBController();
 
-                // 查詢 cm_co2 表，抓取車輛 ID 和對應的碳排放量
-                $pizzaChartQuery = "SELECT cm_car.cc_name, SUM(cm_co2.cCO2_carbon) as total_carbon
-                                    FROM cm_co2
-                                    INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
-                                    GROUP BY cm_car.cc_id, cm_car.cc_name";
-                $pizzaChartResult = $db_handle->runQuery($pizzaChartQuery);
+            // 查詢 cm_co2_thtf 表，抓取車輛類型 (type) 和對應的總碳排放量
+            $pizzaChartQuery = "SELECT type AS car_type, SUM(tatol_carboon) as total_carbon
+                                FROM cm_co2_thtf
+                                GROUP BY type";
+            $pizzaChartResult = $db_handle->runQuery($pizzaChartQuery);
 
-                // 準備資料供 Plotly 使用
-                $pizzaChartData = [
-                    'labels' => [],
-                    'values' => []
-                ];
+            // 準備資料供 Plotly 使用
+            $pizzaChartData = [
+                'labels' => [],
+                'values' => []
+            ];
 
-                if (!empty($pizzaChartResult)) {
-                    foreach ($pizzaChartResult as $row) {
-                        $pizzaChartData['labels'][] = $row['cc_name'];
-                        $pizzaChartData['values'][] = $row['total_carbon'];
-                    }
+            if (!empty($pizzaChartResult)) {
+                foreach ($pizzaChartResult as $row) {
+                    $pizzaChartData['labels'][] = $row['car_type']; // 取車輛類型作為標籤
+                    $pizzaChartData['values'][] = $row['total_carbon']; // 取總碳排放量作為值
                 }
+            }
 
-                // 將資料轉換成 JSON 格式以便 JavaScript 使用
-                echo "<script>
-                    var pizzaLabels = " . json_encode($pizzaChartData['labels']) . ";
-                    var pizzaValues = " . json_encode($pizzaChartData['values']) . ";
-                </script>";
+            // 將資料轉換成 JSON 格式以便 JavaScript 使用
+            echo "<script>
+                var pizzaLabels = " . json_encode($pizzaChartData['labels']) . ";
+                var pizzaValues = " . json_encode($pizzaChartData['values']) . ";
+            </script>";
             ?>
+
             <script>
                 // 確認資料是否已載入
                 if (pizzaLabels && pizzaValues) {
@@ -118,7 +118,7 @@
             <!-- 右區塊 -->
             <div class="col-6 right">
                 <div class="row">
-                    <!-- 篩選列 -->
+                   <!-- 篩選列 -->
                     <form action="" method="get" class="g-3 d-flex justify-content-center align-items-center filter-form">
                         <div class="row w-100">
                             <!-- 篩選日期 -->
@@ -131,23 +131,24 @@
                                     value="<?php echo isset($_GET['end_date_display']) ? htmlspecialchars($_GET['end_date_display']) : ''; ?>">
                             </div>
 
-                            <!-- 篩選公司車 -->
+                            <!-- 篩選車輛類型 -->
                             <div class="col-lg-4 d-flex justify-content-start align-items-center">
-                                <label for="filter_car">公司車：</label>
+                                <label for="filter_car">車輛類型：</label>
                                 <select id="filter_car" name="filter_car">
                                     <option value="">請選擇</option>
                                     <?php
                                     include_once("dropdown_list/dbcontroller.php");
                                     $db_handle = new DBController();
 
-                                    $sql = "SELECT cc_id, cc_name FROM cm_car";
+                                    // 修改為從 cm_co2_thtf 表中提取車輛類型 (type)
+                                    $sql = "SELECT DISTINCT type FROM cm_co2_thtf";
                                     $result_car = $db_handle->runQuery($sql);
 
                                     if (!empty($result_car)) {
                                         foreach ($result_car as $row) {
                                             // 確保選中的選項保持不變
-                                            $selected = (isset($_GET['filter_car']) && $_GET['filter_car'] == $row['cc_id']) ? 'selected' : '';
-                                            echo "<option value='" . $row['cc_id'] . "' $selected>" . $row['cc_name'] . "</option>";
+                                            $selected = (isset($_GET['filter_car']) && $_GET['filter_car'] == $row['type']) ? 'selected' : '';
+                                            echo "<option value='" . htmlspecialchars($row['type']) . "' $selected>" . htmlspecialchars($row['type']) . "</option>";
                                         }
                                     } else {
                                         echo "<option value=''>沒有資料</option>";
@@ -162,14 +163,15 @@
                                 <select id="filter_employee" name="filter_employee">
                                     <option value="">請選擇</option>
                                     <?php
-                                    $sql = "SELECT em_id, em_name FROM employee";
+                                    // 修改為從 cm_co2_thtf 表中提取員工名稱
+                                    $sql = "SELECT DISTINCT em_name FROM cm_co2_thtf";
                                     $result = $db_handle->runQuery($sql);
 
                                     if (!empty($result)) {
                                         foreach ($result as $row) {
                                             // 確保選中的選項保持不變
-                                            $selected = (isset($_GET['filter_employee']) && $_GET['filter_employee'] == $row['em_id']) ? 'selected' : '';
-                                            echo "<option value='" . $row['em_id'] . "' $selected>" . $row['em_name'] . "</option>";
+                                            $selected = (isset($_GET['filter_employee']) && $_GET['filter_employee'] == $row['em_name']) ? 'selected' : '';
+                                            echo "<option value='" . htmlspecialchars($row['em_name']) . "' $selected>" . htmlspecialchars($row['em_name']) . "</option>";
                                         }
                                     } else {
                                         echo "<option value=''>沒有資料</option>";
@@ -193,8 +195,8 @@
                             $end_date_display = isset($_GET['end_date_display']) ? htmlspecialchars($_GET['end_date_display']) : '';
                             $filter_car = isset($_GET['filter_car']) ? htmlspecialchars($_GET['filter_car']) : '';
                             $filter_employee = isset($_GET['filter_employee']) ? htmlspecialchars($_GET['filter_employee']) : '';
-                            $car_name = !empty($filter_car) ? htmlspecialchars($result_car[array_search($filter_car, array_column($result_car, 'cc_id'))]['cc_name']) : '';
-                            $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
+                            $car_name = !empty($filter_car) ? htmlspecialchars($result_car[array_search($filter_car, array_column($result_car, 'cc_id'))]['type']) : '';
+                            $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_name'))]['em_name']) : '';
 
                             if (!empty($start_date_display) && !empty($end_date_display) && empty($filter_car) && empty($filter_employee)) {
                                 echo "<h4>$start_date_display 到 $end_date_display 的所有碳排記錄</h4>";
@@ -240,9 +242,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php
+                            <?php
                                 include_once("dropdown_list/dbcontroller.php");
                                 $db_handle = new DBController();
+
                                 // 檢查是否有任何篩選參數存在
                                 $filter_applied = !empty($_GET['start_date_display']) || !empty($_GET['end_date_display']) || !empty($_GET['filter_car']) || !empty($_GET['filter_employee']);
                                 $start_date_display = isset($_GET['start_date_display']) ? $_GET['start_date_display'] : '';
@@ -255,47 +258,44 @@
                                     // 只有日期
                                     if ((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_car) && empty($filter_employee)) {
                                         $strSrh = "WHERE cCO2_date BETWEEN '$start_date_display' AND '$end_date_display'";
-                                    } elseif ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) { // 只有車子
-                                        $strSrh = "WHERE cm_co2.cc_id = '$filter_car'";
+                                    } elseif ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) { // 只有車輛類型
+                                        $strSrh = "WHERE type = '$filter_car'";
                                     } elseif ((empty($start_date_display) && empty($end_date_display)) && empty($filter_car) && !empty($filter_employee)) { // 只有員工
-                                        $strSrh = "WHERE cm_co2.em_id = '$filter_employee'";
-                                    } elseif ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) { // 日期、車子
-                                        $strSrh = "WHERE cm_co2.cCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND cm_co2.cc_id = '$filter_car'";
-                                    } elseif ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) { // 車子、員工
-                                        $strSrh = "WHERE cm_co2.cc_id = '$filter_car' AND cm_co2.em_id = '$filter_employee'";
+                                        $strSrh = "WHERE em_name = '$filter_employee'";
+                                    } elseif ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) { // 日期、車輛類型
+                                        $strSrh = "WHERE cCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND type = '$filter_car'";
+                                    } elseif ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) { // 車輛類型、員工
+                                        $strSrh = "WHERE type = '$filter_car' AND em_name = '$filter_employee'";
                                     } elseif ((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_car) && !empty($filter_employee)) { // 日期、員工
-                                        $strSrh = "WHERE cm_co2.cCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND cm_co2.em_id = '$filter_employee'";
+                                        $strSrh = "WHERE cCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND em_name = '$filter_employee'";
                                     } elseif ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) { // 都選
-                                        $strSrh = "WHERE cm_co2.cCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND cm_co2.cc_id = '$filter_car' AND cm_co2.em_id = '$filter_employee'";
+                                        $strSrh = "WHERE cCO2_date BETWEEN '$start_date_display' AND '$end_date_display' AND type = '$filter_car' AND em_name = '$filter_employee'";
                                     }
 
-
-                                    $query = "SELECT cm_co2.cc_id, cm_car.cc_name, cm_co2.cCO2_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, cm_co2.cCO2_carbon, cm_car.cc_type, employee.em_id, employee.em_name, cm_co2.cCO2_address
-                                                      FROM cm_co2
-                                                      INNER JOIN employee ON cm_co2.em_id = employee.em_id
-                                                      INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
-                                                      " . $strSrh;
+                                    $query = "SELECT cCO2_date, start_time, end_time, tatol_carboon, em_name, type, place
+                                            FROM cm_co2_thtf
+                                            $strSrh";
                                     // echo "<br>" . $query;
+
                                     // 獲取總記錄數
                                     $total_records_query = "SELECT COUNT(*) as total FROM ($query) as temp_table";
                                     $total_records_result = $db_handle->runQuery($total_records_query);
                                     $total_records = $total_records_result[0]['total'];
-                                    // echo "<br>" . $total_records;
                                     $total_pages = ceil($total_records / $records_per_page);
 
-                                    // 添加LIMIT子句到查詢
-                                    $query .= " ORDER BY cm_co2.cCO2_date DESC LIMIT $offset, $records_per_page";
+                                    // 添加 LIMIT 子句到查詢
+                                    $query .= " ORDER BY cCO2_date DESC LIMIT $offset, $records_per_page";
                                     $result = $db_handle->runQuery($query);
 
                                     if (!empty($result)) {
                                         foreach ($result as $row) {
-                                            $address = htmlspecialchars($row['cCO2_address'], ENT_QUOTES, 'UTF-8');
-                                            $address = str_replace(',', "\n", $address);
+                                            $place = htmlspecialchars($row['place'], ENT_QUOTES, 'UTF-8');
+                                            $place = str_replace(',', "\n", $place);
                                             echo "<tr>";
-                                            echo "<td>" . $row['cc_name'] . "</td>";
-                                            echo "<td>" . $row['cCO2_date'] . "</td>";
-                                            echo "<td>" . $row['cCO2_carbon'] . " 公噸</td>";
-                                            echo "<td>" . $row['em_name'] . "</td>";
+                                            echo "<td>" . htmlspecialchars($row['type']) . "</td>";
+                                            echo "<td>" . htmlspecialchars($row['cCO2_date']) . "</td>";
+                                            echo "<td>" . htmlspecialchars($row['tatol_carboon']) . " 公斤</td>";
+                                            echo "<td>" . htmlspecialchars($row['em_name']) . "</td>";
                                             echo "</tr>";
                                         }
                                     } else {
@@ -303,40 +303,37 @@
                                     }
                                 } else {
                                     // 預設查詢
-                                    $query = "SELECT cm_co2.cc_id, cm_car.cc_name, MIN(cm_co2.cCO2_date) as cCO2_start_date, MAX(cm_co2.cCO2_date) as cCO2_end_date, cm_co2.cCO2_start_time, cm_co2.cCO2_end_time, ROUND(SUM(cm_co2.cCO2_carbon), 2) as cCO2_carbon, cm_car.cc_type, cm_co2.cCO2_address
-                                                      FROM cm_co2
-                                                      INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
-                                                      GROUP BY cm_car.cc_name";
+                                    $query = "SELECT type, MIN(cCO2_date) as start_date, MAX(cCO2_date) as end_date, ROUND(SUM(tatol_carboon), 2) as tatol_carboon, place
+                                            FROM cm_co2_thtf
+                                            GROUP BY type";
                                     // echo "<br>" . $query;
+
                                     // 獲取總記錄數
                                     $total_records_query = "SELECT COUNT(*) as total FROM ($query) as temp_table";
                                     $total_records_result = $db_handle->runQuery($total_records_query);
                                     $total_records = $total_records_result[0]['total'];
-                                    // echo "<br>" . $total_records;
                                     $total_pages = ceil($total_records / $records_per_page);
 
-                                    // 添加LIMIT子句到查詢
-                                    $query .= " ORDER BY cm_co2.cCO2_date DESC LIMIT $offset, $records_per_page";
+                                    // 添加 LIMIT 子句到查詢
+                                    $query .= " ORDER BY start_date DESC LIMIT $offset, $records_per_page";
                                     $result = $db_handle->runQuery($query);
 
                                     if (!empty($result)) {
                                         foreach ($result as $row) {
-                                            $address = htmlspecialchars($row['cCO2_address'], ENT_QUOTES, 'UTF-8');
-                                            $address = str_replace(',', "\n", $address);
+                                            $place = htmlspecialchars($row['place'], ENT_QUOTES, 'UTF-8');
+                                            $place = str_replace(',', "\n", $place);
                                             echo "<tr>";
-                                            echo "<td>" . $row['cc_name'] . "</td>";
-                                            echo "<td>".$row['cCO2_start_date']."至".$row['cCO2_end_date']."</td>";
-                                            echo "<td>" . $row['cCO2_carbon'] . " 公斤</td>";
+                                            echo "<td>" . htmlspecialchars($row['type']) . "</td>";
+                                            echo "<td>" . htmlspecialchars($row['start_date']) . " 至 " . htmlspecialchars($row['end_date']) . "</td>";
+                                            echo "<td>" . htmlspecialchars($row['tatol_carboon']) . " 公斤</td>";
                                             echo "</tr>";
                                         }
                                     } else {
                                         echo "<tr><td colspan='4'>沒有資料</td></tr>";
                                     }
                                 }
+                            ?>
 
-
-
-                                ?>
                             </tbody>
                         </table>
                     </div>
@@ -408,217 +405,200 @@
         </div>
 
         <?php
-        if ($filter_applied) {
-            // 篩選日期範圍
-            if ((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_car) && empty($filter_employee)) {
+            if ($filter_applied) {
+                // 篩選日期範圍
+                if ((!empty($start_date_display) && !empty($end_date_display)) && empty($filter_car) && empty($filter_employee)) {
+                    $start_date = $start_date_display;
+                    $end_date = $end_date_display;
 
-                $start_date = $start_date_display;
-                $end_date = $end_date_display;
+                    echo "<script>console.log($start_date, $end_date);</script>";
 
-                echo "<script>console.log($start_date, $end_date);</script>";
+                    $chartQuery = "SELECT cCO2_date, type, SUM(tatol_carboon) AS total_carbon
+                                FROM cm_co2_thtf
+                                WHERE cCO2_date BETWEEN '$start_date' AND '$end_date'
+                                GROUP BY cCO2_date, type";
+                    $chartResults = $db_handle->runQuery($chartQuery);
+                    $chartData = [
+                        'dates' => [],
+                        'carbons' => [],
+                        'types' => []
+                    ];
 
-                $chartQuery = "SELECT cCO2_date, cm_car.cc_name, SUM(cCO2_carbon) AS total_carbon
-                            FROM cm_co2
-                            INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
-                            WHERE cCO2_date BETWEEN '$start_date' AND '$end_date'
-                            GROUP BY cCO2_date, cm_car.cc_name";
-                $chartResults = $db_handle->runQuery($chartQuery);
-                $chartData = [
-                    'dates' => [],
-                    'carbons' => [],
-                    'cars' => []
-                ];
-
-                if (!empty($chartResults)) {
-                    foreach ($chartResults as $row) {
-                        $chartData['dates'][] = $row['cCO2_date'];
-                        $chartData['carbons'][] = $row['total_carbon'];
-                        $chartData['cars'][] = $row['cc_name'];
-                    }
-                }
-
-                echo "<script>
-                        var dates = " . json_encode($chartData['dates']) . ";
-                        var carbons = " . json_encode($chartData['carbons']) . ";
-                        var cars = " . json_encode($chartData['cars']) . ";
-
-                        var data = [];
-
-                        var groupedData = {};
-                        for (var i = 0; i < dates.length; i++) {
-                            if (!groupedData[cars[i]]) {
-                                groupedData[cars[i]] = { x: [], y: [] };
-                            }
-                            groupedData[cars[i]].x.push(dates[i]);
-                            groupedData[cars[i]].y.push(carbons[i]);
+                    if (!empty($chartResults)) {
+                        foreach ($chartResults as $row) {
+                            $chartData['dates'][] = $row['cCO2_date'];
+                            $chartData['carbons'][] = $row['total_carbon'];
+                            $chartData['types'][] = $row['type'];
                         }
+                    }
 
-                        for (var car in groupedData) {
-                            data.push({
-                                x: groupedData[car].x,
-                                y: groupedData[car].y,
-                                type: 'bar',
-                                name: car
-                            });
+                    echo "<script>
+                            var dates = " . json_encode($chartData['dates']) . ";
+                            var carbons = " . json_encode($chartData['carbons']) . ";
+                            var types = " . json_encode($chartData['types']) . ";
+
+                            var data = [];
+
+                            var groupedData = {};
+                            for (var i = 0; i < dates.length; i++) {
+                                if (!groupedData[types[i]]) {
+                                    groupedData[types[i]] = { x: [], y: [] };
+                                }
+                                groupedData[types[i]].x.push(dates[i]);
+                                groupedData[types[i]].y.push(carbons[i]);
+                            }
+
+                            for (var type in groupedData) {
+                                data.push({
+                                    x: groupedData[type].x,
+                                    y: groupedData[type].y,
+                                    type: 'bar',
+                                    name: type
+                                });
+                            }
+
+                            var layout = {
+                                title: '" . $start_date . "至" . $end_date . " 公司車碳排量',
+                                xaxis: {
+                                    title: '日期',
+                                    gridcolor: '#67776d'
+                                },
+                                yaxis: {
+                                    title: '碳排量 (kg)',
+                                    gridcolor: '#67776d'
+                                },
+                                barmode: 'stack',
+                                plot_bgcolor: '#e2f7ea',
+                                paper_bgcolor: '#e2f7ea',
+                            };
+
+                            Plotly.newPlot('filteredBarChart', data, layout);
+                        </script>";
+                }
+                // 篩選員工
+                else if ((empty($start_date_display) && empty($end_date_display)) && empty($filter_car) && !empty($filter_employee)) {
+                    echo "<script>console.log($filter_employee)</script>";
+
+                    $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(tatol_carboon) AS total_carbon, em_name
+                                FROM cm_co2_thtf
+                                WHERE em_name = '$filter_employee'
+                                GROUP BY month, em_name";
+
+                    $chartResults = $db_handle->runQuery($chartQuery);
+
+                    $chartData = [
+                        'months' => [],
+                        'carbons' => []
+                    ];
+
+                    $employeeName = '';
+
+                    if (!empty($chartResults)) {
+                        foreach ($chartResults as $row) {
+                            $chartData['months'][] = $row['month'];
+                            $chartData['carbons'][] = $row['total_carbon'];
+                            $employeeName = $row['em_name'];
                         }
-
-                        var layout = {
-                            title: '" . $start_date . "至" . $end_date . " 公司車碳排量',
-                            xaxis: {
-                                title: '日期',
-                                gridcolor: '#67776d'
-                            },
-                            yaxis: {
-                                title: '碳排量 (kg)',
-                                gridcolor: '#67776d'
-                            },
-                            barmode: 'stack',
-                            // 设置绘图区域背景颜色
-                            plot_bgcolor: '#e2f7ea',
-                            // 设置整个图表背景颜色
-                            paper_bgcolor: '#e2f7ea',
-                        };
-
-                        Plotly.newPlot('filteredBarChart', data, layout);
-                    </script>";
-            }
-            // 篩選員工
-            else if ((empty($start_date_display) && empty($end_date_display)) && empty($filter_car) && !empty($filter_employee)) {
-                echo "<script>console.log($filter_employee)</script>";
-
-                // 查詢月份、碳排量和員工姓名
-                $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon, employee.em_name
-                                FROM cm_co2
-                                INNER JOIN employee ON cm_co2.em_id = employee.em_id
-                                WHERE cm_co2.em_id = '$filter_employee'
-                                GROUP BY month, employee.em_name";
-
-                $chartResults = $db_handle->runQuery($chartQuery);
-
-                // 預設圖表資料
-                $chartData = [
-                    'months' => [],
-                    'carbons' => []
-                ];
-
-                // 員工姓名變數
-                $employeeName = '';
-
-                // 檢查查詢結果
-                if (!empty($chartResults)) {
-                    foreach ($chartResults as $row) {
-                        $chartData['months'][] = $row['month'];
-                        $chartData['carbons'][] = $row['total_carbon'];
-                        $employeeName = $row['em_name']; // 獲取員工姓名
                     }
+
+                    echo "<script>
+                            var months = " . json_encode($chartData['months']) . ";
+                            var carbons = " . json_encode($chartData['carbons']) . ";
+
+                            var data = [{
+                                x: months,
+                                y: carbons,
+                                type: 'scatter',
+                                mode: 'lines+markers',
+                                name: '碳排量 (kg)',
+                                line: {
+                                    color: '#FF6384'
+                                }
+                            }];
+
+                            var layout = {
+                                title: '$employeeName 的每年碳排量',
+                                xaxis: {
+                                    title: '月份',
+                                    gridcolor: '#67776d'
+                                },
+                                yaxis: {
+                                    title: '碳排量 (kg)',
+                                    gridcolor: '#67776d'
+                                },
+                                plot_bgcolor: '#e2f7ea',
+                                paper_bgcolor: '#e2f7ea',
+                            };
+
+                            Plotly.newPlot('filteredBarChart', data, layout);
+                        </script>";
                 }
+                // 篩選公司車類型
+                else if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) {
+                    $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(tatol_carboon) AS total_carbon, type
+                                FROM cm_co2_thtf
+                                WHERE type = '$filter_car'
+                                GROUP BY month, type";
 
-                // 渲染圖表
-                echo "<script>
-                        var months = " . json_encode($chartData['months']) . ";
-                        var carbons = " . json_encode($chartData['carbons']) . ";
+                    $chartResults = $db_handle->runQuery($chartQuery);
 
-                        var data = [{
-                            x: months,
-                            y: carbons,
-                            type: 'scatter',
-                            mode: 'lines+markers',
-                            name: '碳排量 (kg)',
-                            line: {
-                                color: '#FF6384'
-                            }
-                        }];
+                    $chartData = [
+                        'months' => [],
+                        'carbons' => []
+                    ];
 
-                        var layout = {
-                            title: '$employeeName 的每年碳排量', // 使用員工姓名作為圖表標題
-                            xaxis: {
-                                title: '月份',
-                                gridcolor: '#67776d'
-                            },
-                            yaxis: {
-                                title: '碳排量 (kg)',
-                                gridcolor: '#67776d'
-                            },
-                            plot_bgcolor: '#e2f7ea',
-                            paper_bgcolor: '#e2f7ea',
-                        };
+                    $carType = '';
 
-                        Plotly.newPlot('filteredBarChart', data, layout);
-                    </script>";
-            }
-            // 篩選公司車
-            else if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) {
-                // 查詢數據並檢索公司車名稱
-                $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon, cm_car.cc_name
-                                FROM cm_co2
-                                INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
-                                WHERE cm_co2.cc_id = '$filter_car'
-                                GROUP BY month, cm_car.cc_name";
-
-                $chartResults = $db_handle->runQuery($chartQuery);
-
-                // 準備圖表數據
-                $chartData = [
-                    'months' => [],
-                    'carbons' => []
-                ];
-
-                // 初始化公司車名稱變數
-                $carName = '';
-
-                // 處理查詢結果
-                if (!empty($chartResults)) {
-                    foreach ($chartResults as $row) {
-                        $chartData['months'][] = $row['month'];
-                        $chartData['carbons'][] = $row['total_carbon'];
-                        $carName = $row['cc_name']; // 提取公司車名稱
+                    if (!empty($chartResults)) {
+                        foreach ($chartResults as $row) {
+                            $chartData['months'][] = $row['month'];
+                            $chartData['carbons'][] = $row['total_carbon'];
+                            $carType = $row['type'];
+                        }
                     }
+
+                    echo "<script>
+                            var months = " . json_encode($chartData['months']) . ";
+                            var carbons = " . json_encode($chartData['carbons']) . ";
+
+                            var data = [{
+                                x: months,
+                                y: carbons,
+                                type: 'scatter',
+                                mode: 'lines+markers',
+                                name: '碳排量 (kg)',
+                                line: {
+                                    color: '#FF6384'
+                                }
+                            }];
+
+                            var layout = {
+                                title: '公司車類型 $carType 每年碳排量',
+                                xaxis: {
+                                    title: '月份',
+                                    gridcolor: '#67776d'
+                                },
+                                yaxis: {
+                                    title: '碳排量 (kg)',
+                                    gridcolor: '#67776d'
+                                },
+                                plot_bgcolor: '#e2f7ea',
+                                paper_bgcolor: '#e2f7ea',
+                            };
+
+                            Plotly.newPlot('filteredBarChart', data, layout);
+                        </script>";
                 }
-
-                // 渲染圖表
-                echo "<script>
-                        var months = " . json_encode($chartData['months']) . ";
-                        var carbons = " . json_encode($chartData['carbons']) . ";
-
-                        var data = [{
-                            x: months,
-                            y: carbons,
-                            type: 'scatter',
-                            mode: 'lines+markers',
-                            name: '碳排量 (kg)',
-                            line: {
-                                color: '#FF6384'
-                            }
-                        }];
-
-                        var layout = {
-                            title: '公司車 $carName 每年碳排量', // 使用公司車名稱替代 ID
-                            xaxis: {
-                                title: '月份',
-                                gridcolor: '#67776d'
-                            },
-                            yaxis: {
-                                title: '碳排量 (kg)',
-                                gridcolor: '#67776d'
-                            },
-                            plot_bgcolor: '#e2f7ea',
-                            paper_bgcolor: '#e2f7ea',
-                        };
-
-                        Plotly.newPlot('filteredBarChart', data, layout);
-                    </script>";
-            }
-            // 篩選日期、篩選公司車
+           // 篩選日期、篩選公司車
             else if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && empty($filter_employee)) {
                 $start_date = $start_date_display;
                 $end_date = $end_date_display;
 
-                // 查詢數據並檢索公司車名稱
-                $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon, cm_car.cc_name
-                            FROM cm_co2
-                            INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
-                            WHERE cm_co2.cc_id = '$filter_car' AND cCO2_date BETWEEN '$start_date' AND '$end_date'
-                            GROUP BY month, cm_car.cc_name";
+                // 更新查詢以匹配新表結構
+                $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(tatol_carboon) AS total_carbon, type 
+                            FROM cm_co2_thtf 
+                            WHERE type = '$filter_car' AND cCO2_date BETWEEN '$start_date' AND '$end_date'
+                            GROUP BY month, type";
 
                 $chartResults = $db_handle->runQuery($chartQuery);
 
@@ -636,7 +616,7 @@
                     foreach ($chartResults as $row) {
                         $chartData['months'][] = $row['month'];
                         $chartData['carbons'][] = $row['total_carbon'];
-                        $carName = $row['cc_name']; // 提取公司車名稱
+                        $carName = $row['type']; // 提取公司車類型
                     }
                 }
 
@@ -657,7 +637,7 @@
                     }];
 
                     var layout = {
-                        title: '$start_date 至 $end_date 公司車 $carName 碳排量', // 使用公司車名稱替代 ID
+                        title: '$start_date 至 $end_date 公司車 $carName 碳排量',
                         xaxis: {
                             title: '月份',
                             gridcolor: '#67776d'
@@ -678,21 +658,18 @@
                 $start_date = $start_date_display;
                 $end_date = $end_date_display;
 
-                // 查詢數據並檢索員工姓名
-                $chartQuery = "SELECT cCO2_date, cm_car.cc_name, SUM(cCO2_carbon) AS total_carbon, employee.em_name
-                            FROM cm_co2
-                            INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id
-                            INNER JOIN employee ON cm_co2.em_id = employee.em_id
-                            WHERE cCO2_date BETWEEN '$start_date' AND '$end_date' AND cm_co2.em_id = '$filter_employee'
-                            GROUP BY cCO2_date, cm_car.cc_name, employee.em_name";
+                // 更新查詢以匹配新表結構
+                $chartQuery = "SELECT cCO2_date, SUM(tatol_carboon) AS total_carbon, em_name
+                            FROM cm_co2_thtf
+                            WHERE em_name = '$filter_employee' AND cCO2_date BETWEEN '$start_date' AND '$end_date'
+                            GROUP BY cCO2_date, em_name";
 
                 $chartResults = $db_handle->runQuery($chartQuery);
 
                 // 準備圖表數據
                 $chartData = [
                     'dates' => [],
-                    'carbons' => [],
-                    'cars' => []
+                    'carbons' => []
                 ];
 
                 // 初始化員工姓名變數
@@ -703,7 +680,6 @@
                     foreach ($chartResults as $row) {
                         $chartData['dates'][] = $row['cCO2_date'];
                         $chartData['carbons'][] = $row['total_carbon'];
-                        $chartData['cars'][] = $row['cc_name'];
                         $employeeName = $row['em_name']; // 提取員工姓名
                     }
                 }
@@ -712,24 +688,21 @@
                 echo "<script>
                     var dates = " . json_encode($chartData['dates']) . ";
                     var carbons = " . json_encode($chartData['carbons']) . ";
-                    var cars = " . json_encode($chartData['cars']) . ";
 
                     var data = [{
-                        x: cars,
+                        x: dates,
                         y: carbons,
                         type: 'bar',
                         name: '碳排量 (kg)',
                         marker: {
                             color: '#FF6384'
-                        },
-                        text: dates,
-                        hoverinfo: 'x+text+y'
+                        }
                     }];
 
                     var layout = {
-                        title: '$start_date 至 $end_date 員工 $employeeName 的碳排量', // 使用員工姓名替代 ID
+                        title: '$start_date 至 $end_date 員工 $employeeName 的碳排量',
                         xaxis: {
-                            title: '公司車',
+                            title: '日期',
                             gridcolor: '#67776d'
                         },
                         yaxis: {
@@ -745,14 +718,13 @@
             }
             // 篩選公司車、篩選員工
             else if ((empty($start_date_display) && empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) {
-                $car_name = !empty($filter_car) ? htmlspecialchars($result_car[array_search($filter_car, array_column($result_car, 'cc_id'))]['cc_name']) : '';
-                $employee_name = !empty($filter_employee) ? htmlspecialchars($result[array_search($filter_employee, array_column($result, 'em_id'))]['em_name']) : '';
-                // 查询按月份汇总的碳排量
-                $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(cCO2_carbon) AS total_carbon
-                                FROM cm_co2
-                                WHERE cm_co2.cc_id = '$filter_car' AND cm_co2.em_id = '$filter_employee'
-                                GROUP BY month";
+                $chartQuery = "SELECT MONTH(cCO2_date) AS month, SUM(tatol_carboon) AS total_carbon
+                            FROM cm_co2_thtf
+                            WHERE type = '$filter_car' AND em_name = '$filter_employee'
+                            GROUP BY month";
+
                 $chartResults = $db_handle->runQuery($chartQuery);
+
                 $chartData = [
                     'months' => [],
                     'carbons' => []
@@ -766,115 +738,126 @@
                 }
 
                 echo "<script>
-                        var months = " . json_encode($chartData['months']) . ";
-                        var carbons = " . json_encode($chartData['carbons']) . ";
+                    var months = " . json_encode($chartData['months']) . ";
+                    var carbons = " . json_encode($chartData['carbons']) . ";
 
-                        var data = [{
-                            x: months,
-                            y: carbons,
-                            type: 'scatter',
-                            mode: 'lines+markers',
-                            name: '碳排量 (kg)',
-                            line: {
-                                color: '#FF6384'
-                            }
-                        }];
+                    var data = [{
+                        x: months,
+                        y: carbons,
+                        type: 'scatter',
+                        mode: 'lines+markers',
+                        name: '碳排量 (kg)',
+                        line: {
+                            color: '#FF6384'
+                        }
+                    }];
 
-                        var layout = {
-                            title: '公司車  $car_name 員工  $employee_name 的碳排量',
-                            xaxis: {
-                                title: '月份',
-                                gridcolor: '#67776d'
-                            },
-                            yaxis: {
-                                title: '碳排量 (kg)',
-                                gridcolor: '#67776d'
-                            },
-                            // 设置绘图区域背景颜色
-                            plot_bgcolor: '#e2f7ea',
-                            // 设置整个图表背景颜色
-                            paper_bgcolor: '#e2f7ea',
-                        };
+                    var layout = {
+                        title: '公司車 $filter_car 員工 $filter_employee 的碳排量',
+                        xaxis: {
+                            title: '月份',
+                            gridcolor: '#67776d'
+                        },
+                        yaxis: {
+                            title: '碳排量 (kg)',
+                            gridcolor: '#67776d'
+                        },
+                        plot_bgcolor: '#e2f7ea',
+                        paper_bgcolor: '#e2f7ea',
+                    };
 
-                        Plotly.newPlot('filteredBarChart', data, layout);
-                    </script>";
+                    Plotly.newPlot('filteredBarChart', data, layout);
+                </script>";
             }
+
             // 篩選日期、篩選公司車、篩選員工
-            else if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) {
-                $start_date = $start_date_display;
-                $end_date = $end_date_display;
+else if ((!empty($start_date_display) && !empty($end_date_display)) && !empty($filter_car) && !empty($filter_employee)) {
+    $start_date = $start_date_display;
+    $end_date = $end_date_display;
 
-                // 修改查詢以包括公司車名稱和員工名稱
-                $chartQuery = "SELECT cCO2_date, SUM(cCO2_carbon) AS total_carbon, 
-                                cm_car.cc_name, employee.em_name 
-                                FROM cm_co2 
-                                INNER JOIN cm_car ON cm_co2.cc_id = cm_car.cc_id 
-                                INNER JOIN employee ON cm_co2.em_id = employee.em_id 
-                                WHERE cCO2_date BETWEEN '$start_date' AND '$end_date' 
-                                AND cm_co2.cc_id = '$filter_car' 
-                                AND cm_co2.em_id = '$filter_employee' 
-                                GROUP BY cCO2_date";
+    // 修改查詢以包括公司車名稱和員工名稱
+    $chartQuery = "SELECT cCO2_date, SUM(total_carbon) AS total_carbon, 
+                    type AS car_type, em_name AS employee_name 
+                    FROM cm_co2_thtf 
+                    WHERE cCO2_date BETWEEN '$start_date' AND '$end_date' 
+                    AND type = '$filter_car' 
+                    AND em_name = '$filter_employee' 
+                    GROUP BY cCO2_date";
 
-                // 調試輸出
-                echo "<script>console.log('$chartQuery')</script>";
+    // 調試輸出 SQL 查詢語句
+    echo "<script>console.log('SQL Query: $chartQuery');</script>";
 
-                $chartResults = $db_handle->runQuery($chartQuery);
-                $chartData = [
-                    'dates' => [],
-                    'carbons' => []
-                ];
+    $chartResults = $db_handle->runQuery($chartQuery);
+    $chartData = [
+        'dates' => [],
+        'carbons' => []
+    ];
 
-                // 準備數據
-                if (!empty($chartResults)) {
-                    foreach ($chartResults as $row) {
-                        $chartData['dates'][] = $row['cCO2_date'];
-                        $chartData['carbons'][] = $row['total_carbon'];
-                        // 取得公司車名稱和員工名稱
-                        $car_name = $row['cc_name'];
-                        $employee_name = $row['em_name'];
-                    }
-                }
+    $car_name = ""; // 預設空字串，避免未定義錯誤
+    $employee_name = ""; // 預設空字串
 
-                // 設定圖表資料
-                echo "<script>
-                        var dates = " . json_encode($chartData['dates']) . ";
-                        var carbons = " . json_encode($chartData['carbons']) . ";
-
-                        var data = [{
-                            x: dates,
-                            y: carbons,
-                            type: 'bar',
-                            name: '" . $start_date . " 至 " . $end_date . " " . $car_name . " " . $employee_name . " 的碳排量',
-                            marker: {
-                                color: '#FF6384'
-                            }
-                        }];
-
-                        var layout = {
-                            title: '" . $start_date . " 至 " . $end_date . " 公司車 " . $car_name . " 員工 " . $employee_name . " 的碳排量',
-                            xaxis: {
-                                title: '日期',
-                                gridcolor: '#67776d'
-                            },
-                            yaxis: {
-                                title: '碳排量 (kg)',
-                                gridcolor: '#67776d'
-                            },
-                            // 设置绘图区域背景颜色
-                            plot_bgcolor: '#e2f7ea',
-                            // 设置整个图表背景颜色
-                            paper_bgcolor: '#e2f7ea',
-                        };
-
-                        Plotly.newPlot('filteredBarChart', data, layout);
-                    </script>";
-            }
-        }else{
-
+    // 準備數據
+    if (!empty($chartResults)) {
+        foreach ($chartResults as $row) {
+            $chartData['dates'][] = $row['cCO2_date'];
+            $chartData['carbons'][] = $row['total_carbon'];
+            $car_name = $row['type']; // 從查詢中提取公司車類型
+            $employee_name = $row['em_name']; // 提取員工名稱
         }
-        
+    } else {
+        // 如果查詢結果為空，提示用戶
+        echo "<script>alert('沒有符合條件的數據，請檢查篩選條件或數據庫內容！');</script>";
+    }
 
-        ?>
+    // 調試輸出數據
+    echo "<script>console.log('Dates: " . json_encode($chartData['dates']) . "');</script>";
+    echo "<script>console.log('Carbons: " . json_encode($chartData['carbons']) . "');</script>";
+
+    // 設定圖表資料
+    echo "<script>
+            var dates = " . json_encode($chartData['dates']) . ";
+            var carbons = " . json_encode($chartData['carbons']) . ";
+
+            if (dates.length > 0 && carbons.length > 0) {
+                var data = [{
+                    x: dates,
+                    y: carbons,
+                    type: 'bar',
+                    name: '" . $start_date . " 至 " . $end_date . " " . $car_name . " " . $employee_name . " 的碳排量',
+                    marker: {
+                        color: '#FF6384'
+                    }
+                }];
+
+                var layout = {
+                    title: '" . $start_date . " 至 " . $end_date . " 公司車 " . $car_name . " 員工 " . $employee_name . " 的碳排量',
+                    xaxis: {
+                        title: '日期',
+                        gridcolor: '#67776d'
+                    },
+                    yaxis: {
+                        title: '碳排量 (kg)',
+                        gridcolor: '#67776d'
+                    },
+                    // 設置繪圖區域背景顏色
+                    plot_bgcolor: '#e2f7ea',
+                    // 設置整個圖表背景顏色
+                    paper_bgcolor: '#e2f7ea',
+                };
+
+                Plotly.newPlot('filteredBarChart', data, layout);
+            } else {
+                console.log('圖表數據為空，未能生成圖表！');
+            }
+        </script>";
+
+                        }
+    }else{
+
+            }
+
+
+?>
 
 
 
